@@ -1,23 +1,521 @@
 // Add steps as necessary for accessing the software, post-configuration, and testing. Don’t include full usage instructions for your software, but add links to your product documentation for that information.
 //Should any sections not be applicable, remove them
 
-== Test the deployment
-// If steps are required to test the deployment, add them here. If not, remove the heading
+=== CloudFormation nested stack deployment
+
+The stack will take 10 minutes, or less, to deploy depending on the options chosen in the template. You can monitor the progress of the stack by choosing **Events** on the top-level stack. Below is a description of each nested stack’s function in the order in which they are deployed.
+
+==== QLOOKUP Nested Stack
+
+The first three stacks are launched in parallel. The QLOOKUP Stack is a hierarchical region map
+that finds the AMI-ID for the marketplace offer by region. Note, this stack is not executed
+when selecting the Specified-AMI-ID option.
+
+==== SECRETSSTACK Nested Stack
+
+The first two stacks are launched in parallel. The SECRETS Stack stores usernames and
+passwords in Secrets Manager for the cluster, sidecar, and downloading software from Qumulo
+Trends. The purpose of leveraging Secrets Manager is to provide a secure reference for
+subsequent stacks and users who may forget the passwords assigned.
+
+==== QIAMSTACK Nested Stack
+
+The QIAM Stack creates an IAM profile for the Qumulo Cluster to enable the cluster to manage
+EC2 Secondary IP addresses (Floating IPs), decrypt data, send CloudWatch alarms, and send
+audit logs to CloudWatch Logs. Note, creating IAM roles in AWS takes some time so don’t be
+alarmed if the QIAM stack takes 3 or 4 minutes.
+
+==== QSTACK Nested Stack
+
+The Q Stack spins up all the EC2 instances and EBS volumes for the cluster. It also creates a
+placement group for the cluster and tags all the EC2 instances with the appropriate stack
+name and node number. In addition, it creates CloudWatch alarms for EC2 instance failure and
+a security group for the cluster with the CIDR specified in the template.
+
+==== MGMTNLBSTACK Nested Stack
+
+All stacks subsequent to QSTACK execute in parallel. If public management of the cluster was
+chosen in the template this nested stack is executed as long as the cluster is NOT being
+deployed in an AWS Local Zone. It spins up a Network Load Balancer with a public Elastic IP.
+The load balancer listens only on port 443 and optionally on port 3712 if the replication port
+was selected. This load balancer connects to the primary EC2 IP address on each node. These
+are known as the persistent IPs in the Qumulo UI.
+
+==== DNSSTACK Nested Stack
+
+If the Route 53 Private Hosted Zone FQDN was configured then the DNS stack is executed. It
+creates the private hosted zone and all the A-records with the name assigned in the template.
+All records are given a TTL=0. While round-robin behavior is the goal, Route 53 doesn’t
+provide perfect round-robin. Instead the records are given an equal probability of resolution.
+Clients are well distributed, but not perfectly symmetric.
+
+==== PROVISIONINGSTACK Nested Stack
+
+This stack spins up an EC2 instance with custom user data. It configures the Qumulo Cluster
+and some AWS environment requirements.
+
+===== Qumulo Configuration
+* Software upgrades of QSTACK created nodes
+* Forms the first quorum for the cluster
+* Assigns Floating IP addresses to the cluster
+* Configures Sidecar username, password, and custom RBAC role
+* Configures Audit Logging for CloudWatch Logs
+* Changes the admin password
+
+===== AWS Configuration
+* Checks for Public Internet reachability with a CURL test to google.com
+* Assigns a QSTACK Policy to protect the cluster in subsequent Stack Updates
+* Edits the Customer Managed Key Policy so Sidecar can create CMK encrypted volumes
+* Tags EBS volumes with the stack name and volume type
+* Tracks software versions, cluster IPs, instance IDs, & UUID in AWS Parameter Store
+* Tracks the provisioning instance ‘last-run-status’ in Parameter Store
+
+This instance automatically shuts down upon completion of its provisioning tasks. **Do not delete this EC2 instance. It will be used for stack updates.**
+
+==== CLOUDWATCHSTACK Nested Stack
+
+This stack creates resource groups, a CloudWatch dashboard, and a CloudWatch log group
+(optional) for the cluster. First, it creates a resource group for the EC2 instances and then it
+creates one or more resource groups for the EBS volumes. The resource groups created for the
+EBS volumes depend on the EBS volume configuration of the cluster. All Flash clusters will
+have just one resource group with the stack name and -SSD. Hybrid clusters will have two
+resource groups for EBS: one with -SSD and one with -HDD. The purpose of these resource
+groups is to provide a simple means to create a filtered view in CloudWatch for the EC2 and
+EBS metrics native to AWS.
+
+A CloudWatch Dashboard is also created that presents key metrics sent by the Sidecar Metrics
+Lambda function. These are Qumulo specific metrics.
+Finally, if Audit Logging was enabled a CloudWatch log group is created for the cluster. All
+administrative activity, Lambda access, and file/directory create/modify write activity is captured
+in this log.
+
+==== QSIDECARSTACK Nested Stack
+
+Assuming the provisioning option was left as YES, the SIDECAR stack is deployed. It creates
+two Lambda functions with the specified Sidecar software version. The first is the Metrics
+Lambda that sends Qumulo metrics to CloudWatch. The second is the Disk Recovery Lambda
+that monitors EBS volumes and automatically replaces any failed EBS volumes. IAM roles,
+permissions, and events are created for each Lambda function.
+
+Below is the event view for the top-level stack. Note the timestamps to manage expectations on the duration for each nested stack.
+
+[#additional1]
+.CloudFormation stack events
+image::../images/image1.png[Additional1]
 
 == Post-deployment steps
-// If post-deployment steps are required, add them here. If not, remove the heading
 
-== Best practices for using {partner-product-short-name} on AWS
-// Provide post-deployment best practices for using the technology on AWS, including considerations such as migrating data, backups, ensuring high performance, high availability, etc. Link to software documentation for detailed information.
+Once the top-level stack event log shows **CREATE_COMPLETE**, CloudFormation has completed instantiation of all stack resources. Below are the steps to validate the deployment.
 
-_Add any best practices for using the software._
+=== Review & Verify the AWS Infrastructure
 
-== Security
-// Provide post-deployment best practices for using the technology on AWS, including considerations such as migrating data, backups, ensuring high performance, high availability, etc. Link to software documentation for detailed information.
+==== Verify the Cluster Instances are Running
 
-_Add any security-related information._
+In the **AWS EC2 Console** filter on the stack name, clear the running instance filter, and verify
+the number of instances for the cluster is as expected. Four in this example.
 
-== Other useful information
-//Provide any other information of interest to users, especially focusing on areas where AWS or cloud usage differs from on-premises usage.
+==== Verify the Provisioning Instance has Stopped
 
-_Add any other details that will help the customer use the software on AWS._
+CloudFormation has completed the instantiation of all resources, but this does not mean all
+resources are fully initialized and running. Specifically, the Provisioning instance will still be
+initializing. Given all the tasks the Provisioning instance has to accomplish it will require 6 to
+10 minutes AFTER stack completion to finish all tasks. This variability is due to software
+upgrades of the instances. When it is finished it will automatically shutdown. If the
+provisioning instance has not stopped after 15 minutes, jump to the troubleshooting section.
+
+[#additional2]
+.Deployed EC2 instances
+image::../images/image2.png[Additional2]
+
+==== Verify the EC2 Security Groups
+
+In the AWS Console go to the **EC2 Security Groups** page and filter on the top-level stack
+name. There will be two Security Groups that have been created. Select either to inspect the
+ports and CIDRs configured.
+
+[#additional3]
+.EC2 security groups
+image::../images/image3.png[Additional3]
+
+==== Verify the EC2 Placement Group for the Cluster
+
+In the AWS Console go to **Placement Groups**. A placement group with the stack name has
+been created.
+
+[#additional4]
+.EC2 placement group
+image::../images/image4.png[Additional4]
+
+==== Verify the Load Balancer for Public Management (Optional)
+
+In the AWS Console go to **Load Balancers**. If Public Management was selected in the
+template a load balancer has been created. It will be listening on 443, and if selected in the
+template, 3712 for replication.
+
+[#additional5]
+.Load balancer
+image::../images/image5.png[Additional5]
+
+==== Verify EBS Volume Tags
+
+If the Provisioning instance has stopped the EBS volumes will be tagged accordingly for the
+cluster and EBS volume configuration. Go to the **AWS Console Elastic Block Store Volumes**
+page to verify. The type and number of EBS volumes will vary depending on EBS volume
+configuration chosen in the template and the number of EC2 instances.
+
+[#additional6]
+.EBS volume tags
+image::../images/image6.png[Additional6]
+
+==== Verify EBS Encryption with a CMK (Optional)
+
+On the same page scroll to the right to verify that the volumes are encrypted with the
+Customer Managed Key assigned in the template. This is only relevant if a CMK was specified.
+If the field was left blank in the template, AWS will generate a key to encrypt the data at rest.
+
+[#additional7]
+.EBS encryption
+image::../images/image7.png[Additional7]
+
+==== Verify the KMS CMK Policy (Optional)
+
+In the AWS Console go to the **Key Management Service** page and select the CMK that was
+chosen in the template. Verify that the policy has been updated with two SIDs, one for the
+Metrics Lambda and one for the Disk Recovery Lambda. If the policy is not updated it is likely
+the Provisioning node will not have shutdown because the policy was not cleaned up prior to
+launching the template. Without this policy modification in place the Sidecar will not be able
+to create a new EBS volume to replace a failed EBS volume.
+
+[#additional8]
+.KMS key policy
+image::../images/image8.png[Additional8]
+
+==== Verify Secrets Manager Secrets
+
+In the AWS Console go to the **Secrets Manager** page and filter on the top-level stack name.
+There will be three secrets that have been created to store username/password pairs. Select
+any of them to see the credentials.
+
+[#additional9]
+.Secrets Manager secrets
+image::../images/image9.png[Additional9]
+
+==== Verify the IAM Roles
+
+In the AWS Console go to the **IAM** page and filter on the top-level stack name. There will be
+four IAM roles that have been created: two for the Sidecar, one for the cluster, and one for the
+provisioning instance.
+
+[#additional10]
+.IAM Roles
+image::../images/image10.png[Additional10]
+
+==== Verify Sidecar Lambdas
+
+In the AWS Console go to the **Lambda** page and filter on the top-level stack name. There will
+be two Lambda functions. Select the **Disk Recovery Lambda** and then choose **Monitor**. In the
+populated graphs check that the Error Count and Success Rate shows 100% green and 0%
+red. This confirms the Disk Recovery Lambda is communicating with the cluster. Review the
+Metrics Lambda in the same manner.
+
+[#additional11]
+.Sidecar Lambdas
+image::../images/image11.png[Additional11]
+
+==== Verify Route 53 Private Hosted Zone for DNS (Optional)
+
+In the AWS Console go to **Route 53**. Select the Private Hosted Zone that was created; in this
+example it is **test.local**. Verify the A-records were created with the A-record name specified in the
+template. This is only relevant if an FQDN was specified, otherwise Route 53 configuration is
+skipped. Note, 12 A-records were created, one for each floating IP, since 4 EC2 instances with
+3 floating IPs were chosen in the template.
+
+[#additional12]
+.Route53 private zone
+image::../images/image12.png[Additional12]
+
+==== Verify Resource Groups
+
+In the AWS Console go to **CloudWatch**. In the first filter box choose **EC2** and then in the **Filter by resource group** box select the cluster with **Qumulo-Cluster-EC2-[Stack Name]**. This provides a CloudWatch filtered view of the EC2 instances for the cluster. CPU Utilization,
+network stats, boot volume stats, and alarm events are available.
+
+[#additional13]
+.CloudWatch metrics
+image::../images/image13.png[Additional13]
+
+Now clear the **Filter by resource group** field and select **EBS** in the first filter box. Now in the
+**Filter by resource group** field choose the cluster with **Qumulo-Cluster-[SSD or HDD]-[Stack Name]**. This is a CloudWatch view of the EBS volumes for the cluster. Note, boot volumes are not included in this view.
+
+[#additional14]
+.CloudWatch metrics filtered
+image::../images/image14.png[Additional14]
+
+==== Verify CloudWatch Dashboard
+
+In the AWS Console go to **CloudWatch > Dashboard > Qumulo-Cluster-[Stack Name]-QSTACK-[123456789ABCD]**. This is a dashboard that has been built to display the metrics sent by the Qumulo Sidecar Metrics Lambda function. Instance health, EBS health, Available Capacity, and Performance data are all available. This dashboard is very useful for historical data that is over 72 hours old. For real-time data visit the Qumulo cluster’s UI. Note: If you are deploying multiple clusters in an AWS region give them unique Qumulo Cluster Names. Metrics are filtered based on the Qumulo Cluster Name.
+
+[#additional15]
+.CloudWatch dashboard
+image::../images/image15.png[Additional15]
+
+==== Verify CloudWatch Logs (Audit Logging)
+
+In the AWS Console go to **CloudWatch > Log Groups > /qumulo/[Stack Name]**. This log
+group is configured if Audit Logging was enabled in the CloudFormation template. Log files
+will immediately be available for each instance in the cluster.
+
+[#additional16]
+.CloudWatch log groups
+image::../images/image16.png[Additional16]
+
+=== Review & Verify the Qumulo Cluster Configuration
+
+==== Review the Outputs of the CloudFormation Stack
+
+Go to the **CloudFormation** page and select the top-level stack name. Choose
+**Outputs**. If Route 53 was configured a URL to the private addresses, resolved by Route 53,
+will be shown. If Route 53 was skipped, a URL to the first node’s primary IP address will be
+displayed. Likewise, if Public Management was chosen a URL to the Elastic IP (public static)
+address will be shown. If connecting via the public Internet, open a page from your local
+machine using the **QumuloPublicIP** URL. If connecting from within your VPC, paste the
+**QumuloPrivateIP** URL into the browser of an EC2 instance running Chrome.
+
+[#additional17]
+.CloudFormation outputs
+image::../images/image17.png[Additional17]
+
+==== Verify Admin Password
+
+The login page should authenticate with the credentials:
+Username: **admin**
+Password: **‘your chosen Admin password’**
+If you’ve forgotten the admin password entered in the template go to Secrets Manager and
+retrieve it.
+
+[#additional18]
+.Qumulo login
+image::../images/image18.png[Additional18]
+
+==== Verify Quorum and Protection
+
+After logging in, the cluster dashboard should be displayed. IF it isn’t the cluster failed to form
+quorum. Jump to troubleshooting.
+
+[#additional19]
+.Qumulo dashboard
+image::../images/image19.png[Additional19]
+
+Choose **More details**. The number of nodes in the cluster should match what was provisioned
+in the template. Further, to the right is the protection status showing protection for 1 node
+failure or 2 disk failures.
+
+[#additional20]
+.Qumulo dashboard details
+image::../images/image20.png[Additional20]
+
+==== Verify Software Version
+
+In the top right of the Qumulo UI the software version is displayed. This should match the
+software version requested when the template was filled in. Here it shows Qumulo Core
+version 4.0.6 as expected.
+
+[#additional21]
+.Qumulo software version
+image::../images/image21.png[Additional21]
+
+==== Verify Floating IPs
+
+Go to the **Cluster** tab and select **Network Configuration**. Each node will have a persistent IP.
+This is the EC2 primary IP address that is provided via DHCP at creation and subsequently
+never changes unless the instance is destroyed (i.e. terminated). Also, each node will have
+floating IPs associated with it. In this case the default of 3 floating IPs per instance was chosen.
+These IPs are EC2 secondary IPs that the cluster now manages as floating IPs. The AWS EC2
+console will only display what EC2 secondary IPs were assigned to an instance at creation. For
+real-time status always refer to the Qumulo UI.
+
+[#additional22]
+.Qumulo floating IP addresses
+image::../images/image22.png[Additional22]
+
+==== Verify Sidecar User and Custom RBAC Configuration
+
+Previously the Sidecar Lambda function connectivity to the cluster was verified. There’s no
+need to review the Sidecar User and RBAC configuration. If you desire to review these they are
+under **Cluster** -> **Local Users & Groups** and **Cluster** -> **Role Management**, respectively.
+
+=== Stack Update Options
+
+==== Supported Stack Update Parameters
+
+|===
+||Add |Del |Change
+
+// Space needed to maintain table headers
+|Total Number of Qumulo EC2 Instances | | |increase
+|OPTIONAL: Provision Public IP for Qumulo Management |✓ |✓ |✓
+|OPTIONAL: Enable Replication Port for Qumulo Public IP |✓ |✓ |✓
+|OPTIONAL: FQDN for R53 Private Hosted Zone |✓ |✓ |✓
+|OPTIONAL: R53 Record Name for Qumulo RR DNS |✓ |✓ |✓
+|OPTIONAL: Send Qumulo Audit Log messages to CloudWatch Logs? |✓ |✓ |✓
+|Provision Qumulo SideCar Lambdas |✓ | |
+|Qumulo Sidecar Software Version | | |✓
+|===
+
+==== Adding Node(s) to the Cluster
+
+A Qumulo cluster may be grown in both capacity and performance by adding additional nodes
+(EC2 instances) to the cluster. This stack supports adding as many as 16 nodes in one stack
+update for a maximum of 20 nodes total in the cluster. Each node added increases compute,
+networking, and storage capacity. To add nodes to a cluster follow the procedure below. Note,
+total instance count may only be increased, not decreased. If total instance count is decreased
+the stack update will fail and rollback.
+
+**IF you have upgraded the software on the cluster after initial deployment leave the software version for the cluster in the template as it was originally provisioned. The stack is unaware of this update and the software version field for the cluster can not be used for upgrades after initial deployment.**
+
+1. Go to the **CloudFormation** view in the AWS Console
+2. Select the top-level stack name
+3. Select **Update** in the upper right corner
+4. Keep the default **Use Current Template**
+5. Select **Next**
+6. The template as last populated will be displayed
+7. Scroll down to the **Total Number of Qumulo EC2 Instances**
+8. Increase the number of instances to the chosen value, **8** in this example
+9. Select **Next**
+10. Select **Next** again
+11. **Check both boxes** acknowledging that CloudFormation may create IAM roles and that it may leverage CAPABILITY_AUTO_EXPAND.
+12. Select **Update stack**
+
+The stack will commence updating. In this case four nodes will be added to the cluster. This is
+not service impacting as the existing nodes are left untouched. There is a brief quorum bounce
+to add the four new nodes to the cluster. Below is a view of the AWS EC2 Console showing
+the new instances initializing.
+Notice
+
+[#additional23]
+.EC2 instances
+image::../images/image23.png[Additional23]
+
+Notice that the Provisioning instance is also being restarted. This is by design. The Provisioner
+will query the latest version of software running on the cluster and upgrade all new nodes to
+this version of software before joining them to the cluster. Further, it tags all the new EBS
+volumes and updates the floating IPs.
+
+This stack provisioned Public Management and Route 53 originally. With the addition of new
+nodes, IP addresses need to be added to the Load Balancer and the Route 53 Private Hosted
+Zone. The stack will automate these updates as well. You may review any nested stack to see
+what resources were modified or added in the stack **Events** tab. At the completion of node
+addition you may review any and all of the AWS infrastructure referencing the former section.
+As a final check make sure the Provisioning node shutdown which indicates success of all
+secondary provisioning.
+
+[#additional24]
+.EC2 instances
+image::../images/image24.png[Additional24]
+
+Finally, login to the cluster and verify the node addition.
+
+[#additional25]
+.Qumulo cluster nodes
+image::../images/image25.png[Additional25]
+
+==== Adding or Removing Public Management
+
+A stack update may be used to add or remove public management. Since this update is completely separate from the cluster there’s no changes required to the cluster infrastructure or infrastructure touched by the Provisioning instance. Hence, it will not restart. Follow the same steps as a Node Addition, but change the **OPTIONAL: Provision Public IP for Qumulo Management** parameter to ‘YES/NO’ instead of changing the number of EC2 instances (steps 7 & 8 above). Note, the MGMTNLBSTACK will be deleted when removing public management. This is expected. The stack will show as DELETE_FAILED for a period of time while CloudFormation retries the delete of the Elastic IP. Ultimately it will succeed.
+
+==== Adding or Removing Route53 DNS Private Hosted Zone
+
+It is possible to change the R53 FQDN, but AWS requires the deletion of the current Private
+Hosted Zone and a new one will be rebuilt if the FQDN is modified in a stack update. To
+remove the private hosted zone, set the FQDN back to NONE.local. In the stack update pages
+you can review the changes the update will make. Follow the same steps as a Node Addition,
+but change the **OPTIONAL: FQDN for R53 Private Hosted Zone** parameter to the desired
+value instead of changing the number of EC2 instances (steps 7 & 8 above).
+
+==== Enabling or Disabling Audit Logging
+
+A stack update may be used to enable or disable Qumulo audit logging. These logs are stored
+in a CloudWatch Logs log group. If a stack update is used to disable audit logging the log
+group will be deleted. Likewise, if audit logging is enabled in a stack update a log group will
+be created with the name **/qumulo/[Stack Name]**. Follow the same steps as a Node Addition,
+but change the **OPTIONAL: Send Qumulo Audit Log messages to CloudWatch Logs?**
+parameter to ‘YES/NO’ instead of changing the number of EC2 instances (steps 7 & 8 above).
+
+==== Adding the Qumulo Sidecar Lambdas
+
+If the Sidecar was not deployed with the Cluster originally, it may be added subsequently to the stack. Follow the same steps as a Node Addition, but change the **Provision Qumulo Sidecar Lambdas** parameter to ‘Yes’ instead of changing the number of EC2 instances (steps 7 & 8 above). Removing the Sidecar lambdas is not supported.
+
+==== Updating the Sidecar Software Version
+
+A stack update may be used to update the Sidecar software version. Follow the same steps as
+a Node Addition, but change the **Sidecar Software Version** field to the desired version instead
+of changing the number of EC2 instances (steps 7 & 8 above). This is typically done after
+updating the cluster software via the Qumulo UI.
+
+==== Other Stack Updates and the QSTACK Policy
+
+The only restrictions placed on stack updates are for the Qumulo cluster. Specifically this is
+the QSTACK. The stack policy is applied by the Provisioning instance, and it forbids any
+modifications, deletions, or recreations of QSTACK EC2 and EBS infrastructure. This is to
+protect production environments from erroneous stack updates. In the event a stack update is
+attempted for an unsupported change the update will simply fail and rollback without harm.
+Many stack updates are possible and not all permutations have been tested. The common
+examples are documented above that are most productive and well tested.
+
+==== Changing Instance Types and EBS Volume Types
+
+Qumulo does not support changing the cluster instance types with a stack update. This is
+prevented with the aforementioned stack policy. While it would be possible if allowed, it
+would stop all the instances, change the instance type, and restart them. This would be
+service impacting in a production environment. Instead Qumulo recommends shutting down
+an instance at a time so the cluster can leverage floating IPs and maintain the production
+workload.
+
+Due to the permutations of EBS volume configurations the likelihood of user error is high
+attempting to change EBS volume types with a stack update. Rather than risk data loss this is
+blocked by the QSTACK policy.
+
+For both instance type changes and EBS volume type changes Qumulo offers simple scripts
+that are production friendly.
+
+=== Protecting Production Environments
+
+In production deployments it is wise to enable Termination Protection for the entire stack.
+Multiple prompts are required to delete any infrastructure with Termination Protection enabled.
+To enable termination protection:
+
+1. Go to the **CloudFormation** view in the AWS Console
+2. Select the top-level stack name
+3. Select **Stack actions** in the upper right corner
+4. Then select **Edit termination protection**
+5. Select **Enabled**
+6. Select **Save**
+
+=== Deleting the Stack
+
+When a cluster is no longer needed ensure all critical data has been removed from the cluster.
+Qumulo’s SHIFT functionality may be used to natively copy data from the cluster to S3.
+Alternatively, Qumulo supports S3 Snapshots but rehydration will require a cluster with the
+same EBS volume configuration. Once the data has been archived with the chosen method
+simply select the **top-level stack** in CloudFormation and choose **Delete**. All resources will be
+deleted. Note, disable Termination Protection before deleting the stack if it was enabled.
+
+If a Customer Managed Key was used for encryption at rest, the KMS CMK policy must be
+cleaned up. It’s simplest to do this after the stack is completely deleted. AWS CloudFormation
+does not support CMK policy modifications so it is unable to track these changes that the
+Provisioning instance applied. Go to the **AWS Key Management Service** and select the **CMK**
+that was used. Then **Edit** the policy. **Delete** the two SIDs for the Sidecar and select **Save**. If
+the key policy had no other SIDs applied to it, aside from the Qumulo Sidecar SIDs, it will have
+the following JSON structure before and after being cleaned up.
+
+[#additional26]
+.KMS key policy before cleanup
+image::../images/image26.png[Additional26]
+
+[#additional27]
+.KMS key policy after cleanup
+image::../images/image27.png[Additional27]
+
+As of the date of this document AWS CloudFormation will fail to delete all of the
+MGMTNLB stack resources (If Public Management was provisioned). Simply let the
+deletion finish, reselect the MGMTNLB stack and delete it again, and then delete the
+top-level stack.

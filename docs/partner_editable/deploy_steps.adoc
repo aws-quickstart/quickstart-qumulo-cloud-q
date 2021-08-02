@@ -3,20 +3,13 @@
 . Sign in to your AWS account at https://aws.amazon.com with an IAM user role that has the necessary permissions. For details, see link:#_planning_the_deployment[Planning the deployment] earlier in this guide.
 . Make sure that your AWS account is configured correctly, as discussed in the link:#_technical_requirements[Technical requirements] section.
 
-// Optional based on Marketplace listing. Not to be edited
-ifdef::marketplace_subscription[]
-=== Subscribe to the {partner-product-short-name} AMI
+=== Subscribe to a Qumulo Marketplace offer
 
-This Quick Start requires a subscription to the AMI for {partner-product-short-name} in AWS Marketplace.
+A Qumulo subscription for the chosen configuration and deployment region is required.
 
-. Sign in to your AWS account.
-. Open the page for the {marketplace_listing_url}[{partner-product-short-name} AMI in AWS Marketplace^], and then choose *Continue to Subscribe*.
-. Review the terms and conditions for software usage, and then choose *Accept Terms*. +
-  A confirmation page loads, and an email confirmation is sent to the account owner. For detailed subscription instructions, see the https://aws.amazon.com/marketplace/help/200799470[AWS Marketplace documentation^].
-
-. When the subscription process is complete, exit out of AWS Marketplace without further action. *Do not* provision the software from AWS Marketplace—the Quick Start deploys the AMI for you.
-endif::marketplace_subscription[]
-// \Not to be edited
+1. Go to https://aws.amazon.com/marketplace and type Qumulo in the search bar. Select one of the available offerings with a designated usable capacity. NOTE: If you have a private offer you will receive an email with a link to accept the private offer. The Customizable File Storage Node configuration in the Marketplace requires a private offer unless you choose to accept it with 320TiB per EC2 instance.
+2. Click **Continue to Subscribe** in the upper right corner. The subscription will take a couple of minutes to process.
+3. At this point the Marketplace process is complete when using the aws-sa-waf-cluster CloudFormation template. Close the Marketplace tab. Do not deploy from Marketplace.
 
 === Launch the Quick Start
 // Adapt the following warning to your Quick Start.

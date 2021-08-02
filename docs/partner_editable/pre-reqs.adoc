@@ -1,13 +1,27 @@
 // If no preperation is required, remove all content from here
 
-==== Prepare your AWS account
+The following AWS services are required in a custom IAM role or IAM user to deploy this template:
 
-_Describe any setup required in the AWS account prior to template launch_
-
-==== Prepare your {partner-company-name} account
-
-_Describe any setup required in the partner portal/account prior to template launch_
-
-==== Prepare for the deployment
-
-_Describe any preparation required to complete the product build, such as obtaining licenses or placing files in S3_
+* application-autoscaling:*
+* applicationinsights:*
+* autoscaling:*
+* cloudformation:*
+* cloudtrail:*
+* cloudwatch:*
+* compute-optimizer:*
+* ec2:*
+* elasticloadbalancing:*
+* events:*
+* health:*
+* iam:*
+* kms:*
+* lambda:*
+* logs:*
+* resource-groups:*
+* route53:*
+* s3:*
+* secretsmanager:*
+* sns:*
+* ssm:*
+* sqs:*
+* tag:*

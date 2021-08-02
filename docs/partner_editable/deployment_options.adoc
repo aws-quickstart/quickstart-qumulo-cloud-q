@@ -7,3 +7,11 @@ This Quick Start provides two deployment options:
 
 The Quick Start provides separate templates for these options. It also lets you configure Classless Inter-Domain Routing (CIDR) blocks, instance types, and {partner-product-short-name} settings, as discussed later in this guide.
 
+The following parameters are optional:
+
+* AWS Local Zone deployment
+* Public IP Management
+* R53 Private Hosted Zone configuration
+* Customer Managed Key configuration
+* SNS Notifications
+* CloudWatch audit log configuration
