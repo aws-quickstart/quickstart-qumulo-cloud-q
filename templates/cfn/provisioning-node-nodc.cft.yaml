@@ -275,7 +275,7 @@ Resources:
           ssm_put="aws ssm put-parameter --region ${Region} --name /qumulo/$q_stackname"
           ssm_get="aws ssm get-parameter --region ${Region} --name /qumulo/$q_stackname"
 
-          if [ $(curl -sL -w "%{http_code}\\n" "google.com" -o /dev/null --connect-timeout 3 --max-time 5) == "200" ]; then 
+          if [ $(curl -sL -w "%{http_code}\\n" "trends.qumulo.com" -o /dev/null --connect-timeout 3 --max-time 5) == "200" ]; then 
             $ssm_put/last-run-status --value "Public Internet Reachable" --type String --overwrite          
           else 
             $ssm_put/last-run-status --value "NO Public Internet Connectivity, resolve and reboot provisioning instance" --type String --overwrite          
