@@ -25,6 +25,9 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: This is the main template to spin up a Qumulo Cluster in an existing VPC.  It calls subordinate CloudFormation templates to instantiate the infrastructure.
 
 Metadata:
+  QuickStartDocumentation:
+    EntrypointName: 'Parameters for deploying into an existing VPC'
+    Order: '2'
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
