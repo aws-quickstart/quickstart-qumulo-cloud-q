@@ -1,0 +1,55 @@
+
+.AWS Template Configuration - Cloud Q v3.0
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|S3 Bucket Name
+(`QSS3BucketName`)|`aws-quickstart`|Name of the S3 bucket for your copy of the Quick Start assets. Keep the default name unless you are customizing the template. Changing the name updates code references to point to a new Quick Start location. This name can include numbers, lowercase letters, uppercase letters, and hyphens, but do not start or end with a hyphen (-). See https://aws-quickstart.github.io/option1.html.|S3 Key Prefix Name (Path in the bucket inclusive of quickstart-qumulo-cloud-q folder)
+(`QSS3KeyPrefix`)|`quickstart-qumulo-cloud-q/`|S3 key prefix that is used to simulate a directory for your copy of the Quick Start assets. Keep the default prefix unless you are customizing the template. Changing this prefix updates code references to point to a new Quick Start location. This prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slashes (/). See https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html and https://aws-quickstart.github.io/option1.html.|S3 Bucket Region
+(`QSS3BucketRegion`)|`us-east-1`|AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. Keep the default Region unless you are customizing the template. Changing this Region updates code references to point to a new Quick Start location. When using your own bucket, specify the Region. See https://aws-quickstart.github.io/option1.html.|AWS Key-Pair Name
+(`KeyPair`)|`mykeypair`|Name of an existing EC2 Key Pair to enable authentication to instances|OPTIONAL: Environment Type
+(`EnvType`)|`dev`|Type of Environment: Dev, QA, or, Prod
+|===
+.AWS Network Configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Specify an Availability Zone
+(`AvailabilityZone`)|`**__Requires input__**`|The Qumulo Cluster will be deployed in the chosen AZ|AWS VPC Subnet
+(`VpcCidr`)|`10.0.0.0/16`|Must be specified as an IPv4 address followed by / and a subnet mask of 0-32.|AWS VPC Public Subnet
+(`PublicSubnetCidr`)|`10.0.0.0/20`|AWS Public Subnet CIDR for the AZ. Must be specified as an IPv4 address followed by / and a subnet mask of 0-32.|AWS VPC Private Subnet
+(`PrivateSubnetCidr`)|`10.0.16.0/20`|AWS Private Subnet CIDR in the AZ. Must be specified as an IPv4 address followed by / and a subnet mask of 0-32.|Is the Qumulo Cluster being deployed in a Local Zone?
+(`QClusterLocalZone`)|`NO`|AWS Lambda services are not supported in Local Zones and will be placed in the subnet specified below.  Note: If deploying on Outpost launch the 'Deploy in an existing VPC' link in the deployment guide.|Qumulo Sidecar Lambda Availability Zone
+(`SideCarAZ`)|`**__Requires input__**`|An AZ MUST be selected. It is only used if YES for Local Zone was selected above. Select an AZ in the region (not a Local Zone).|Qumulo Sidecar Lambdas Private Subnet
+(`SideCarPrivateSubnetCidr`)|`10.0.32.0/20`|This CIDR is only used if YES for Local Zone was selected above.  Must be specified as an IPv4 address followed by / and a subnet mask of 0-32.|OPTIONAL: Provision Public IP for Qumulo Management
+(`QPublicMgmt`)|`NO`|Select YES to provision an Elastic IP Address (public static) attached to a Network Loadbalancer listening only on port 443 for Qumulo Managment.  Not supported in Local Zones or Outpost.|OPTIONAL: Enable Replication Port for Qumulo Public IP
+(`QPublicRepl`)|`NO`|Select YES to enable port 3712 for replication from on-prem Qumulo systems using the Elastic IP (public static) for Qumulo Managment.  Requires YES to Public Management above.|OPTIONAL: FQDN for R53 Private Hosted Zone
+(`DomainName`)|`NONE.local`|IF NONE.local, R53 config will be skipped. Private R53 DNS Fully Qualified Domain Name.  The .local domain is one way to provide public query resolution for overlapping names: qumulo.com vs qumulo.local|OPTIONAL: R53 Record Name for Qumulo RR DNS 
+(`QFloatRecordName`)|`qumulo`|ONLY APPLICABLE if a domain name was provided above.  Record Name for R53 Private Hosted Zone Qumulo Cluster floating IPs.
+|===
+.Qumulo File Data Platform Configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Is the Qumulo Cluster being deployed for Disaster Recovery?
+(`QDr`)|`NO`|Select YES if the cluster is being deployed for a Disaster Recovery workload.|Qumulo AWS Marketplace Offering Accepted
+(`QMarketPlaceType`)|`1TB-Usable-All-Flash`|Select the Qumulo Cluster usable capacity per the accpeted AWS Marketplace offering.  Customizable offerings typically leverage a Private Offer via AWS Marketplace and can be used to deploy 1TB to 6PB with this template.|Qumulo AWS AMI ID
+(`QAmiID`)|`Only for Specified AMI-ID Offering`|Only used for the Specified AMI-ID option above.  Amazon Machine Image ID supplied by Qumulo.|Qumulo EC2 Instance Type
+(`QInstanceType`)|`m5.2xlarge`|EC2 instance type for Qumulo nodes.|Total Number of Qumulo EC2 Instances
+(`QNodeCount`)|`Select for Custom Offering OR Expanding Cluster`|Total number of EC2 instances, or Qumulo Nodes, in the Qumulo Cluster: (4-10).  NOTE: This field may be used to add nodes with a CloudFormation Stack Update after initial provisioning.|EBS Volume Configuration per EC2 Instance
+(`QDiskConfig`)|`Select for Custom Offering`|Choose the EBS Volume configuration and type for the Qumulo EC2 instances: AF= SSD, Hybrid st1= SSD+HDD st1, Hybrid sc1= SSD+HDD sc1. NOTE: This must match the EBS capacity and type of the Customizable Private Offer.|Floating IP for IP Failover
+(`QFloatingIP`)|`3`|Number of EC2 Secondary IPs to be configured for each instance in the cluster, 1-4.|Qumulo Core Software Version
+(`QClusterVersion`)|`4.2.0`|Software version to install on the cluster.  NOTE: This field CAN NOT be used to upgrade the cluster with a CloudFormation Stack Update. All Updates after initial creation must follow the quarterly release cadence using the Web UI or REST API.|Qumulo Cluster Name
+(`QClusterName`)|`Cloud-Q`|Name must be an alpha-numeric string between 2 and 15 characters. Dash (-) is allowed if not the first or last character.|Qumulo Cluster Admin Password
+(`QClusterAdminPwd`)|`**__Requires input__**`|Minumum 8 characters and must include one each of: uppercase, lowercase, and a special character.|OPTIONAL: AWS EBS Volumes Encryption Key 
+(`VolumesEncryptionKey`)|`**__Blank string__**`|Leave Blank and AWS will generate a key. To specify a Customer Managed Key provide the KMS CMK ID: 12345678-1234-1234-1234-1234567890ab|OPTIONAL: Qumulo Instance Recovery Topic
+(`QInstanceRecoveryTopic`)|`**__Blank string__**`|Optionally enter the ARN of an SNS topic that receives messages when an instance alarm is triggered.|OPTIONAL: Send Qumulo Audit Log messages to CloudWatch Logs? 
+(`QAuditLog`)|`NO`|Select YES to create a CloudWatch Logs Group for the Qumulo Cluster that captures all Qumulo Audit Log Activity.
+|===
+.Qumulo EBS Monitoring/Replacement & CloudWatch Metrics Configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Provision Qumulo Sidecar Lambdas
+(`SideCarProv`)|`YES`|By default the Qumulo Sidecar Lambdas are deployed to monitor and replace failed EBS volumes plus send metrics to CloudWatch.  Leave this at default for production environments with WAF compliance. The ability to disable this provisioning is offerred just for test environments.|Qumulo Sidecar Username 
+(`SideCarUsername`)|`SideCarUser`|Username for SideCar|Qumulo Sidecar Password 
+(`SideCarPassword`)|`**__Requires input__**`|Minumum 8 characters and must include one each of: uppercase, lowercase, and a special character.  This field must be filled in regardless of the Sidecar provisioning option above.|Qumulo Sidecar Software Version 
+(`SideCarVersion`)|`4.2.0`|Software Version should match the desired cluster version at creation.  NOTE: This field may be used to upgrade the SideCar software version with a CloudFormation Stack Update after upgrading the cluster via the Web UI or REST API.|OPTIONAL: Qumulo Sidecar SNS Topic 
+(`SideCarSNSTopic`)|`**__Blank string__**`|Optionally enter an SNS topic ARN that lambda errors and successful disk replacements will be published to.
+|===
