@@ -22,8 +22,17 @@ AWSTemplateFormatVersion: "2010-09-09"
 #OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 #SOFTWARE.
 
-Description: This template looks up the AMI-ID for the Qumulo EC2 instances based on AWS region and marketplace product type
-
+Description: This template looks up the AMI-ID for the Qumulo EC2 instances based on AWS region and marketplace product type (qs-1s6n2i687)
+Metadata:
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W9001
+        - W9002
+        - W9003
+        - W9004
+        - W9006
+        
 Parameters:
   MarketPlaceType:
     Type: String

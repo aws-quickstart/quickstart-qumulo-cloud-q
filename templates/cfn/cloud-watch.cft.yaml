@@ -22,8 +22,17 @@ AWSTemplateFormatVersion: "2010-09-09"
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 # SOFTWARE.
 
-Description: This template creates a resource group, audit log group, and dashboard for the QSTACK for easy filtering and monitoring in Cloud Watch
-
+Description: This template creates a resource group, audit log group, and dashboard for the QSTACK for easy filtering and monitoring in Cloud Watch (qs-1s6n2i67c)
+Metadata:
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W9001
+        - W9002
+        - W9003
+        - W9004
+        - W9006
+        
 Parameters:
   QClusterName:
     Type: String  

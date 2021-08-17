@@ -22,8 +22,17 @@ AWSTemplateFormatVersion: "2010-09-09"
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 # SOFTWARE.
 
-Description: This template instantiates an AWS Network Load Balancer connected to the Qumulo Cluster Static IP addresses, insuring reachability
-
+Description: This template instantiates an AWS Network Load Balancer connected to the Qumulo Cluster Static IP addresses, insuring reachability (qs-1s6n2i67j)
+Metadata:
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W9001
+        - W9002
+        - W9003
+        - W9004
+        - W9006
+        
 Parameters:
   VPCID:
     Type: String

@@ -22,9 +22,17 @@ AWSTemplateFormatVersion: "2010-09-09"
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 # SOFTWARE.
 
-Description: This is the main template to spin up a Qumulo Cluster in an existing VPC.  It calls subordinate CloudFormation templates to instantiate the infrastructure.
+Description: This is the main template to spin up a Qumulo Cluster in an existing VPC.  It calls subordinate CloudFormation templates to instantiate the infrastructure. (qs-1s6n2i6af)
 
 Metadata:
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W9006
+        - W9901
+        - E9902 #Unknown exception while processing rule E9902
+        - E9903 #Unknown exception while processing rule E9903
+        - E9904 #Unknown exception while processing rule E9904
   QuickStartDocumentation:
     EntrypointName: 'Parameters for deploying into an existing VPC'
     Order: '2'
@@ -443,6 +451,7 @@ Parameters:
     Default: "4.2.0"
 
   SideCarUsername:
+    Description: "Username for SideCar"
     Type: String
     Default: SideCarUser
 
@@ -699,7 +708,6 @@ Resources:
 
   QSTACK:
     Type: 'AWS::CloudFormation::Stack'
-    DependsOn: QIAMSTACK
     Properties:
       Parameters:
         ClusterName: !Ref QClusterName
@@ -733,7 +741,6 @@ Resources:
 
   QSIDECARSTACK:
     Type: 'AWS::CloudFormation::Stack'
-    DependsOn: QSTACK
     Condition: ProvSideCar
     Properties:
       Parameters:
@@ -748,7 +755,6 @@ Resources:
 
   PROVISIONINGSTACK:
     Type: 'AWS::CloudFormation::Stack'
-    DependsOn: QSTACK
     Properties:
       Parameters:
         SideCarProv: !Ref SideCarProv
@@ -783,7 +789,6 @@ Resources:
 
   CLOUDWATCHSTACK:
     Type: 'AWS::CloudFormation::Stack'
-    DependsOn: QSTACK
     Properties:
       Parameters:
         QClusterName: !Ref QClusterName        
@@ -802,7 +807,6 @@ Resources:
 
   MGMTNLBSTACK:
     Type: 'AWS::CloudFormation::Stack'
-    DependsOn: QSTACK
     Condition: ProvMgmt
     Properties:
       Parameters:
@@ -820,7 +824,6 @@ Resources:
 
   DNSSTACK:
     Type: 'AWS::CloudFormation::Stack'
-    DependsOn: QSTACK
     Condition: ProvR53
     Properties:
       Parameters:

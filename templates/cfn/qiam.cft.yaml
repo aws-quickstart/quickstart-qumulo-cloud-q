@@ -22,8 +22,17 @@ AWSTemplateFormatVersion: "2010-09-09"
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 # SOFTWARE.
 
-Description: This template creates an IAM Profile for subsequent use by the QSTACK template during cluster creation
-
+Description: This template creates an IAM Profile for subsequent use by the QSTACK template during cluster creation (qs-1s6n2i68d)
+Metadata:
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W9001
+        - W9002
+        - W9003
+        - W9004
+        - W9006
+        
 Resources:
   QumuloAccessRole:
     Type: "AWS::IAM::Role"

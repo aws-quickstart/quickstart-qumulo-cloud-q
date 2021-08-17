@@ -22,8 +22,18 @@ AWSTemplateFormatVersion: "2010-09-09"
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 # SOFTWARE.
 
-Description: This template instantiates an EC2 instance for configuration of the Qumulo Cluster and is then shutdown.  Floating IPs, Sidecar role and permissions, EBS Volume Tags, and CMK Policy management are all configured.
-
+Description: This template instantiates an EC2 instance for configuration of the Qumulo Cluster and is then shutdown.  Floating IPs, Sidecar role and permissions, EBS Volume Tags, and CMK Policy management are all configured. (qs-1s6n2i67p)
+Metadata:
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W2506
+        - W9001
+        - W9002
+        - W9003
+        - W9004
+        - W9006
+        
 Parameters:
   SideCarProv:
     Type: String
@@ -87,19 +97,19 @@ Resources:
       SecurityGroupIngress:
         - CidrIp: !Ref PrivateSubnetCidr
           Description: 'SSH access for provisioning instance'
-          FromPort: '22'
+          FromPort: 22
           IpProtocol: tcp
-          ToPort: '22'
+          ToPort: 22
         - CidrIp: !Ref PrivateSubnetCidr
           Description: 'Cluster access to ngnix'
-          FromPort: '80'
+          FromPort: 80
           IpProtocol: tcp
-          ToPort: '80'
+          ToPort: 80
         - CidrIp: !Ref PrivateSubnetCidr
           Description: 'Cluster access to ngnix'
-          FromPort: '443'
+          FromPort: 443
           IpProtocol: tcp
-          ToPort: '443'
+          ToPort: 443
 
   ProvisionerRole:
     Type: 'AWS::IAM::Role'
@@ -233,9 +243,9 @@ Resources:
       IamInstanceProfile: !Ref ProvisionerProfile
       KeyName: !Ref KeyName
       NetworkInterfaces:
-        - AssociatePublicIpAddress: 'false'
-          DeleteOnTermination: 'true'
-          DeviceIndex: 0
+        - AssociatePublicIpAddress: false
+          DeleteOnTermination: true
+          DeviceIndex: '0'
           GroupSet:
             - !Ref ProvisionerSG
           SubnetId: !Ref PrivateSubnetId
@@ -243,9 +253,9 @@ Resources:
         - DeviceName: /dev/sda1
           Ebs:
             VolumeType: gp2
-            VolumeSize: '40'
-            DeleteOnTermination: 'true'
-            Encrypted: 'false'
+            VolumeSize: 40
+            DeleteOnTermination: true
+            Encrypted: false
       UserData:
         Fn::Base64: !Sub |
           Content-Type: multipart/mixed; boundary="//"

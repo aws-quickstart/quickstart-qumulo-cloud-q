@@ -22,8 +22,17 @@ AWSTemplateFormatVersion: "2010-09-09"
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 # SOFTWARE.
 
-Description: This template creates an private hosted zone in R53 DNS
-
+Description: This template creates an private hosted zone in R53 DNS (qs-1s6n2i69j)
+Metadata:
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W9001
+        - W9002
+        - W9003
+        - W9004
+        - W9006
+        
 Parameters:
   FQDName:
     Type: String
@@ -227,7 +236,6 @@ Resources:
               - " - Hosted Private Zone"
   RoundRobinGroup:
     Type: AWS::Route53::RecordSetGroup
-    DependsOn: DNSZone
     Properties:
       Comment: "A Records for DNS RR to Qumulo Cluster Frontend"
       HostedZoneId: !Ref DNSZone
@@ -238,28 +246,28 @@ Resources:
           SetIdentifier: "Qumulo FIP 1"
           Type: A
           TTL: "0"
-          Weight: "0"
+          Weight: 0
         - Name: !Sub "${RecordName}.${FQDName}"
           ResourceRecords: 
             - !Select [1, !Split [", ", !Ref FloatIPs]]
           SetIdentifier: "Qumulo FIP 2"
           Type: A
           TTL: "0"
-          Weight: "0"
+          Weight: 0
         - Name: !Sub "${RecordName}.${FQDName}"
           ResourceRecords: 
             - !Select [2, !Split [", ", !Ref FloatIPs]]
           SetIdentifier: "Qumulo FIP 3"
           Type: A
           TTL: "0"
-          Weight: "0"
+          Weight: 0
         - Name: !Sub "${RecordName}.${FQDName}"
           ResourceRecords: 
             - !Select [3, !Split [", ", !Ref FloatIPs]]
           SetIdentifier: "Qumulo FIP 4"
           Type: A
           TTL: "0"
-          Weight: "0"
+          Weight: 0
         - !If
           - Provision5
           - Name: !Sub "${RecordName}.${FQDName}"
@@ -268,7 +276,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 5"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision6
@@ -278,7 +286,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 6"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision7
@@ -288,7 +296,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 7"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision8
@@ -298,7 +306,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 8"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision9
@@ -308,7 +316,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 9"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision10
@@ -318,7 +326,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 10"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision11
@@ -328,7 +336,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 11"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision12
@@ -338,7 +346,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 12"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision13
@@ -348,7 +356,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 13"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision14
@@ -358,7 +366,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 14"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision15
@@ -368,7 +376,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 15"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision16
@@ -378,7 +386,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 16"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision17
@@ -388,7 +396,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 17"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision18
@@ -398,7 +406,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 18"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision19
@@ -408,7 +416,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 19"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision20
@@ -418,7 +426,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 20"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision21
@@ -428,7 +436,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 21"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision22
@@ -438,7 +446,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 22"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision23
@@ -448,7 +456,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 23"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision24
@@ -458,7 +466,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 24"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision25
@@ -468,7 +476,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 25"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision26
@@ -478,7 +486,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 26"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision27
@@ -488,7 +496,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 27"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision28
@@ -498,7 +506,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 28"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision29
@@ -508,7 +516,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 29"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision30
@@ -518,7 +526,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 30"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision31
@@ -528,7 +536,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 31"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision32
@@ -538,7 +546,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 32"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision33
@@ -548,7 +556,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 33"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision34
@@ -558,7 +566,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 34"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision35
@@ -568,7 +576,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 35"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision36
@@ -578,7 +586,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 36"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision37
@@ -588,7 +596,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 37"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision38
@@ -598,7 +606,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 38"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision39
@@ -608,7 +616,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 39"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision40
@@ -618,7 +626,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 40"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision41
@@ -628,7 +636,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 41"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision42
@@ -638,7 +646,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 42"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision43
@@ -648,7 +656,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 43"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision44
@@ -658,7 +666,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 44"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision45
@@ -668,7 +676,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 45"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision46
@@ -678,7 +686,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 46"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision47
@@ -688,7 +696,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 47"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision48
@@ -698,7 +706,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 48"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision49
@@ -708,7 +716,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 49"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision50
@@ -718,7 +726,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 50"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision51
@@ -728,7 +736,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 51"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision52
@@ -738,7 +746,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 52"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision53
@@ -748,7 +756,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 53"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision54
@@ -758,7 +766,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 54"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision55
@@ -768,7 +776,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 55"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision56
@@ -778,7 +786,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 56"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision57
@@ -788,7 +796,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 57"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision58
@@ -798,7 +806,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 58"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision59
@@ -808,7 +816,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 59"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision60
@@ -818,7 +826,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 60"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision61
@@ -828,7 +836,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 61"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision62
@@ -838,7 +846,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 62"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision63
@@ -848,7 +856,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 63"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision64
@@ -858,7 +866,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 64"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision65
@@ -868,7 +876,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 65"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision66
@@ -878,7 +886,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 66"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision67
@@ -888,7 +896,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 67"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision68
@@ -898,7 +906,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 68"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision69
@@ -908,7 +916,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 69"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision70
@@ -918,7 +926,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 70"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision71
@@ -928,7 +936,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 71"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision72
@@ -938,7 +946,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 72"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision73
@@ -948,7 +956,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 73"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision74
@@ -958,7 +966,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 74"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision75
@@ -968,7 +976,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 75"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision76
@@ -978,7 +986,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 76"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision77
@@ -988,7 +996,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 77"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision78
@@ -998,7 +1006,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 78"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision79
@@ -1008,7 +1016,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 79"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
         - !If
           - Provision80
@@ -1018,7 +1026,7 @@ Resources:
             SetIdentifier: "Qumulo FIP 80"
             Type: A
             TTL: "0"
-            Weight: "0"
+            Weight: 0
           - !Ref AWS::NoValue
 
           

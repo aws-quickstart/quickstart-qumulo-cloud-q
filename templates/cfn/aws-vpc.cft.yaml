@@ -1,5 +1,14 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: This template builds the VPC, public and private subnets, NAT gateway, and several Security Groups
+Description: This template builds the VPC, public and private subnets, NAT gateway, and several Security Groups (qs-1s6n2i64h)
+Metadata:
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W9001
+        - W9002
+        - W9003
+        - W9004
+        - W9006
 
 Parameters:
   VpcCidr:

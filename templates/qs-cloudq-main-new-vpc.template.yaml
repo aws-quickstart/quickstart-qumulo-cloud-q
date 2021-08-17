@@ -22,9 +22,14 @@ AWSTemplateFormatVersion: "2010-09-09"
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 # SOFTWARE.
 
-Description: This is the main template to spin up a Qumulo Cluster and create a new VPC.  It calls subordinate CloudFormation templates to instantiate the infrastructure.
+Description: This is the main template to spin up a Qumulo Cluster and create a new VPC.  It calls subordinate CloudFormation templates to instantiate the infrastructure. (qs-1s6n2i6a8)
 
 Metadata:
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W9006
+        - W9901
   QuickStartDocumentation:
     EntrypointName: 'Parameters for deploying into a new VPC'
     Order: '1'
@@ -448,6 +453,7 @@ Parameters:
     Default: "4.2.0"
 
   SideCarUsername:
+    Description: "Username for SideCar"
     Type: String
     Default: SideCarUser
 
@@ -601,7 +607,6 @@ Resources:
 
   CloudQStack:
     Type: "AWS::CloudFormation::Stack"
-    DependsOn: AWSVPCSTACK
     Properties:
       Parameters:
         QSS3BucketName: !Ref QSS3BucketName
