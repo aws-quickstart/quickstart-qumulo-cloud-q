@@ -39,7 +39,7 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
-          default: AWS Template Configuration - aws-sa-waf-cluster version 3.0
+          default: AWS Template Configuration - Cloud Q Quick Start v3.3
         Parameters:
           - QSS3BucketName
           - QSS3KeyPrefix
@@ -75,9 +75,10 @@ Metadata:
           - QClusterName
           - QClusterAdminPwd
           - VolumesEncryptionKey
+          - QPermissionsBoundary
           - QInstanceRecoveryTopic
           - QAuditLog
-          - ProvisioningServerAMI
+          - TermProtection
 
       - Label:
           default: Qumulo EBS Monitoring/Replacement & CloudWatch Metrics Configuration
@@ -137,12 +138,14 @@ Metadata:
         default: "Qumulo EC2 Instance Type"
       VolumesEncryptionKey:
         default: "OPTIONAL: AWS EBS Volumes Encryption Key "
+      QPermissionsBoundary:
+        default: "OPTIONAL: AWS Permissions Boundary Policy Name"
       QInstanceRecoveryTopic:
         default: "OPTIONAL: Qumulo Instance Recovery Topic"
       QAuditLog:
         default: "OPTIONAL: Send Qumulo Audit Log messages to CloudWatch Logs? "
-      ProvisioningServerAMI:
-        default: "Provisioning Server for Secondary Configuration of Qumulo "
+      TermProtection:
+        default: "Enable Termination Protection "
       QClusterLocalZone:
         default: "Is the Qumulo Cluster being deployed in a Local Zone or Outpost?"
       SideCarProv:
@@ -245,7 +248,7 @@ Parameters:
 
   DomainName:
     Description: "IF NONE.local, R53 config will be skipped. Private R53 DNS Fully Qualified Domain Name.  The .local domain is one way to provide public query resolution for overlapping names: qumulo.com vs qumulo.local"
-    AllowedPattern: '[a-zA-Z0-9]+\..+'
+    AllowedPattern: '[a-zA-Z0-9-]+\..+'
     MaxLength: '255'
     MinLength: '2'
     Type: String
@@ -397,6 +400,12 @@ Parameters:
     Type: String
     Default: ""
 
+  QPermissionsBoundary:
+    Description: "Apply an IAM Permissions Boundary Policy to the Qumulo IAM roles that are created for the Qumulo cluster and provisioning instance.  This is an account based policy and is optional.  
+                  Qumulo's IAM roles conform to the least privilege model."
+    Type: String
+    Default: ""
+
   QInstanceRecoveryTopic:
     Description: Optionally enter the ARN of an SNS topic that receives messages when an instance alarm is triggered.
     Type: String
@@ -408,10 +417,13 @@ Parameters:
     Type: String
     Default: "172.31.0.0/16"
 
-  ProvisioningServerAMI: 
-    Description: "AWS Linux Server AMI"
-    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
-    Default: "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
+  TermProtection:
+    Description: Enable Termination Protection for EC2 instances and the CloudFormation stack
+    AllowedValues:
+      - "YES"
+      - "NO"
+    Type: String
+    Default: "YES"
 
   QClusterLocalZone:
     Description: AWS Lambda services are not supported in Local Zones or Outposts and will be placed in the subnet specified below.
@@ -699,6 +711,8 @@ Resources:
   QIAMSTACK:
     Type: "AWS::CloudFormation::Stack"
     Properties:
+      Parameters:
+        QPermissionsBoundary: !Ref QPermissionsBoundary
       TemplateURL:
         !Sub
           - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/qiam.cft.yaml
@@ -758,7 +772,7 @@ Resources:
     Properties:
       Parameters:
         SideCarProv: !Ref SideCarProv
-        ProvisioningServerAMI: !Ref ProvisioningServerAMI
+        TermProtection: !Ref TermProtection
         SecretsManagedPolicy: "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
         KeyName: !Ref KeyPair
         Region: !Ref AWS::Region
@@ -778,11 +792,13 @@ Resources:
         QStackName: !GetAtt QSTACK.Outputs.AWSStackName
         QClusterName: !Ref QClusterName  
         QClusterVersion: !Ref QClusterVersion
-        BucketName: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]  
+        QPermissionsBoundary: !Ref QPermissionsBoundary        
+        BucketName: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+        BucketRegion: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
         KeyPrefix: !Ref QSS3KeyPrefix
       TemplateURL:
         !Sub
-          - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/provisioning-node-nodc.cft.yaml
+          - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/provisioning-node.cft.yaml
           - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
             S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       TimeoutInMinutes: 150   

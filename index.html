@@ -2567,7 +2567,7 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 <div class="sect2">
 <h3 id="_parameters_for_deploying_into_a_new_vpc">Parameters for deploying into a new VPC</h3>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. AWS Template Configuration - Cloud Q v3.0</caption>
+<caption class="title">Table 1. AWS Template Configuration - Cloud Q Quick Start v3.3</caption>
 <colgroup>
 <col style="width: 16%;">
 <col style="width: 11%;">
@@ -2778,6 +2778,12 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 <td class="tableblock halign-left valign-top"><p class="tableblock">Leave Blank and AWS will generate a key. To specify a Customer Managed Key provide the KMS CMK ID: 12345678-1234-1234-1234-1234567890ab</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OPTIONAL: AWS Permissions Boundary Policy Name
+(<code>QPermissionsBoundary</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Blank string</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apply an IAM Permissions Boundary Policy to the Qumulo IAM roles that are created for the Qumulo cluster and provisioning instance.  This is an account based policy and is optional. Qumulo&#8217;s IAM roles conform to the least privilege model.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">OPTIONAL: Qumulo Instance Recovery Topic
 (<code>QInstanceRecoveryTopic</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Blank string</em></strong></code></p></td>
@@ -2788,6 +2794,12 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 (<code>QAuditLog</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>NO</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Select YES to create a CloudWatch Logs Group for the Qumulo Cluster that captures all Qumulo Audit Log Activity.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable Termination Protection
+(<code>TermProtection</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>YES</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable Termination Protection for EC2 instances and the CloudFormation stack</p></td>
 </tr>
 </tbody>
 </table>
@@ -2842,7 +2854,7 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 <div class="sect2">
 <h3 id="_parameters_for_deploying_into_an_existing_vpc">Parameters for deploying into an existing VPC</h3>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 5. AWS Template Configuration - aws-sa-waf-cluster version 3.0</caption>
+<caption class="title">Table 5. AWS Template Configuration - Cloud Q Quick Start v3.3</caption>
 <colgroup>
 <col style="width: 16%;">
 <col style="width: 11%;">
@@ -3047,6 +3059,12 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 <td class="tableblock halign-left valign-top"><p class="tableblock">Leave Blank and AWS will generate a key. To specify a Customer Managed Key provide the KMS CMK ID: 12345678-1234-1234-1234-1234567890ab</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OPTIONAL: AWS Permissions Boundary Policy Name
+(<code>QPermissionsBoundary</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Blank string</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apply an IAM Permissions Boundary Policy to the Qumulo IAM roles that are created for the Qumulo cluster and provisioning instance.  This is an account based policy and is optional. Qumulo&#8217;s IAM roles conform to the least privilege model.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">OPTIONAL: Qumulo Instance Recovery Topic
 (<code>QInstanceRecoveryTopic</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Blank string</em></strong></code></p></td>
@@ -3059,10 +3077,10 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 <td class="tableblock halign-left valign-top"><p class="tableblock">Select YES to create a CloudWatch Logs Group for the Qumulo Cluster that captures all Qumulo Audit Log Activity.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Provisioning Server for Secondary Configuration of Qumulo
-(<code>ProvisioningServerAMI</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AWS Linux Server AMI</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable Termination Protection
+(<code>TermProtection</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>YES</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable Termination Protection for EC2 instances and the CloudFormation stack</p></td>
 </tr>
 </tbody>
 </table>
@@ -3164,7 +3182,7 @@ and to share your customizations with others.</p>
 </html>
 <!--
 repo commit:
-a9b56b5d8b9565228a5264b4331a88d50ab7ca0d
+8e5b18a9d58836a2e8c90732dfbd70f5156956ac
 
 submodule config:
  65f80e33e522df2db773d415faf97a7fadf2f5e3 docs/boilerplate (remotes/origin/swingline-test-12-g65f80e3)
