@@ -32,7 +32,17 @@ Metadata:
         - W9003
         - W9004
         - W9006
-        
+
+Parameters:
+  QPermissionsBoundary:
+    Type: String
+
+Conditions:
+    ProvBoundary: !Not
+    - !Equals
+      - !Ref QPermissionsBoundary
+      - ""
+
 Resources:
   QumuloAccessRole:
     Type: "AWS::IAM::Role"
@@ -47,6 +57,7 @@ Resources:
             Action:
               - "sts:AssumeRole"
       Path: /
+      PermissionsBoundary: !If [ProvBoundary, !Sub "arn:aws:iam::${AWS::AccountId}:policy/${QPermissionsBoundary}", !Ref "AWS::NoValue"]
       Policies:
         - PolicyName: QumuloAccess
           PolicyDocument:

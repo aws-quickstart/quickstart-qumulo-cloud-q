@@ -36,7 +36,7 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
-          default: AWS Template Configuration - Cloud Q v3.0
+          default: AWS Template Configuration - Cloud Q Quick Start v3.3
         Parameters:
           - QSS3BucketName
           - QSS3KeyPrefix
@@ -73,8 +73,10 @@ Metadata:
           - QClusterName
           - QClusterAdminPwd
           - VolumesEncryptionKey
+          - QPermissionsBoundary          
           - QInstanceRecoveryTopic
           - QAuditLog
+          - TermProtection          
 
       - Label:
           default: Qumulo EBS Monitoring/Replacement & CloudWatch Metrics Configuration
@@ -134,10 +136,14 @@ Metadata:
         default: "Qumulo EC2 Instance Type"
       VolumesEncryptionKey:
         default: "OPTIONAL: AWS EBS Volumes Encryption Key "
+      QPermissionsBoundary:
+        default: "OPTIONAL: AWS Permissions Boundary Policy Name"        
       QInstanceRecoveryTopic:
         default: "OPTIONAL: Qumulo Instance Recovery Topic"
       QAuditLog:
         default: "OPTIONAL: Send Qumulo Audit Log messages to CloudWatch Logs? "
+      TermProtection:
+        default: "Enable Termination Protection "        
       QClusterLocalZone:
         default: "Is the Qumulo Cluster being deployed in a Local Zone?"
       SideCarProv:
@@ -252,7 +258,7 @@ Parameters:
 
   DomainName:
     Description: "IF NONE.local, R53 config will be skipped. Private R53 DNS Fully Qualified Domain Name.  The .local domain is one way to provide public query resolution for overlapping names: qumulo.com vs qumulo.local"
-    AllowedPattern: '[a-zA-Z0-9]+\..+'
+    AllowedPattern: '[a-zA-Z0-9-]+\..+'
     MaxLength: '255'
     MinLength: '2'
     Type: String
@@ -404,10 +410,24 @@ Parameters:
     Type: String
     Default: ""
 
+  QPermissionsBoundary:
+    Description: "Apply an IAM Permissions Boundary Policy to the Qumulo IAM roles that are created for the Qumulo cluster and provisioning instance.  This is an account based policy and is optional.  
+                  Qumulo's IAM roles conform to the least privilege model."
+    Type: String
+    Default: ""
+    
   QInstanceRecoveryTopic:
     Description: Optionally enter the ARN of an SNS topic that receives messages when an instance alarm is triggered.
     Type: String
     Default: ""
+
+  TermProtection:
+    Description: Enable Termination Protection for EC2 instances and the CloudFormation stack
+    AllowedValues:
+      - "YES"
+      - "NO"
+    Type: String
+    Default: "YES"
 
   QClusterLocalZone:
     Description: "AWS Lambda services are not supported in Local Zones and will be placed in the subnet specified below.  Note: If deploying on Outpost launch the 'Deploy in an existing VPC' link in the deployment guide."
@@ -635,8 +655,10 @@ Resources:
         QClusterName: !Ref QClusterName
         QClusterAdminPwd: !Ref QClusterAdminPwd
         VolumesEncryptionKey: !Ref VolumesEncryptionKey
+        QPermissionsBoundary: !Ref QPermissionsBoundary        
         QInstanceRecoveryTopic: !Ref QInstanceRecoveryTopic
         QAuditLog: !Ref QAuditLog
+        TermProtection: !Ref TermProtection
         SideCarProv: !Ref SideCarProv
         SideCarUsername: !Ref SideCarUsername
         SideCarPassword: !Ref SideCarPassword
