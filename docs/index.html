@@ -1,0 +1,2951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.12">
+<title>Qumulo Cloud Q on the AWS Cloud</title>
+<style>
+
+/* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
+/* Uncomment @import statement to use as custom stylesheet */
+@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700";*/
+article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section{display:block}
+audio,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
+html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
+a{background:none}
+a:focus{outline:thin dotted}
+a:active,a:hover{outline:0}
+h1{font-size:2em;margin:.67em 0}
+abbr[title]{border-bottom:1px dotted}
+b,strong{font-weight:bold}
+dfn{font-style:italic}
+hr{-moz-box-sizing:content-box;box-sizing:content-box;height:0}
+mark{background:#ff0;color:#000}
+code,kbd,pre,samp{font-family:monospace;font-size:1em}
+pre{white-space:pre-wrap}
+q{quotes:"\201C" "\201D" "\2018" "\2019"}
+small{font-size:80%}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+figure{margin:0}
+fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
+legend{border:0;padding:0}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
+button,input{line-height:normal}
+button,select{text-transform:none}
+button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+textarea{overflow:auto;vertical-align:top}
+table{border-collapse:collapse;border-spacing:0}
+*,*::before,*::after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
+html,body{font-size:100%}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto;tab-size:4;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+a:hover{cursor:pointer}
+img,object,embed{max-width:100%;height:auto}
+object,embed{height:100%}
+img{-ms-interpolation-mode:bicubic}
+.left{float:left!important}
+.right{float:right!important}
+.text-left{text-align:left!important}
+.text-right{text-align:right!important}
+.text-center{text-align:center!important}
+.text-justify{text-align:justify!important}
+.hide{display:none}
+img,object,svg{display:inline-block;vertical-align:middle}
+textarea{height:auto;min-height:50px}
+select{width:100%}
+.center{margin-left:auto;margin-right:auto}
+.stretch{width:100%}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0;direction:ltr}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
+a:hover,a:focus{color:#1d4b8f}
+a img{border:0}
+p{font-family:inherit;font-weight:400;font-size:1em;line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p aside{font-size:.875em;line-height:1.35;font-style:italic}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#34478c;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
+h1{font-size:2.125em}
+h2{font-size:1.6875em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
+h4,h5{font-size:1.125em}
+h6{font-size:1em}
+hr{border:solid #dddddf;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em;height:0}
+em,i{font-style:italic;line-height:inherit}
+strong,b{font-weight:bold;line-height:inherit}
+small{font-size:60%;line-height:inherit}
+code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+ul,ol,dl{font-size:1em;line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol{margin-left:1.5em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0;font-size:1em}
+ul.square li ul,ul.circle li ul,ul.disc li ul{list-style:inherit}
+ul.square{list-style-type:square}
+ul.circle{list-style-type:circle}
+ul.disc{list-style-type:disc}
+ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
+dl dt{margin-bottom:.3125em;font-weight:bold}
+dl dd{margin-bottom:1.25em}
+abbr,acronym{text-transform:uppercase;font-size:90%;color:rgba(0,0,0,.8);border-bottom:1px dotted #ddd;cursor:help}
+abbr{text-transform:none}
+blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
+blockquote cite{display:block;font-size:.9375em;color:rgba(0,0,0,.6)}
+blockquote cite::before{content:"\2014 \0020"}
+blockquote cite a,blockquote cite a:visited{color:rgba(0,0,0,.6)}
+blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
+@media screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
+h1{font-size:2.75em}
+h2{font-size:2.3125em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+h4{font-size:1.4375em}}
+table{background:#fff;margin-bottom:1.25em;border:solid 1px #dedede}
+table thead,table tfoot{background:#f7f8f7}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
+table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
+table tr.even,table tr.alt{background:#f8f8f7}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{display:table-cell;line-height:1.6}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
+h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.clearfix::before,.clearfix::after,.float-group::before,.float-group::after{content:" ";display:table}
+.clearfix::after,.float-group::after{clear:both}
+:not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed;word-wrap:break-word}
+:not(pre)>code.nobreak{word-wrap:normal}
+:not(pre)>code.nowrap{white-space:nowrap}
+pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
+pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
+pre>code{display:block}
+pre.nowrap,pre.nowrap pre{white-space:pre;word-wrap:normal}
+em em{font-style:normal}
+strong strong{font-weight:400}
+.keyseq{color:rgba(51,51,51,.8)}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+.keyseq kbd:first-child{margin-left:0}
+.keyseq kbd:last-child{margin-right:0}
+.menuseq,.menuref{color:#000}
+.menuseq b:not(.caret),.menuref{font-weight:inherit}
+.menuseq{word-spacing:-.02em}
+.menuseq b.caret{font-size:1.25em;line-height:.8}
+.menuseq i.caret{font-weight:bold;text-align:center;width:.45em}
+b.button::before,b.button::after{position:relative;top:-1px;font-weight:400}
+b.button::before{content:"[";padding:0 3px 0 2px}
+b.button::after{content:"]";padding:0 2px 0 3px}
+p a>code:hover{color:rgba(0,0,0,.9)}
+#header,#content,#footnotes,#footer{width:100%;margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header::before,#header::after,#content::before,#content::after,#footnotes::before,#footnotes::after,#footer::before,#footer::after{content:" ";display:table}
+#header::after,#content::after,#footnotes::after,#footer::after{clear:both}
+#content{margin-top:1.25em}
+#content::before{content:none}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #dddddf}
+#header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
+#header .details{border-bottom:1px solid #dddddf;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:-ms-flexbox;display:-webkit-flex;display:flex;-ms-flex-flow:row wrap;-webkit-flex-flow:row wrap;flex-flow:row wrap}
+#header .details span:first-child{margin-left:-.125em}
+#header .details span.email a{color:rgba(0,0,0,.85)}
+#header .details br{display:none}
+#header .details br+span::before{content:"\00a0\2013\00a0"}
+#header .details br+span.author::before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
+#header .details br+span#revremark::before{content:"\00a0|\00a0"}
+#header #revnumber{text-transform:capitalize}
+#header #revnumber::after{content:"\00a0"}
+#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #dddddf;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
+#toc{
+  border-bottom:1px solid #e7e7e9;
+  padding-bottom:.5em;
+  width: 230px;
+}
+#toc>ul{margin-left:.125em}
+#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
+#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc li{line-height:1.3334;margin-top:.3334em}
+#toc a{
+  font-family: "Work Sans", "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+  text-decoration:none;
+  color:#ccc;
+  display: block;
+  font-size:1rem;
+  line-height: 2rem;
+}
+#toc a:hover{color:#e6e6e6}
+#toc a:active{
+  text-decoration:none;
+  color:#777;
+}
+#toctitle{
+  padding-top:0;
+  overflow:hidden;
+  background:#283e5b;
+  /* border-bottom: 4px solid #435c7c; */
+  width:320px;
+  height:154px;
+  top:0;
+  left:0;
+  color: #283e5b;
+}
+@media screen and (min-width:768px){#toctitle{font-size:1.375em}
+body.toc2{padding-left:15em;padding-right:0}
+#toc.toc2{margin-top:0!important;background:#1c222a;position:fixed;width:15em;left:0;top:0;border-right:1px solid #e7e7e9;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;/*! padding:1.25em 1em; */height:100%;overflow:auto;padding-right: 0px;}
+#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
+#toc.toc2>ul{font-size:.9em;margin-bottom:0}
+#toc.toc2 ul ul{margin-left:0;padding-left:1em}
+#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+body.toc2.toc-right{padding-left:0;padding-right:15em}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #e7e7e9;left:auto;right:0}}
+@media screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+#toc.toc2{width:20em}
+#toc.toc2 #toctitle{
+  font-size:1.375em;
+  background-repeat: no-repeat;
+  background-size: 160.8px 136.483px;
+  background-position: center;
+  }
+#toc.toc2>ul{font-size:.95em}
+#toc.toc2 ul ul{padding-left:1.25em}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}
+#content #toc{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+#content #toc>:first-child{margin-top:0}
+#content #toc>:last-child{margin-bottom:0}
+#footer{max-width:100%;background:#1c222a;padding:1.25em}
+#footer-text{color:rgba(255,255,255,.8);line-height:1.44;/*! background: #e6e6e6; */}
+#content{margin-bottom:.625em}
+.sect1{padding-bottom:.625em}
+@media screen and (min-width:768px){#content{margin-bottom:1.25em}
+.sect1{padding-bottom:1.25em}}
+.sect1:last-child{padding-bottom:0}
+.sect1+.sect1{border-top:1px solid #e7e7e9}
+#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
+#content h1>a.anchor::before,h2>a.anchor::before,h3>a.anchor::before,#toctitle>a.anchor::before,.sidebarblock>.content>.title>a.anchor::before,h4>a.anchor::before,h5>a.anchor::before,h6>a.anchor::before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
+#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
+details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
+details>summary:first-of-type{cursor:pointer;display:list-item;outline:none;margin-bottom:.75em}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
+.paragraph.lead>p,#preamble>.sectionbody>[class="paragraph"]:first-of-type p{font-size:1.21875em;line-height:1.6;color:rgba(0,0,0,.85)}
+table.tableblock #preamble>.sectionbody>[class="paragraph"]:first-of-type p{font-size:inherit}
+.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
+.admonitionblock>table td.icon{text-align:center;width:80px}
+.admonitionblock>table td.icon img{max-width:none}
+.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6)}
+.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content{border-style:solid;border-width:1px;border-color:#e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;-webkit-border-radius:4px;border-radius:4px}
+.exampleblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child{margin-bottom:0}
+.sidebarblock{border-style:solid;border-width:1px;border-color:#dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;-webkit-border-radius:4px;border-radius:4px}
+.sidebarblock>:first-child{margin-top:0}
+.sidebarblock>:last-child{margin-bottom:0}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
+.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.literalblock pre,.listingblock>.content>pre{-webkit-border-radius:4px;border-radius:4px;word-wrap:break-word;overflow-x:auto;padding:1em;font-size:.8125em}
+@media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
+@media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
+.literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class="highlight"],.listingblock>.content>pre[class^="highlight "]{background:#f7f7f8}
+.literalblock.output pre{color:#f7f7f8;background:rgba(0,0,0,.9)}
+.listingblock>.content{position:relative}
+.listingblock code[data-lang]::before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:inherit;opacity:.5}
+.listingblock:hover code[data-lang]::before{display:block}
+.listingblock.terminal pre .command::before{content:attr(data-prompt);padding-right:.5em;color:inherit;opacity:.5}
+.listingblock.terminal pre .command:not([data-prompt])::before{content:"$"}
+.listingblock pre.highlightjs{padding:0}
+.listingblock pre.highlightjs>code{padding:1em;-webkit-border-radius:4px;border-radius:4px}
+.listingblock pre.prettyprint{border-width:0}
+.prettyprint{background:#f7f7f8}
+pre.prettyprint .linenums{line-height:1.45;margin-left:2em}
+pre.prettyprint li{background:none;list-style-type:inherit;padding-left:0}
+pre.prettyprint li code[data-lang]::before{opacity:1}
+pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
+table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
+table.linenotable td.code{padding-left:.75em}
+table.linenotable td.linenos{border-right:1px solid currentColor;opacity:.35;padding-right:.5em}
+pre.pygments .lineno{border-right:1px solid currentColor;opacity:.35;display:inline-block;margin-right:.75em}
+pre.pygments .lineno::before{content:"";margin-right:-.125em}
+.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
+.quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
+.quoteblock blockquote,.quoteblock p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
+.quoteblock blockquote{margin:0;padding:0;border:0}
+.quoteblock blockquote::before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
+.quoteblock .attribution{margin-top:.75em;margin-right:.5ex;text-align:right}
+.verseblock{margin:0 1em 1.25em}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre strong{font-weight:400}
+.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
+.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
+.quoteblock .attribution br,.verseblock .attribution br{display:none}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
+.quoteblock.abstract blockquote::before,.quoteblock.excerpt blockquote::before,.quoteblock .quoteblock blockquote::before{display:none}
+.quoteblock.abstract blockquote,.quoteblock.abstract p,.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{line-height:1.6;word-spacing:0}
+.quoteblock.abstract{margin:0 1em 1.25em;display:block}
+.quoteblock.abstract>.title{margin:0 0 .375em;font-size:1.15em;text-align:center}
+.quoteblock.excerpt>blockquote,.quoteblock .quoteblock{padding:0 0 .25em 1em;border-left:.25em solid #dddddf}
+.quoteblock.excerpt,.quoteblock .quoteblock{margin-left:0}
+.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{color:inherit;font-size:1.0625rem}
+.quoteblock.excerpt .attribution,.quoteblock .quoteblock .attribution{color:inherit;text-align:left;margin-right:0}
+table.tableblock{max-width:100%;border-collapse:separate}
+p.tableblock:last-child{margin-bottom:0}
+td.tableblock>.content>:last-child{margin-bottom:-1.25em}
+td.tableblock>.content>:last-child.sidebarblock{margin-bottom:0}
+table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
+table.grid-all>thead>tr>.tableblock,table.grid-all>tbody>tr>.tableblock{border-width:0 1px 1px 0}
+table.grid-all>tfoot>tr>.tableblock{border-width:1px 1px 0 0}
+table.grid-cols>*>tr>.tableblock{border-width:0 1px 0 0}
+table.grid-rows>thead>tr>.tableblock,table.grid-rows>tbody>tr>.tableblock{border-width:0 0 1px}
+table.grid-rows>tfoot>tr>.tableblock{border-width:1px 0 0}
+table.grid-all>*>tr>.tableblock:last-child,table.grid-cols>*>tr>.tableblock:last-child{border-right-width:0}
+table.grid-all>tbody>tr:last-child>.tableblock,table.grid-all>thead:last-child>tr>.tableblock,table.grid-rows>tbody>tr:last-child>.tableblock,table.grid-rows>thead:last-child>tr>.tableblock{border-bottom-width:0}
+table.frame-all{border-width:1px}
+table.frame-sides{border-width:0 1px}
+table.frame-topbot,table.frame-ends{border-width:1px 0}
+table.stripes-all tr,table.stripes-odd tr:nth-of-type(odd),table.stripes-even tr:nth-of-type(even),table.stripes-hover tr:hover{background:#f8f8f7}
+th.halign-left,td.halign-left{text-align:left}
+th.halign-right,td.halign-right{text-align:right}
+th.halign-center,td.halign-center{text-align:center}
+th.valign-top,td.valign-top{vertical-align:top}
+th.valign-bottom,td.valign-bottom{vertical-align:bottom}
+th.valign-middle,td.valign-middle{vertical-align:middle}
+table thead th,table tfoot th{font-weight:bold}
+tbody tr th{display:table-cell;line-height:1.6;background:#f7f8f7}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
+p.tableblock>code:only-child{background:none;padding:0}
+p.tableblock{font-size:1em}
+ol{margin-left:1.75em}
+ul li ol{margin-left:1.5em}
+dl dd{margin-left:1.125em}
+dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
+ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
+ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
+ul.unstyled,ol.unstyled{margin-left:0}
+ul.checklist{margin-left:.625em}
+ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
+ul.checklist li>p:first-child>input[type="checkbox"]:first-child{margin-right:.25em}
+ul.inline{display:-ms-flexbox;display:-webkit-box;display:flex;-ms-flex-flow:row wrap;-webkit-flex-flow:row wrap;flex-flow:row wrap;list-style:none;margin:0 0 .625em -1.25em}
+ul.inline>li{margin-left:1.25em}
+.unstyled dl dt{font-weight:400;font-style:normal}
+ol.arabic{list-style-type:decimal}
+ol.decimal{list-style-type:decimal-leading-zero}
+ol.loweralpha{list-style-type:lower-alpha}
+ol.upperalpha{list-style-type:upper-alpha}
+ol.lowerroman{list-style-type:lower-roman}
+ol.upperroman{list-style-type:upper-roman}
+ol.lowergreek{list-style-type:lower-greek}
+.hdlist>table,.colist>table{border:0;background:none}
+.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
+td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
+td.hdlist1{font-weight:bold;padding-bottom:1.25em}
+.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
+.colist td:not([class]):first-child{padding:.4em .75em 0;line-height:1;vertical-align:top}
+.colist td:not([class]):first-child img{max-width:none}
+.colist td:not([class]):last-child{padding:.25em 0}
+.thumb,.th{line-height:0;display:inline-block;border:solid 4px #fff;-webkit-box-shadow:0 0 0 1px #ddd;box-shadow:0 0 0 1px #ddd}
+.imageblock.left{margin:.25em .625em 1.25em 0}
+.imageblock.right{margin:.25em 0 1.25em .625em}
+.imageblock>.title{margin-bottom:0}
+.imageblock.thumb,.imageblock.th{border-width:6px}
+.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
+.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.image.left{margin-right:.625em}
+.image.right{margin-left:.625em}
+a.image{text-decoration:none;display:inline-block}
+a.image object{pointer-events:none}
+sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
+sup.footnote a,sup.footnoteref a{text-decoration:none}
+sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
+#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
+#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em;border-width:1px 0 0}
+#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;margin-bottom:.2em}
+#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
+#footnotes .footnote:last-of-type{margin-bottom:0}
+#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+.gist .file-data>table{border:0;background:#fff;width:100%;margin-bottom:0}
+.gist .file-data>table td.line-data{width:99%}
+div.unbreakable{page-break-inside:avoid}
+.big{font-size:larger}
+.small{font-size:smaller}
+.underline{text-decoration:underline}
+.overline{text-decoration:overline}
+.line-through{text-decoration:line-through}
+.aqua{color:#00bfbf}
+.aqua-background{background:#00fafa}
+.black{color:#000}
+.black-background{background:#000}
+.blue{color:#0000bf}
+.blue-background{background:#0000fa}
+.fuchsia{color:#bf00bf}
+.fuchsia-background{background:#fa00fa}
+.gray{color:#606060}
+.gray-background{background:#7d7d7d}
+.green{color:#006000}
+.green-background{background:#007d00}
+.lime{color:#00bf00}
+.lime-background{background:#00fa00}
+.maroon{color:#600000}
+.maroon-background{background:#7d0000}
+.navy{color:#000060}
+.navy-background{background:#00007d}
+.olive{color:#606000}
+.olive-background{background:#7d7d00}
+.purple{color:#600060}
+.purple-background{background:#7d007d}
+.red{color:#bf0000}
+.red-background{background:#fa0000}
+.silver{color:#909090}
+.silver-background{background:#bcbcbc}
+.teal{color:#006060}
+.teal-background{background:#007d7d}
+.white{color:#bfbfbf}
+.white-background{background:#fafafa}
+.yellow{color:#bfbf00}
+.yellow-background{background:#fafa00}
+span.icon>.fa{cursor:default}
+a span.icon>.fa{cursor:inherit}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note::before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip::before{content:"\f0eb";color: rgb(3, 87, 21);}
+.admonitionblock td.icon .icon-warning::before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution::before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important::before{content:"\f06a";color:#bf0000}
+.conum[data-value]{display:inline-block;color:#fff!important;background:rgba(0,0,0,.8);-webkit-border-radius:100px;border-radius:100px;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value] *{color:#fff!important}
+.conum[data-value]+b{display:none}
+.conum[data-value]::after{content:attr(data-value)}
+pre .conum[data-value]{position:relative;top:-.125em}
+b.conum *{color:inherit!important}
+.conum:not([data-value]):empty{display:none}
+dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
+h1,h2,p,td.content,span.alt{letter-spacing:-.01em}
+p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content,span.alt{font-size:1.0625rem}
+p{margin-bottom:1.25rem}
+.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
+.exampleblock>.content{background:#fffef7;border-color:#e0e0dc;-webkit-box-shadow:0 1px 4px #e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.print-only{display:none!important}
+@page{margin:1.25cm .75cm}
+@media print{*{-webkit-box-shadow:none!important;box-shadow:none!important;text-shadow:none!important}
+html{font-size:80%}
+a{color:inherit!important;text-decoration:underline!important}
+a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+a[href^="http:"]:not(.bare)::after,a[href^="https:"]:not(.bare)::after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]::after{content:" (" attr(title) ")"}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+thead{display:table-header-group}
+svg{max-width:100%}
+p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#toc,.sidebarblock,.exampleblock>.content{background:none!important}
+#toc{border-bottom:1px solid #dddddf!important;padding-bottom:0!important}
+body.book #header{text-align:center}
+body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em}
+body.book #header .details{border:0!important;display:block;padding:0!important}
+body.book #header .details span:first-child{margin-left:0!important}
+body.book #header .details br{display:block}
+body.book #header .details br+span::before{content:none!important}
+body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+.listingblock code[data-lang]::before{display:block}
+#footer{padding:0 .9375em}
+.hide-on-print{display:none!important}
+.print-only{display:block!important}
+.hide-for-print{display:none!important}
+.show-for-print{display:inherit!important}}
+@media print,amzn-kf8{#header>h1:first-child{margin-top:1.25rem}
+.sect1{padding:0!important}
+.sect1+.sect1{border:0}
+#footer{background:none}
+#footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
+@media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
+
+/* -------------------------   QS CSS entries ---------------------------- */
+@font-face {
+  font-family: 'Amazon Ember Light';
+  src        :
+    local('Amazon Ember Light'),
+    local('AmazonEmberLight'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_lt-019e0ec3f9b521056e66e31fdcbc8323e5cd1938._V299195751_.woff2') format('woff2'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_lt-bc9ed0fce860a46f3cb061034280c23400e6e8b6._V299195751_.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Amazon Ember Light';
+  font-weight: 700;
+  src        :
+    local('Amazon Ember Light'),
+    local('AmazonEmberLight-Bold'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_bd-46b91bda68161c14e554a779643ef4957431987b._V2_.woff2') format('woff2'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_bd-b605252f87b8b3df5ae206596dac0938fc5888bc._V2_.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Amazon Ember Light';
+  font-style : italic;
+  src        :
+    local('Amazon Ember Light'),
+    local('AmazonEmberLight-Italic'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_ltit-96be47a559388a2b219577124589435c09a361fe._V299195751_.woff2') format('woff2'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_ltit-b561f11b5c8be92ac17f6b713dd9d4b6e2f00c8d._V299195751_.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Amazon Ember Light';
+  font-style : italic;
+  font-weight: 700;
+  src        :
+    local('Amazon Ember Light'),
+    local('AmazonEmberLight-BoldItalic'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_ltit-96be47a559388a2b219577124589435c09a361fe._V299195751_.woff2') format('woff2'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_ltit-b561f11b5c8be92ac17f6b713dd9d4b6e2f00c8d._V299195751_.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Amazon Ember Regular';
+  src        :
+    local('Amazon Ember Regular'),
+    local('AmazonEmberRegular'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_rg-fd81bacb6a659a8c8c95828226b74594ab985060._V299195749_.woff2') format('woff2'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_rg-0acf3bc8b64d470d8888d84741a19533394654c6._V299195749_.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Amazon Ember Regular';
+  font-weight: 700;
+  src        :
+    local('Amazon Ember Regular'),
+    local('AmazonEmberRegular-Bold'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_bd-46b91bda68161c14e554a779643ef4957431987b._V2_.woff2') format('woff2'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_bd-b605252f87b8b3df5ae206596dac0938fc5888bc._V2_.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Amazon Ember Regular';
+  font-style : italic;
+  src        :
+    local('Amazon Ember Regular'),
+    local('AmazonEmberRegular-Italic'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_rgit-af980fe9c64fc17ece72cba4e3e7fdf54babeea6._V299195748_.woff2') format('woff2'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_rgit-4fae4842b3446774d86579b9b024858a848644e8._V299195748_.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Amazon Ember Regular';
+  font-style : italic;
+  font-weight: 700;
+  src        :
+    local('Amazon Ember Regular'),
+    local('AmazonEmberRegular-BoldItalic'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_bdit-80ff7aba37dd1ff5a6b90233a19e3a780a96dc2f._V2_.woff2') format('woff2'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_bdit-57598ce426a612be5a1d15eee08252668fca5e7a._V2_.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Amazon Ember Medium';
+  src        :
+    local('Amazon Ember Medium'),
+    local('AmazonEmberMedium'),
+    url('https://m.media-amazon.com/images/G/01/amazonservices/fonts/amazonember_md_base-webfont._V525237381_.woff2') format('woff2'),
+    url('https://m.media-amazon.com/images/G/01/amazonservices/fonts/amazonember_md_base-webfont._V525237386_.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Amazon Ember Medium';
+  font-weight: 700;
+  src        :
+    local('Amazon Ember Medium'),
+    local('AmazonEmberMedium-Bold'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_bd-46b91bda68161c14e554a779643ef4957431987b._V2_.woff2') format('woff2'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_bd-b605252f87b8b3df5ae206596dac0938fc5888bc._V2_.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Amazon Ember Medium';
+  font-style : italic;
+  src        :
+    local('Amazon Ember Medium'),
+    local('AmazonEmberMedium-Italic'),
+    url('https://m.media-amazon.com/images/G/01/agdm/fonts/amazonember/amazonember_mdit-webfont._V522331917_.woff2') format('woff2'),
+    url('https://m.media-amazon.com/images/G/01/agdm/fonts/amazonember/amazonember_mdit-webfont._V522331917_.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Amazon Ember Medium';
+  font-style : italic;
+  font-weight: 700;
+  src        :
+    local('Amazon Ember Medium'),
+    local('AmazonEmberMedium-BoldItalic'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_bdit-80ff7aba37dd1ff5a6b90233a19e3a780a96dc2f._V2_.woff2') format('woff2'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_bdit-57598ce426a612be5a1d15eee08252668fca5e7a._V2_.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Amazon Ember Heavy';
+  src        :
+    local('Amazon Ember Heavy'),
+    local('AmazonEmberHeavy'),
+    url('https://m.media-amazon.com/images/G/01/acs/fonts/amazonember_he-webfont._V278446113_.woff2') format('woff2'),
+    url('https://m.media-amazon.com/images/G/01/acs/fonts/amazonember_he-webfont._V278446115_.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Amazon Ember Heavy';
+  font-weight: 700;
+  src        :
+    local('Amazon Ember Heavy'),
+    local('AmazonEmberHeavy-Bold'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_bd-46b91bda68161c14e554a779643ef4957431987b._V2_.woff2') format('woff2'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_bd-b605252f87b8b3df5ae206596dac0938fc5888bc._V2_.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Amazon Ember Heavy';
+  font-style : italic;
+  src        :
+    local('Amazon Ember Heavy'),
+    local('AmazonEmberHeavy-Italic'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_bdit-80ff7aba37dd1ff5a6b90233a19e3a780a96dc2f._V2_.woff2') format('woff2'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_bdit-57598ce426a612be5a1d15eee08252668fca5e7a._V2_.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Amazon Ember Heavy';
+  font-style : italic;
+  font-weight: 700;
+  src        :
+    local('Amazon Ember Heavy'),
+    local('AmazonEmberHeavy-BoldItalic'),
+    url('https://m.media-amazon.com/images/G/01/agdm/fonts/amazonember/amazonember_heit-webfont._V522331917_.woff2') format('woff2'),
+    url('https://m.media-amazon.com/images/G/01/agdm/fonts/amazonember/amazonember_heit-webfont._V522331917_.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Amazon Ember Thin';
+  src        :
+    local('Amazon Ember Thin'),
+    local('AmazonEmberThin'),
+    url('https://m.media-amazon.com/images/G/01/mobile-apps/devportal2/content/alexa/prize/20160810/fonts/AmazonEmber/amazonember-thin-webfont._V282715032_.woff2') format('woff2'),
+    url('https://m.media-amazon.com/images/G/01/mobile-apps/devportal2/content/alexa/prize/20160810/fonts/AmazonEmber/amazonember-thin-webfont._V282715033_.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Amazon Ember Thin';
+  font-weight: 700;
+  src        :
+    local('Amazon Ember Thin'),
+    local('AmazonEmberThin-Bold'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_bd-46b91bda68161c14e554a779643ef4957431987b._V2_.woff2') format('woff2'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_bd-b605252f87b8b3df5ae206596dac0938fc5888bc._V2_.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Amazon Ember Thin';
+  font-style : italic;
+  src        :
+    local('Amazon Ember Thin'),
+    local('AmazonEmberThin-Italic'),
+    url('https://m.media-amazon.com/images/G/01/mobile-apps/devportal2/content/alexa/prize/20160810/fonts/AmazonEmber/amazonember-thinit-webfont._V282715033_.woff2') format('woff2'),
+    url('https://m.media-amazon.com/images/G/01/mobile-apps/devportal2/content/alexa/prize/20160810/fonts/AmazonEmber/amazonember-thinit-webfont._V282715032_.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Amazon Ember Thin';
+  font-style : italic;
+  font-weight: 700;
+  src        :
+    local('Amazon Ember Thin'),
+    local('AmazonEmberThin-BoldItalic'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_bdit-80ff7aba37dd1ff5a6b90233a19e3a780a96dc2f._V2_.woff2') format('woff2'),
+    url('https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIBaseCSS-amazonember_bdit-57598ce426a612be5a1d15eee08252668fca5e7a._V2_.woff') format('woff');
+}
+
+
+.tip {
+  border-top: 30px solid rgba(92, 184, 92, 0.8);
+  background: #E6F9E6;
+}
+
+.note {
+  border-top: 30px solid #6AB0DE;
+  background: #E7F2FA;
+}
+
+.warning {
+  border-top: 30px solid #F0B37E;
+  background: #FFF2DB;
+}
+
+.caution {
+  border-top: 30px solid rgba(217, 83, 79, 0.8);
+  background: #FAE2E2;
+}
+
+.important {
+  border-top: 30px solid rgba(217, 83, 79, 0.8);
+  background: #FAE2E2;
+}
+
+#content {
+  max-width: 100rem;
+  padding-left: 5rem;
+  padding-right: 5rem;
+}
+
+body {
+  font-family: "Amazon Ember Regular", "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+}
+
+/* added */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin        : 0.85rem 0 1.7rem 0;
+  text-rendering: optimizeLegibility;
+  color: #ec7211;
+}
+
+p {
+  margin: 1rem 0;
+}
+
+/* QS Table of Contents */
+
+#toc {
+  overflow-x: hidden !important;
+}
+
+#toc>ul li {
+  padding    : 0.3rem 0.6rem;
+  margin-top : 0;
+  line-height: 1;
+}
+
+#toc>ul li a {
+  line-height: 1.6;
+}
+
+#toc a {
+  /* TOC details */
+  font-family  : "Amazon Ember Light", "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+  margin-left  : -1rem;
+  margin-right : -1rem;
+  padding-left : 1rem;
+  padding-right: 1rem;
+  background   : transparent;
+  box-sizing   : border-box;
+  cursor       : pointer;
+  font-weight  : 300 !important;
+}
+
+/* image layout */
+#toc.toc2 #toctitle {
+  background-image: url("images/AWS-Logo.svg");
+  background-repeat: no-repeat;
+  background-size: 50%;
+  background-position: center;
+  width: auto;
+  height: 15%;
+}
+
+/* Left Navbar size */
+#toc.toc2 {
+  width: 17%;
+  min-width: 15em;
+}
+
+/* auto width for main page */
+body.toc2 {
+  padding-left: 22%;
+  padding-right: 2%;
+}
+
+/* hide left nav bar if page size is smaller than 767px */
+@media screen and (max-width: 767px) {
+  #toc {
+      display: none !important;
+  }
+  body.toc2 {
+    padding-left: 1%;
+    padding-right: 1%;
+    position: relative;
+  }
+
+  #content {
+    padding-left: 2%;
+    padding-right: 2%;
+  }
+}
+
+/* QS Tables */
+
+table.tableblock .title,
+.imageblock .title {
+  font-family  : "Amazon Ember Light", "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+  font-size: 1.1rem;
+  color: #34478c;
+}
+table p {
+  margin: 0rem;
+}
+
+/* Add border around hyperlink images */
+a img {
+    border: 1px solid #A4A4A4;
+}
+
+.preview_mode {
+	border-color:#e0e0dc;
+	-webkit-box-shadow:0 1px 4px #e0e0dc;
+	box-shadow:0 1px 4px #e0e0dc;
+  background:#ffffb3;
+  padding-bottom: 2rem;
+}
+.preview_mode .tableblock {
+  background:#ffffb3;
+}
+
+.footer-text{color:rgba(255,255,255,.8);line-height:1.44;background:#1c222a;padding:1.25em;max-width:100%;margin-bottom:unset}
+p.footer-text a{color:#d7d8d8}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body class="book toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle"></div>
+<ul class="sectlevel1">
+<li><a href="#_overview">Overview</a></li>
+<li><a href="#_qumulo_cloud_q_on_aws">Qumulo Cloud Q on AWS</a></li>
+<li><a href="#_aws_costs">AWS costs</a></li>
+<li><a href="#_software_licenses">Software licenses</a></li>
+<li><a href="#_architecture">Architecture</a></li>
+<li><a href="#_planning_the_deployment">Planning the deployment</a>
+<ul class="sectlevel2">
+<li><a href="#_specialized_knowledge">Specialized knowledge</a></li>
+<li><a href="#_aws_account">AWS account</a></li>
+<li><a href="#_technical_requirements">Technical requirements</a></li>
+</ul>
+</li>
+<li><a href="#_deployment_steps">Deployment steps</a>
+<ul class="sectlevel2">
+<li><a href="#_confirm_your_aws_account_configuration">Confirm your AWS account configuration</a></li>
+<li><a href="#_subscribe_to_a_qumulo_marketplace_offer">Subscribe to a Qumulo Marketplace offer</a></li>
+<li><a href="#_launch_the_quick_start">Launch the Quick Start</a></li>
+<li><a href="#_cloudformation_nested_stack_deployment">CloudFormation nested stack deployment</a></li>
+</ul>
+</li>
+<li><a href="#_post_deployment_steps">Post-deployment steps</a>
+<ul class="sectlevel2">
+<li><a href="#_review_verify_the_aws_infrastructure">Review &amp; Verify the AWS Infrastructure</a></li>
+<li><a href="#_review_verify_the_qumulo_cluster_configuration">Review &amp; Verify the Qumulo Cluster Configuration</a></li>
+<li><a href="#_stack_update_options">Stack Update Options</a></li>
+<li><a href="#_termination_protection">Termination Protection</a></li>
+<li><a href="#_deleting_the_stack">Deleting the Stack</a></li>
+<li><a href="#_adding_a_dr_cluster">Adding a DR Cluster</a></li>
+</ul>
+</li>
+<li><a href="#_faq">FAQ</a></li>
+<li><a href="#_troubleshooting">Troubleshooting</a>
+<ul class="sectlevel2">
+<li><a href="#_wheres_the_uuid_for_the_cluster">Where’s the UUID for the cluster?</a></li>
+<li><a href="#_the_stack_failed_on_the_nested_stack_awsvpcstack_qlookupstack_or_the_secretsstack">The Stack failed on the nested stack AWSVPCSTACK, QLOOKUPSTACK, or the SECRETSSTACK</a></li>
+<li><a href="#_the_stack_failed_when_provisioning_the_qstack">The Stack failed when provisioning the QSTACK</a></li>
+<li><a href="#_the_stack_update_failed_and_rolled_back">The Stack Update failed and rolled back</a></li>
+<li><a href="#_the_cluster_didnt_form_quorum">The Cluster didn’t form quorum</a></li>
+<li><a href="#_the_provisioning_instance_didnt_shut_down">The Provisioning instance didn’t shut down</a></li>
+</ul>
+</li>
+<li><a href="#_customer_responsibility">Customer responsibility</a></li>
+<li><a href="#_parameter_reference">Parameter reference</a></li>
+<li><a href="#_send_us_feedback">Send us feedback</a></li>
+<li><a href="#_quick_start_reference_deployments">Quick Start reference deployments</a></li>
+<li><a href="#_github_repository">GitHub repository</a></li>
+<li><a href="#_notices">Notices</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<h2 id="_qumulo_cloud_q_on_the_aws_cloud" class="discrete text-center">Qumulo Cloud Q on the AWS Cloud</h2>
+<h2 id="_quick_start_reference_deployment" class="discrete text-left text-center">Quick Start Reference Deployment</h2>
+<div class="imageblock text-center">
+<div class="content">
+<img src="https://aws-quickstart.s3.amazonaws.com/quickstart-qumulo-cloud-q/docs/boilerplate/.images/aws-quickstart-graphic.png" alt="QS" width="80" height="80">
+</div>
+</div>
+<h3 id="_draft_document_unofficial_guidance" class="discrete text-center">DRAFT DOCUMENT / UNOFFICIAL GUIDANCE</h3>
+<div class="paragraph">
+<p><em><strong>This portion of the deployment guide is located at <code>docs/partner_editable/__settings</em>.adoc</code></strong>_</p>
+</div>
+<table class="tableblock frame-all grid-all stretch preview_mode">
+<colgroup>
+<col style="width: 100%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph text-center">
+<p><strong>August 2021</strong><br>
+<em>Dack Busch, Qumulo</em><br>
+<em>Dave May, AWS Integration &amp; Automation team</em></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Visit our <a href="https://github.com/aws-quickstart/quickstart-qumulo-cloud-q" target="_blank" rel="noopener">GitHub repository</a> for source files and to post feedback,
+report bugs, or submit feature ideas for this Quick Start.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph text-left">
+<p>This Quick Start was created by Qumulo in collaboration with Amazon Web Services (AWS). <a href="http://aws.amazon.com/quickstart/" target="_blank" rel="noopener">Quick Starts</a> are automated reference deployments that use AWS CloudFormation templates to deploy key technologies on AWS, following AWS best practices.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_overview">Overview</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em><strong>This portion of the deployment guide is located at <code>docs/partner_editable/overview_target_and_usage.adoc</code></strong></em></p>
+</div>
+<table class="tableblock frame-all grid-all stretch preview_mode">
+<colgroup>
+<col style="width: 100%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>This guide provides instructions for deploying Cloud Q Quick Start reference architecture in the AWS cloud. Any subsequent configuration for the file data platform is outside the scope of this document. Refer to the <a href="https://care.qumulo.com/hc/en-us/categories/115000637447-KNOWLEDGE-BASE">Qumulo Knowledge Base</a> for further information.</p>
+</div>
+<div class="paragraph">
+<p>This Quick Start is for users who want to build a scale-out, multip-protocol, file data platform with 1TB to 6PB of usable capacity in a single name space hosted in AWS.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Amazon may share user-deployment information with the AWS Partner that collaborated with AWS on the Quick Start.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_qumulo_cloud_q_on_aws">Qumulo Cloud Q on AWS</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em><strong>This portion of the deployment guide is located at <code>docs/partner_editable/product_description.adoc</code></strong></em></p>
+</div>
+<table class="tableblock frame-all grid-all stretch preview_mode">
+<colgroup>
+<col style="width: 100%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Qumulo for AWS is the world’s most efficient, high-performance file storage in the public cloud and runs natively on AWS. Support thousands of elastic compute nodes with enterprise-grade file storage to tackle your toughest data processing challenges problems.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Integrates with native AWS services and features like CloudWatch, and Amazon S3.</p>
+</li>
+<li>
+<p>Runs applications, even workstation or data center applications, at native speeds–no reconfiguring applications, or retraining users.</p>
+</li>
+<li>
+<p>Offers the cloud’s most advanced file system, with unlimited scale and API programmability.</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_aws_costs">AWS costs</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You are responsible for the cost of the AWS services and any third-party licenses used while running this Quick Start. There is no additional cost for
+using the Quick Start.</p>
+</div>
+<div class="paragraph">
+<p>The AWS CloudFormation templates for Quick Starts include
+configuration parameters that you can customize. Some of the settings,
+such as the instance type, affect the cost of deployment. For cost estimates,
+see the pricing pages for each AWS service you use. Prices are subject to change.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+After you deploy the Quick Start, create <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-reports-gettingstarted-turnonreports.html" target="_blank" rel="noopener">AWS Cost and Usage Reports</a> to deliver billing metrics to an Amazon Simple Storage Service (Amazon S3) bucket in your account. These reports provide cost estimates based on usage throughout each month and aggregate the data at the end of the month. For more information, see <a href="https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html" target="_blank" rel="noopener">What are AWS Cost and Usage Reports?</a>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_software_licenses">Software licenses</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em><strong>This portion of the deployment guide is located at <code>docs/partner_editable/licenses.adoc</code></strong></em></p>
+</div>
+<table class="tableblock frame-all grid-all stretch preview_mode">
+<colgroup>
+<col style="width: 100%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Prior to executing any of the Cloud Q Quick Start templates a Qumulo subscription must be accepted in the AWS Marketplace for a chosen AWS account. The templates documented here are much more comprehensive than those available by default in the AWS Marketplace, so don’t deploy from the AWS Marketplace. Simply accept the offer for the subscription of interest and close the AWS Marketplace session.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_architecture">Architecture</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em><strong>This portion of the deployment guide is located at <code>docs/partner_editable/architecture.adoc</code></strong></em></p>
+</div>
+<table class="tableblock frame-all grid-all stretch preview_mode">
+<colgroup>
+<col style="width: 100%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Deploying this Quick Start for a new virtual private cloud (VPC) with
+default parameters builds the following Cloud Q environment in the
+AWS Cloud.</p>
+</div>
+<div id="architecture1" class="imageblock">
+<div class="content">
+<img src="images/architecture_diagram.png" alt="Architecture">
+</div>
+<div class="title">Figure 1. Quick Start architecture for Cloud Q on AWS</div>
+</div>
+<div class="paragraph">
+<p>As shown in <a href="#architecture1">Figure 1</a>, the Quick Start sets up the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A VPC configured with public and private subnets, in two Availability Zones, according to AWS best practices, to provide you with your own virtual network on AWS.*</p>
+</li>
+<li>
+<p>In the public production subnet:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A managed Network Address Translation (NAT) gateway to allow outbound Internet access for resources in the private subnet.*</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>In the private production subnet:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A cluster of Qumulo EC2 instances</p>
+<div class="ulist">
+<ul>
+<li>
+<p>4 to 20 nodes</p>
+</li>
+<li>
+<p>1TB to 6PB of usable capacity</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Multiple AWS Elastic Block Store (EBS) volumes connected to the Qumulo cluster</p>
+<div class="ulist">
+<ul>
+<li>
+<p>28 unique EBS Volume configurations (ie Disk Configs) are available</p>
+</li>
+<li>
+<p>All flash (SSD) and Hybrid (SSD+HDD) Disk Configs are available</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>The Qumulo Sidecar which consists of two Lambda functions</p>
+<div class="ulist">
+<ul>
+<li>
+<p>One Lambda function sends Qumulo cluster metrics to Cloudwatch</p>
+</li>
+<li>
+<p>The other Lambda function monitors the health of EBS volumes and automatically replaces any unhealthy volumes</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>(Optional) AWS Route 53 private hosted zone</p>
+<div class="ulist">
+<ul>
+<li>
+<p>If R53 is resolving all DNS for the VPC then a R53 private hosted zone may be optionally provisioned to configure DNS A-records for the cluster.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>(Optional) Public IP Management</p>
+<div class="ulist">
+<ul>
+<li>
+<p>If desired a Network Load Balancer with an Elastic IP (public static) may also be configured</p>
+</li>
+<li>
+<p>Note, this NLB listens on port 443 and has some inherent DoS capabilities.</p>
+</li>
+<li>
+<p>As a best practice the cluster should be managed long-term via a secure host in the public or private subnet.</p>
+</li>
+<li>
+<p>This functionality is only intended for initial configuration inspection and validation in the event no other EC2 machines exist in the VPC to manage the cluster</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Provisioner Instance</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An EC2 instance configures multiple parameters on the Qumulo cluster and within the AWS infrastructure</p>
+</li>
+<li>
+<p>This instance automatically shuts down after successful provisioning</p>
+</li>
+<li>
+<p>It is also restarted during stack updates to provision modifications to the infrastructure</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><span class="small">* The template that deploys the Quick Start into an existing VPC skips the components marked by asterisks and prompts you for your existing VPC configuration.</span></p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_planning_the_deployment">Planning the deployment</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_specialized_knowledge">Specialized knowledge</h3>
+<div class="paragraph">
+<p>This deployment requires a moderate level of familiarity with
+AWS services. If you’re new to AWS, see <a href="https://aws.amazon.com/getting-started/" target="_blank" rel="noopener">Getting Started Resource Center</a>
+and <a href="https://aws.amazon.com/training/" target="_blank" rel="noopener">AWS Training and Certification</a>. These sites provide materials for learning how to design,
+deploy, and operate your infrastructure and applications on the AWS Cloud.</p>
+</div>
+<div class="paragraph">
+<p><em><strong>This portion of the deployment guide is located at <code>docs/partner_editable/specialized_knowledge.adoc</code></strong></em></p>
+</div>
+<table class="tableblock frame-all grid-all stretch preview_mode">
+<colgroup>
+<col style="width: 100%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Deploying this template requires only a moderate level of familiarity with AWS services. If you’re new to AWS, see <a href="https://aws.amazon.com/getting-started/" class="bare">https://aws.amazon.com/getting-started/</a>.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_aws_account">AWS account</h3>
+<div class="paragraph">
+<p>If you don’t already have an AWS account, create one at <a href="https://aws.amazon.com/" target="_blank" rel="noopener">https://aws.amazon.com</a> by following the on-screen instructions. Part of the sign-up process involves receiving a phone call and entering a PIN using the phone keypad.</p>
+</div>
+<div class="paragraph">
+<p>Your AWS account is automatically signed up for all AWS services. You are charged only for the services you use.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_technical_requirements">Technical requirements</h3>
+<div class="paragraph">
+<p>Before you launch the Quick Start, review the following information and ensure that your account is properly configured. Otherwise, deployment might fail.</p>
+</div>
+<div class="sect3">
+<h4 id="_resource_quotas">Resource quotas</h4>
+<div class="paragraph">
+<p>If necessary, request <a href="https://console.aws.amazon.com/servicequotas/home?region=us-east-2#!/" target="_blank" rel="noopener">service quota increases</a> for the following resources. You might need to request increases if your existing deployment currently uses these resources and if this Quick Start deployment could result in exceeding the default quotas. The <a href="https://console.aws.amazon.com/servicequotas/home?region=us-east-2#!/" target="_blank" rel="noopener">Service Quotas console</a> displays your usage and quotas for some aspects of some services. For more information, see <a href="https://docs.aws.amazon.com/servicequotas/latest/userguide/intro.html" target="_blank" rel="noopener">What is Service Quotas?</a> and <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html" target="_blank" rel="noopener">AWS service quotas</a>.</p>
+</div>
+<div class="paragraph">
+<p><em><strong>This portion of the deployment guide is located at <code>docs/partner_editable/service_limits.adoc</code></strong></em></p>
+</div>
+<div class="preview_mode">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Resource</th>
+<th class="tableblock halign-left valign-top">This deployment uses</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VPCs</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Elastic IP addresses (optional for public management)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Security groups</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AWS Identity and Access Management (IAM) roles</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">m5.2xlarge, m5.4xlarge, m5.8xlarge, m5.12xlarge, m5.16xlarge, m5.24xlarge, c5n.4xlarge, c5n.9xlarge, or c5n.18xlarge instances</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4 to 20</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">m5.large instances</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lambda functions</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EBS (gp2, st1, or sc1) volumes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.34TiB to 6.25PiB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_supported_aws_regions">Supported AWS Regions</h4>
+<div class="paragraph">
+<p><em><strong>This portion of the deployment guide is located at <code>docs/partner_editable/regions.adoc</code></strong></em></p>
+</div>
+<div id="preview_mode">
+<div class="paragraph">
+<p>This Quick Start supports the following Regions:</p>
+</div>
+<div class="sect4">
+<h5 id="_americas">Americas</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>us-east-1, US East (N. Virginia)</p>
+</li>
+<li>
+<p>us-east-2, US East (Ohio)</p>
+</li>
+<li>
+<p>us-west-1, US West (N. California)</p>
+</li>
+<li>
+<p>us-west-2, US West (Oregon)</p>
+</li>
+<li>
+<p>us-gov-west-1</p>
+</li>
+<li>
+<p>us-gov-east-1</p>
+</li>
+<li>
+<p>ca-central-1, Canada (Central)</p>
+</li>
+<li>
+<p>sa-east-1, South America (São Paulo)</p>
+</li>
+<li>
+<p>af-south-1, Africa (Cape Town)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_asia_pacific">Asia Pacific</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>ap-northeast-1, Asia Pacific (Tokyo)</p>
+</li>
+<li>
+<p>ap-northeast-2, Asia Pacific (Seoul)</p>
+</li>
+<li>
+<p>ap-south-1, Asia Pacific (Mumbai)</p>
+</li>
+<li>
+<p>ap-southeast-1, Asia Pacific (Singapore)</p>
+</li>
+<li>
+<p>ap-southeast-2, Asia Pacific (Sydney)</p>
+</li>
+<li>
+<p>ap-east-1, Asia Pacific (Hong Kong)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_europemiddle_eastafrica">Europe/Middle East/Africa</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>eu-central-1, Europe (Frankfurt)</p>
+</li>
+<li>
+<p>eu-west-1, Europe (Ireland)</p>
+</li>
+<li>
+<p>eu-west-2, Europe (London)</p>
+</li>
+<li>
+<p>eu-west-3, Europe (Paris)</p>
+</li>
+<li>
+<p>eu-north-1, Europe (Stockholm)</p>
+</li>
+<li>
+<p>eu-south-1, Europe (Milan)</p>
+</li>
+<li>
+<p>me-south-1, Middle East (Bahrain)</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_iam_permissions">IAM permissions</h4>
+<div class="paragraph">
+<p>Before launching the Quick Start, you must sign in to the AWS Management Console with IAM permissions for the resources that the templates deploy. The <em>AdministratorAccess</em> managed policy within IAM provides sufficient permissions, although your organization may choose to use a custom policy with more restrictions. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_job-functions.html" target="_blank" rel="noopener">AWS managed policies for job functions</a>.</p>
+</div>
+<div class="paragraph">
+<p><em><strong>This portion of the deployment guide is located at <code>docs/partner_editable/pre-reqs.adoc</code></strong></em></p>
+</div>
+<table class="tableblock frame-all grid-all stretch preview_mode">
+<colgroup>
+<col style="width: 100%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The following AWS services are required in a custom IAM role or IAM user to deploy this template:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>application-autoscaling:*</p>
+</li>
+<li>
+<p>applicationinsights:*</p>
+</li>
+<li>
+<p>autoscaling:*</p>
+</li>
+<li>
+<p>cloudformation:*</p>
+</li>
+<li>
+<p>cloudtrail:*</p>
+</li>
+<li>
+<p>cloudwatch:*</p>
+</li>
+<li>
+<p>compute-optimizer:*</p>
+</li>
+<li>
+<p>ec2:*</p>
+</li>
+<li>
+<p>elasticloadbalancing:*</p>
+</li>
+<li>
+<p>events:*</p>
+</li>
+<li>
+<p>health:*</p>
+</li>
+<li>
+<p>iam:*</p>
+</li>
+<li>
+<p>kms:*</p>
+</li>
+<li>
+<p>lambda:*</p>
+</li>
+<li>
+<p>logs:*</p>
+</li>
+<li>
+<p>resource-groups:*</p>
+</li>
+<li>
+<p>route53:*</p>
+</li>
+<li>
+<p>s3:*</p>
+</li>
+<li>
+<p>secretsmanager:*</p>
+</li>
+<li>
+<p>sns:*</p>
+</li>
+<li>
+<p>ssm:*</p>
+</li>
+<li>
+<p>sqs:*</p>
+</li>
+<li>
+<p>tag:*</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_deployment_options">Deployment options</h4>
+<div class="paragraph">
+<p><em><strong>This portion of the deployment guide is located at <code>docs/partner_editable/deployment_options.adoc</code></strong></em></p>
+</div>
+<table class="tableblock frame-all grid-all stretch preview_mode">
+<colgroup>
+<col style="width: 100%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>This Quick Start provides two deployment options:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Deploy Cloud Q into a new VPC</strong>. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateways, security groups, bastion hosts, and other infrastructure components. It then deploys Cloud Q into this new VPC.</p>
+</li>
+<li>
+<p><strong>Deploy Cloud Q into an existing VPC</strong>. This option provisions Cloud Q in your existing AWS infrastructure.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The Quick Start provides separate templates for these options. It also lets you configure Classless Inter-Domain Routing (CIDR) blocks, instance types, and Cloud Q settings, as discussed later in this guide.</p>
+</div>
+<div class="paragraph">
+<p>The following parameters are optional:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>AWS Local Zone deployment when deploying in a new VPC (Local Zone OR Outpost when deploying in an existing VPC)</p>
+</li>
+<li>
+<p>Public IP Management</p>
+</li>
+<li>
+<p>R53 Private Hosted Zone configuration</p>
+</li>
+<li>
+<p>Customer Managed Key configuration</p>
+</li>
+<li>
+<p>SNS Notifications</p>
+</li>
+<li>
+<p>CloudWatch audit log configuration</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_deploying_in_a_vpc_without_internet_access">Deploying in a VPC without Internet access</h4>
+<div class="paragraph">
+<p>The architecure referenced herein expects a NAT Gateway in the VPC.  It is possible to deploy this Quick Start in an existing VPC without Internet access.  To support deployments without public Internet connectivity the following VPC and an S3 bucket requirements must be met:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>VPC Interface Endpoints to support AWS services</p>
+</li>
+<li>
+<p>A security group applied to each VPC Interface Endpoint</p>
+</li>
+<li>
+<p>The code for the Quick Start must be downloaded from GitHub and placed in your own S3 bucket</p>
+</li>
+<li>
+<p>If software upgrades are to be performed by the template then Qumulo Core software must be placed in the /upgrade folder within the bucket in Qumulo Trends format</p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_vpc_interface_endpoints_for_deployments_without_internet_access">VPC Interface Endpoints (for deployments without Internet Access)</h5>
+<div class="paragraph">
+<p>It is recommended to leave the policy for each endpoint as Full Access. The following VPC Interface Endpoints must be configured when deploying without Internet Access:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>cloudformation</p>
+</li>
+<li>
+<p>cloudtrail</p>
+</li>
+<li>
+<p>ec2</p>
+</li>
+<li>
+<p>events</p>
+</li>
+<li>
+<p>kms</p>
+</li>
+<li>
+<p>lambda</p>
+</li>
+<li>
+<p>logs</p>
+</li>
+<li>
+<p>monitoring</p>
+</li>
+<li>
+<p>profile</p>
+</li>
+<li>
+<p>S3</p>
+</li>
+<li>
+<p>secretsmanager</p>
+</li>
+<li>
+<p>sns</p>
+</li>
+<li>
+<p>ssm</p>
+</li>
+<li>
+<p>sts</p>
+</li>
+<li>
+<p>sqs</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_vpc_interface_endpoints_security_group_rules_for_deployments_without_internet_access">VPC Interface Endpoints Security Group rules (for deployments without Internet Access)</h5>
+<div class="paragraph">
+<p>To allow traffic from the provisioning node and the Qumulo cluster, the security group applied to the VPC interface endpoints must have the following Security Groups added as Inbound Rule Sources:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>[stack name]-PROVISIONINGSTACK-[aws 12 digit code]-ProvisionerSG-[aws 12 digit code]</p>
+</li>
+<li>
+<p>[stack name]-QSTACK-[aws 12 digit code]-QumuloSecurityGroup-[aws 12 digit code]</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_automated_qumulo_core_upgrades_during_deployment_for_deployments_without_internet_access">Automated Qumulo Core upgrades during deployment (for deployments without Internet Access)</h5>
+<div class="paragraph">
+<p>If you enter a newer software version than the Qumulo Core AMI was released with, the provisioning instance will expect to find the code via the Internet, or in this case from the S3 bucket.  Since the provisioning instance will not be able to reach the public Internet, it will look for code in the template’s S3 bucket at the following prefix: [your prefix]/upgrade. Typically this is quickstart-qumulo-cloudq-main/upgrade. All quarterly released images between the AMI ID release version to, and including, the requested version must be present in the bucket. For example, if the AMI was released with 4.0.6 and the desired version is 4.2.3, then 4.1.0.1, 4.2.0, and 4.2.3 versions must be in the bucket. If the software images are not present in the S3 bucket the Provisioning instance will not shutdown, nor will it progress with provisioning activities. To see the quarterly release cadence just cat the file [your prefix/cfn-init/upgrade-order.txt. Place the image(s) in the bucket and restart the provisioning instance if this occurs. The image(s) must be in the Qumulo Trends format: qumulo_upgrade_cloud_x.y.z_num.qimg. If you don’t have access to Qumulo Trends, contact Qumulo for support.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_deploying_on_outpost">Deploying on Outpost</h4>
+<div class="paragraph">
+<p>For Outpost deployments use the <strong>Deploy Cloud Q into an exisiting VPC</strong> option.</p>
+</div>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_deployment_steps">Deployment steps</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em><strong>This portion of the deployment guide is located at <code>docs/partner_editable/deploy_steps.adoc</code></strong></em></p>
+</div>
+<div class="preview_mode">
+<div class="sect2">
+<h3 id="_confirm_your_aws_account_configuration">Confirm your AWS account configuration</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Sign in to your AWS account at <a href="https://aws.amazon.com" class="bare">https://aws.amazon.com</a> with an IAM user role that has the necessary permissions. For details, see <a href="#_planning_the_deployment">Planning the deployment</a> earlier in this guide.</p>
+</li>
+<li>
+<p>Make sure that your AWS account is configured correctly, as discussed in the <a href="#_technical_requirements">Technical requirements</a> section.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_subscribe_to_a_qumulo_marketplace_offer">Subscribe to a Qumulo Marketplace offer</h3>
+<div class="paragraph">
+<p>A Qumulo subscription for the chosen configuration and deployment region is required.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Go to <a href="https://aws.amazon.com/marketplace" class="bare">https://aws.amazon.com/marketplace</a> and type Qumulo in the search bar. Select one of the available offerings with a designated usable capacity. NOTE: If you have a private offer you will receive an email with a link to accept the private offer. The Customizable File Storage Node configuration in the Marketplace requires a private offer unless you choose to accept it with 320TiB per EC2 instance.</p>
+</li>
+<li>
+<p>Click <strong>Continue to Subscribe</strong> in the upper right corner. The subscription will take a couple of minutes to process.</p>
+</li>
+<li>
+<p>At this point the Marketplace process is complete when using the aws-sa-waf-cluster CloudFormation template. Close the Marketplace tab. Do not deploy from Marketplace.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_launch_the_quick_start">Launch the Quick Start</h3>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+If you’re deploying Cloud Q into an existing VPC, make sure that your VPC has both a private and public subnet.  This Quick Start doesn’t support <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-sharing.html" target="_blank" rel="noopener">shared subnets</a>. These subnets require <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html" target="_blank" rel="noopener">NAT gateways</a> in their route tables to allow the instances to download packages and software without exposing them to the Internet. Also make sure that the domain name option in the DHCP options is configured as explained in <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html" target="_blank" rel="noopener">DHCP options sets</a>. You provide your VPC settings when you launch the Quick Start.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Each deployment takes about 15 minutes to complete.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Sign in to your AWS account, and choose one of the following options to launch the AWS CloudFormation template. For help with choosing an option, see <a href="#_deployment_options">Deployment options</a> earlier in this guide.</p>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 75%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="http://qs_launch_permalink" target="_blank" rel="noopener">Deploy Cloud Q into a new VPC on AWS</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="http://qs_template_permalink" target="_blank" rel="noopener">View template</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="http://qs_launch_permalink" target="_blank" rel="noopener">Deploy Cloud Q into an existing VPC on AWS</a></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><a href="http://qs_template_permalink" target="_blank" rel="noopener">View template</a></p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>Check the AWS Region that’s displayed in the upper-right corner of the navigation bar, and change it if necessary. This Region is where you build the network infrastructure. The template is launched in the us-east-1 Region by default. For other choices, see <a href="#_supported_regions">Supported Regions</a> earlier in this guide.</p>
+</li>
+<li>
+<p>On the <strong>Create stack</strong> page, keep the default setting for the template URL, and then choose <strong>Next</strong>.</p>
+</li>
+<li>
+<p>On the <strong>Specify stack details</strong> page, change the stack name if needed. Review the parameters for the template. Provide values for the parameters that require input. For all other parameters, review the default settings and customize them as necessary. For details on each parameter, see the <a href="#_parameter_reference">Parameter reference</a> section of this guide. When you finish reviewing and customizing the parameters, choose <strong>Next</strong>.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="paragraph">
+<p>+</p>
+</div>
+<div class="paragraph">
+<p>+
+. On the <strong>Configure stack options</strong> page, you can <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html" target="_blank" rel="noopener">specify tags</a> (key-value pairs) for resources in your stack and <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-console-add-tags.html" target="_blank" rel="noopener">set advanced options</a>. When you finish, choose <strong>Next</strong>.
+. On the <strong>Review</strong> page, review and confirm the template settings. Under <strong>Capabilities</strong>, select the two check boxes to acknowledge that the template creates IAM resources and might require the ability to automatically expand macros.
+. Choose <strong>Create stack</strong> to deploy the stack.
+. Monitor the status of the stack. When the status is <strong>CREATE_COMPLETE</strong>, the Cloud Q deployment is ready.
+. To view the created resources, see the values displayed in the <strong>Outputs</strong> tab for the stack.</p>
+</div>
+<div class="paragraph">
+<p><em><strong>This portion of the deployment guide is located at <code>docs/partner_editable/additional_info.adoc</code></strong></em></p>
+</div>
+<div class="preview_mode">
+</div>
+<div class="sect2">
+<h3 id="_cloudformation_nested_stack_deployment">CloudFormation nested stack deployment</h3>
+<div class="paragraph">
+<p>The stack will take 10 minutes, or less, to deploy depending on the options chosen in the template. You can monitor the progress of the stack by choosing <strong>Events</strong> on the top-level stack. Below is a description of each nested stack’s function in the order in which they are deployed.</p>
+</div>
+<div class="sect3">
+<h4 id="_awsvpcstack_nested_stack">AWSVPCSTACK Nested Stack</h4>
+<div class="paragraph">
+<p>If deploying in a new VPC, this is the first nested stack that will appear in the CloudFormation console events view.
+This stack creates the VPC, private subnet, public subnet, route tables, NAT gateway, and Internet gateway.  It also
+creates public and private subnets in a second Availability Zone for a future DR cluster.  See the section later
+in this guide <strong>Adding a DR Cluster</strong>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_cloudqstack_nested_stack">CloudQStack Nested Stack</h4>
+<div class="paragraph">
+<p>If deploying in a new VPC, all subsequent nested stacks will be contained within the CloudQStack.
+If deploying in an existing VPC, all stack activity will consist of the stacks contained within the CloudQStack.</p>
+</div>
+<div class="sect4">
+<h5 id="_qlookupstack_nested_stack">QLOOKUPSTACK Nested Stack</h5>
+<div class="paragraph">
+<p>The first three stacks are launched in parallel. The QLOOKUP Stack is a hierarchical region map
+that finds the AMI-ID for the marketplace offer by region. Note, this stack is not executed
+when selecting the Specified-AMI-ID option.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_secretsstack_nested_stack">SECRETSSTACK Nested Stack</h5>
+<div class="paragraph">
+<p>The first two stacks are launched in parallel. The SECRETS Stack stores usernames and
+passwords in Secrets Manager for the cluster, sidecar, and downloading software from Qumulo
+Trends. The purpose of leveraging Secrets Manager is to provide a secure reference for
+subsequent stacks and users who may forget the passwords assigned.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_qiamstack_nested_stack">QIAMSTACK Nested Stack</h5>
+<div class="paragraph">
+<p>The QIAM Stack creates an IAM profile for the Qumulo Cluster to enable the cluster to manage
+EC2 Secondary IP addresses (Floating IPs), decrypt data, send CloudWatch alarms, and send
+audit logs to CloudWatch Logs. Note, creating IAM roles in AWS takes some time so don’t be
+alarmed if the QIAM stack takes 3 or 4 minutes.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_qstack_nested_stack">QSTACK Nested Stack</h5>
+<div class="paragraph">
+<p>The Q Stack spins up all the EC2 instances and EBS volumes for the cluster. It also creates a
+placement group for the cluster and tags all the EC2 instances with the appropriate stack
+name and node number. In addition, it creates CloudWatch alarms for EC2 instance failure and
+a security group for the cluster with the CIDR specified in the template.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_mgmtnlbstack_nested_stack">MGMTNLBSTACK Nested Stack</h5>
+<div class="paragraph">
+<p>All stacks subsequent to QSTACK execute in parallel. If public management of the cluster was
+chosen in the template this nested stack is executed as long as the cluster is NOT being
+deployed in an AWS Local Zone. It spins up a Network Load Balancer with a public Elastic IP.
+The load balancer listens only on port 443 and optionally on port 3712 if the replication port
+was selected. This load balancer connects to the primary EC2 IP address on each node. These
+are known as the persistent IPs in the Qumulo UI.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_dnsstack_nested_stack">DNSSTACK Nested Stack</h5>
+<div class="paragraph">
+<p>If the Route 53 Private Hosted Zone FQDN was configured then the DNS stack is executed. It
+creates the private hosted zone and all the A-records with the name assigned in the template.
+All records are given a TTL=0. While round-robin behavior is the goal, Route 53 doesn’t
+provide perfect round-robin. Instead the records are given an equal probability of resolution.
+Clients are well distributed, but not perfectly symmetric.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_provisioningstack_nested_stack">PROVISIONINGSTACK Nested Stack</h5>
+<div class="paragraph">
+<p>This stack spins up an EC2 instance with custom user data. It configures the Qumulo Cluster
+and some AWS environment requirements.</p>
+</div>
+<div class="sect5">
+<h6 id="_qumulo_configuration">Qumulo Configuration</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>Software upgrades of QSTACK created nodes</p>
+</li>
+<li>
+<p>Forms the first quorum for the cluster</p>
+</li>
+<li>
+<p>Assigns Floating IP addresses to the cluster</p>
+</li>
+<li>
+<p>Configures Sidecar username, password, and custom RBAC role</p>
+</li>
+<li>
+<p>Configures Audit Logging for CloudWatch Logs</p>
+</li>
+<li>
+<p>Changes the admin password</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_aws_configuration">AWS Configuration</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>Checks for Public Internet reachability with a CURL test to google.com</p>
+</li>
+<li>
+<p>Assigns a QSTACK Policy to protect the cluster in subsequent Stack Updates</p>
+</li>
+<li>
+<p>Edits the Customer Managed Key Policy so Sidecar can create CMK encrypted volumes</p>
+</li>
+<li>
+<p>Tags EBS volumes with the stack name and volume type</p>
+</li>
+<li>
+<p>Tracks software versions, cluster IPs, instance IDs, &amp; UUID in AWS Parameter Store</p>
+</li>
+<li>
+<p>Tracks the provisioning instance ‘last-run-status’ in Parameter Store</p>
+</li>
+<li>
+<p>Configures Termination Protection for the Stack and the EC2 Instances</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This instance automatically shuts down upon completion of its provisioning tasks. <strong>Do not delete this EC2 instance. It will be used for stack updates.</strong></p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_cloudwatchstack_nested_stack">CLOUDWATCHSTACK Nested Stack</h5>
+<div class="paragraph">
+<p>This stack creates resource groups, a CloudWatch dashboard, and a CloudWatch log group
+(optional) for the cluster. First, it creates a resource group for the EC2 instances and then it
+creates one or more resource groups for the EBS volumes. The resource groups created for the
+EBS volumes depend on the EBS volume configuration of the cluster. All Flash clusters will
+have just one resource group with the stack name and -SSD. Hybrid clusters will have two
+resource groups for EBS: one with -SSD and one with -HDD. The purpose of these resource
+groups is to provide a simple means to create a filtered view in CloudWatch for the EC2 and
+EBS metrics native to AWS.</p>
+</div>
+<div class="paragraph">
+<p>A CloudWatch Dashboard is also created that presents key metrics sent by the Sidecar Metrics
+Lambda function. These are Qumulo specific metrics.
+Finally, if Audit Logging was enabled a CloudWatch log group is created for the cluster. All
+administrative activity, Lambda access, and file/directory create/modify write activity is captured
+in this log.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_qsidecarstack_nested_stack">QSIDECARSTACK Nested Stack</h5>
+<div class="paragraph">
+<p>Assuming the provisioning option was left as YES, the SIDECAR stack is deployed. It creates
+two Lambda functions with the specified Sidecar software version. The first is the Metrics
+Lambda that sends Qumulo metrics to CloudWatch. The second is the Disk Recovery Lambda
+that monitors EBS volumes and automatically replaces any failed EBS volumes. IAM roles,
+permissions, and events are created for each Lambda function.</p>
+</div>
+<div class="paragraph">
+<p>Below is the event view for the top-level stack followed by the event view for the CloudQStack. Note the timestamps to manage expectations on the duration for each nested stack.</p>
+</div>
+<div id="additional0" class="imageblock">
+<div class="content">
+<img src="images/image0.png" alt="Additional0" width="50%" height="50%">
+</div>
+<div class="title">Figure 2. CloudFormation top-level stack events</div>
+</div>
+<div id="additional1" class="imageblock">
+<div class="content">
+<img src="images/image1.png" alt="Additional1">
+</div>
+<div class="title">Figure 3. CloudFormation CloudQStack events</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_post_deployment_steps">Post-deployment steps</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Once the top-level stack event log shows <strong>CREATE_COMPLETE</strong>, CloudFormation has completed instantiation of all stack resources. Below are the steps to validate the deployment.</p>
+</div>
+<div class="sect2">
+<h3 id="_review_verify_the_aws_infrastructure">Review &amp; Verify the AWS Infrastructure</h3>
+<div class="sect3">
+<h4 id="_verify_the_cluster_instances_are_running">Verify the Cluster Instances are Running</h4>
+<div class="paragraph">
+<p>In the <strong>AWS EC2 Console</strong> filter on the stack name, clear the running instance filter, and verify
+the number of instances for the cluster is as expected. Four in this example.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verify_the_provisioning_instance_has_stopped">Verify the Provisioning Instance has Stopped</h4>
+<div class="paragraph">
+<p>CloudFormation has completed the instantiation of all resources, but this does not mean all
+resources are fully initialized and running. Specifically, the Provisioning instance will still be
+initializing. Given all the tasks the Provisioning instance has to accomplish it will require at least
+4 minutes AFTER stack completion to finish all tasks. For a large cluster (ie 20 nodes) it may require
+up to 10 minutes. This variability is due to software upgrades of the instances and tagging EBS volumes.
+When it is finished it will automatically shutdown. If the
+provisioning instance has not stopped after 15 minutes, jump to the troubleshooting section.</p>
+</div>
+<div id="additional2" class="imageblock">
+<div class="content">
+<img src="images/image2.png" alt="Additional2">
+</div>
+<div class="title">Figure 4. Deployed EC2 instances</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verify_the_ec2_security_groups">Verify the EC2 Security Groups</h4>
+<div class="paragraph">
+<p>In the AWS Console go to the <strong>EC2 Security Groups</strong> page and filter on the top-level stack
+name. There will be two Security Groups that have been created. Select either to inspect the
+ports and CIDRs configured.</p>
+</div>
+<div id="additional3" class="imageblock">
+<div class="content">
+<img src="images/image3.png" alt="Additional3">
+</div>
+<div class="title">Figure 5. EC2 security groups</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verify_the_ec2_placement_group_for_the_cluster">Verify the EC2 Placement Group for the Cluster</h4>
+<div class="paragraph">
+<p>In the AWS Console go to <strong>Placement Groups</strong>. A placement group with the stack name has
+been created.</p>
+</div>
+<div id="additional4" class="imageblock">
+<div class="content">
+<img src="images/image4.png" alt="Additional4">
+</div>
+<div class="title">Figure 6. EC2 placement group</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verify_the_load_balancer_for_public_management_optional">Verify the Load Balancer for Public Management (Optional)</h4>
+<div class="paragraph">
+<p>In the AWS Console go to <strong>Load Balancers</strong>. If Public Management was selected in the
+template a load balancer has been created. It will be listening on 443, and if selected in the
+template, 3712 for replication.</p>
+</div>
+<div id="additional5" class="imageblock">
+<div class="content">
+<img src="images/image5.png" alt="Additional5">
+</div>
+<div class="title">Figure 7. Load balancer</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verify_ebs_volume_tags">Verify EBS Volume Tags</h4>
+<div class="paragraph">
+<p>If the Provisioning instance has stopped the EBS volumes will be tagged accordingly for the
+cluster and EBS volume configuration. Go to the <strong>AWS Console Elastic Block Store Volumes</strong>
+page to verify. The type and number of EBS volumes will vary depending on EBS volume
+configuration chosen in the template and the number of EC2 instances.</p>
+</div>
+<div id="additional6" class="imageblock">
+<div class="content">
+<img src="images/image6.png" alt="Additional6">
+</div>
+<div class="title">Figure 8. EBS volume tags</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verify_ebs_encryption_with_a_cmk_optional">Verify EBS Encryption with a CMK (Optional)</h4>
+<div class="paragraph">
+<p>On the same page scroll to the right to verify that the volumes are encrypted with the
+Customer Managed Key assigned in the template. This is only relevant if a CMK was specified.
+If the field was left blank in the template, AWS will generate a key to encrypt the data at rest.</p>
+</div>
+<div id="additional7" class="imageblock">
+<div class="content">
+<img src="images/image7.png" alt="Additional7">
+</div>
+<div class="title">Figure 9. EBS encryption</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verify_the_kms_cmk_policy_optional">Verify the KMS CMK Policy (Optional)</h4>
+<div class="paragraph">
+<p>In the AWS Console go to the <strong>Key Management Service</strong> page and select the CMK that was
+chosen in the template. Verify that the policy has been updated with two SIDs, one for the
+Metrics Lambda and one for the Disk Recovery Lambda. If the policy is not updated it is likely
+the Provisioning node will not have shutdown because the policy was not cleaned up prior to
+launching the template. Without this policy modification in place the Sidecar will not be able
+to create a new EBS volume to replace a failed EBS volume.</p>
+</div>
+<div id="additional8" class="imageblock">
+<div class="content">
+<img src="images/image8.png" alt="Additional8">
+</div>
+<div class="title">Figure 10. KMS key policy</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verify_secrets_manager_secrets">Verify Secrets Manager Secrets</h4>
+<div class="paragraph">
+<p>In the AWS Console go to the <strong>Secrets Manager</strong> page and filter on the top-level stack name.
+There will be three secrets that have been created to store username/password pairs. Select
+any of them to see the credentials.</p>
+</div>
+<div id="additional9" class="imageblock">
+<div class="content">
+<img src="images/image9.png" alt="Additional9">
+</div>
+<div class="title">Figure 11. Secrets Manager secrets</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verify_the_iam_roles">Verify the IAM Roles</h4>
+<div class="paragraph">
+<p>In the AWS Console go to the <strong>IAM</strong> page and filter on the top-level stack name. There will be
+four IAM roles that have been created: two for the Sidecar, one for the cluster, and one for the
+provisioning instance.</p>
+</div>
+<div id="additional10" class="imageblock">
+<div class="content">
+<img src="images/image10.png" alt="Additional10">
+</div>
+<div class="title">Figure 12. IAM Roles</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verify_sidecar_lambdas">Verify Sidecar Lambdas</h4>
+<div class="paragraph">
+<p>In the AWS Console go to the <strong>Lambda</strong> page and filter on the top-level stack name. There will
+be two Lambda functions. Select the <strong>Disk Recovery Lambda</strong> and then choose <strong>Monitor</strong>. In the
+populated graphs check that the Error Count and Success Rate shows 100% green and 0%
+red. This confirms the Disk Recovery Lambda is communicating with the cluster. Review the
+Metrics Lambda in the same manner.</p>
+</div>
+<div id="additional11" class="imageblock">
+<div class="content">
+<img src="images/image11.png" alt="Additional11">
+</div>
+<div class="title">Figure 13. Sidecar Lambdas</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verify_route_53_private_hosted_zone_for_dns_optional">Verify Route 53 Private Hosted Zone for DNS (Optional)</h4>
+<div class="paragraph">
+<p>In the AWS Console go to <strong>Route 53</strong>. Select the Private Hosted Zone that was created; in this
+example it is <strong>test.local</strong>. Verify the A-records were created with the A-record name specified in the
+template. This is only relevant if an FQDN was specified, otherwise Route 53 configuration is
+skipped. Note, 16 A-records were created, one for each floating IP, since 4 EC2 instances with
+4 floating IPs were chosen in the template.</p>
+</div>
+<div id="additional12" class="imageblock">
+<div class="content">
+<img src="images/image12.png" alt="Additional12">
+</div>
+<div class="title">Figure 14. Route53 private zone</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verify_resource_groups">Verify Resource Groups</h4>
+<div class="paragraph">
+<p>In the AWS Console go to <strong>CloudWatch</strong>. Choose <strong>Service Dashboards</strong> then choose <strong>EC2</strong>.  In the first filter box choose <strong>EC2</strong> and then in the <strong>Filter by resource group</strong> box select the cluster with <strong>Qumulo-Cluster-EC2-[Stack Name]</strong>. This provides a CloudWatch filtered view of the EC2 instances for the cluster. CPU Utilization,
+network stats, boot volume stats, and alarm events are available.</p>
+</div>
+<div id="additional13" class="imageblock">
+<div class="content">
+<img src="images/image13.png" alt="Additional13">
+</div>
+<div class="title">Figure 15. CloudWatch metrics</div>
+</div>
+<div class="paragraph">
+<p>Now clear the <strong>Filter by resource group</strong> field and select <strong>EBS</strong> in the first filter box. Now in the
+<strong>Filter by resource group</strong> field choose the cluster with <strong>Qumulo-Cluster-[SSD or HDD]-[Stack Name]</strong>. This is a CloudWatch view of the EBS volumes for the cluster. Note, boot volumes are not included in this view.</p>
+</div>
+<div id="additional14" class="imageblock">
+<div class="content">
+<img src="images/image14.png" alt="Additional14">
+</div>
+<div class="title">Figure 16. CloudWatch metrics filtered</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verify_cloudwatch_dashboard">Verify CloudWatch Dashboard</h4>
+<div class="paragraph">
+<p>In the AWS Console go to <strong>CloudWatch &gt; Dashboard &gt; Qumulo-Cluster-[Stack Name]-QSTACK-[123456789ABCD]</strong>. This is a dashboard that has been built to display the metrics sent by the Qumulo Sidecar Metrics Lambda function. Instance health, EBS health, Available Capacity, and Performance data are all available. This dashboard is very useful for historical data that is over 72 hours old. For real-time data visit the Qumulo cluster’s UI. Note: If you are deploying multiple clusters in an AWS region give them unique Qumulo Cluster Names. Metrics are filtered based on the Qumulo Cluster Name.</p>
+</div>
+<div id="additional15" class="imageblock">
+<div class="content">
+<img src="images/image15.png" alt="Additional15">
+</div>
+<div class="title">Figure 17. CloudWatch dashboard</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verify_cloudwatch_logs_audit_logging">Verify CloudWatch Logs (Audit Logging)</h4>
+<div class="paragraph">
+<p>In the AWS Console go to <strong>CloudWatch &gt; Log Groups &gt; /qumulo/[Stack Name]</strong>. This log
+group is configured if Audit Logging was enabled in the CloudFormation template. Log files
+will immediately be available for each instance in the cluster.</p>
+</div>
+<div id="additional16" class="imageblock">
+<div class="content">
+<img src="images/image16.png" alt="Additional16">
+</div>
+<div class="title">Figure 18. CloudWatch log groups</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_review_verify_the_qumulo_cluster_configuration">Review &amp; Verify the Qumulo Cluster Configuration</h3>
+<div class="sect3">
+<h4 id="_review_the_outputs_of_the_cloudformation_stack">Review the Outputs of the CloudFormation Stack</h4>
+<div class="paragraph">
+<p>Go to the <strong>CloudFormation</strong> page and select the top-level stack name. Choose
+<strong>Outputs</strong>. If Route 53 was configured a URL to the private addresses, resolved by Route 53,
+will be shown. If Route 53 was skipped, a URL to the first node’s primary IP address will be
+displayed. Likewise, if Public Management was chosen a URL to the Elastic IP (public static)
+address will be shown. If connecting via the public Internet, open a page from your local
+machine using the <strong>QumuloPublicIP</strong> URL. If connecting from within your VPC, paste the
+<strong>QumuloPrivateIP</strong> URL into the browser of an EC2 instance running Chrome.</p>
+</div>
+<div id="additional17" class="imageblock">
+<div class="content">
+<img src="images/image17.png" alt="Additional17">
+</div>
+<div class="title">Figure 19. CloudFormation outputs</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verify_admin_password">Verify Admin Password</h4>
+<div class="paragraph">
+<p>The login page should authenticate with the credentials:
+Username: <strong>admin</strong>
+Password: <strong>‘your chosen Admin password’</strong>
+If you’ve forgotten the admin password entered in the template go to Secrets Manager and
+retrieve it.</p>
+</div>
+<div id="additional18" class="imageblock">
+<div class="content">
+<img src="images/image18.png" alt="Additional18">
+</div>
+<div class="title">Figure 20. Qumulo login</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verify_quorum_and_protection">Verify Quorum and Protection</h4>
+<div class="paragraph">
+<p>After logging in, the cluster dashboard should be displayed. IF it isn’t the cluster failed to form
+quorum. Jump to troubleshooting.</p>
+</div>
+<div id="additional19" class="imageblock">
+<div class="content">
+<img src="images/image19.png" alt="Additional19">
+</div>
+<div class="title">Figure 21. Qumulo dashboard</div>
+</div>
+<div class="paragraph">
+<p>Choose <strong>More details</strong>. The number of nodes in the cluster should match what was provisioned
+in the template. Further, to the right is the protection status showing protection for 1 node
+failure or 2 disk failures.</p>
+</div>
+<div id="additional20" class="imageblock">
+<div class="content">
+<img src="images/image20.png" alt="Additional20">
+</div>
+<div class="title">Figure 22. Qumulo dashboard details</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verify_software_version">Verify Software Version</h4>
+<div class="paragraph">
+<p>In the top right of the Qumulo UI the software version is displayed. This should match the
+software version requested when the template was filled in. Here it shows Qumulo Core
+version 4.2.0 as expected.</p>
+</div>
+<div id="additional21" class="imageblock">
+<div class="content">
+<img src="images/image21.png" alt="Additional21">
+</div>
+<div class="title">Figure 23. Qumulo software version</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verify_floating_ips">Verify Floating IPs</h4>
+<div class="paragraph">
+<p>Go to the <strong>Cluster</strong> tab and select <strong>Network Configuration</strong>. Each node will have a persistent IP.
+This is the EC2 primary IP address that is provided via DHCP at creation and subsequently
+never changes unless the instance is destroyed (i.e. terminated). Also, each node will have
+floating IPs associated with it. In this case 4 floating IPs per instance was chosen.
+These IPs are EC2 secondary IPs that the cluster now manages as floating IPs. The AWS EC2
+console will only display what EC2 secondary IPs were assigned to an instance at creation. For
+real-time status always refer to the Qumulo UI.</p>
+</div>
+<div id="additional22" class="imageblock">
+<div class="content">
+<img src="images/image22.png" alt="Additional22">
+</div>
+<div class="title">Figure 24. Qumulo floating IP addresses</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_verify_sidecar_user_and_custom_rbac_configuration">Verify Sidecar User and Custom RBAC Configuration</h4>
+<div class="paragraph">
+<p>Previously the Sidecar Lambda function connectivity to the cluster was verified. There’s no
+need to review the Sidecar User and RBAC configuration. If you desire to review these they are
+under <strong>Cluster</strong> &#8594; <strong>Local Users &amp; Groups</strong> and <strong>Cluster</strong> &#8594; <strong>Role Management</strong>, respectively.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_stack_update_options">Stack Update Options</h3>
+<div class="sect3">
+<h4 id="_supported_stack_update_parameters">Supported Stack Update Parameters</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"></th>
+<th class="tableblock halign-left valign-top">Add</th>
+<th class="tableblock halign-left valign-top">Del</th>
+<th class="tableblock halign-left valign-top">Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Total Number of Qumulo EC2 Instances</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">increase</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Floating IPs for IP Failover</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Provision Qumulo SideCar Lambdas</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qumulo Sidecar Software Version</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable Termination Protection</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OPTIONAL: Provision Public IP for Qumulo Management</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OPTIONAL: Enable Replication Port for Qumulo Public IP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OPTIONAL: FQDN for R53 Private Hosted Zone</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OPTIONAL: R53 Record Name for Qumulo RR DNS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OPTIONAL: Send Qumulo Audit Log messages to CloudWatch Logs?</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_adding_nodes_to_the_cluster">Adding Node(s) to the Cluster</h4>
+<div class="paragraph">
+<p>A Qumulo cluster may be grown in both capacity and performance by adding additional nodes
+(EC2 instances) to the cluster. This stack supports adding as many as 16 nodes in one stack
+update for a maximum of 20 nodes total in the cluster. Each node added increases compute,
+networking, and storage capacity. To add nodes to a cluster follow the procedure below. Note,
+total instance count may only be increased, not decreased. If total instance count is decreased
+the stack update will fail and rollback.</p>
+</div>
+<div class="paragraph">
+<p><strong>IF you have upgraded the software on the cluster after initial deployment leave the software version for the cluster in the template as it was originally provisioned. The stack is unaware of this update and the software version field for the cluster can not be used for upgrades after initial deployment.</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Go to the <strong>CloudFormation</strong> view in the AWS Console</p>
+</li>
+<li>
+<p>Select the top-level stack name</p>
+</li>
+<li>
+<p>Select <strong>Update</strong> in the upper right corner</p>
+</li>
+<li>
+<p>Keep the default <strong>Use Current Template</strong></p>
+</li>
+<li>
+<p>Select <strong>Next</strong></p>
+</li>
+<li>
+<p>The template as last populated will be displayed</p>
+</li>
+<li>
+<p>Scroll down to the <strong>Total Number of Qumulo EC2 Instances</strong></p>
+</li>
+<li>
+<p>Increase the number of instances to the chosen value, <strong>8</strong> in this example</p>
+</li>
+<li>
+<p>Select <strong>Next</strong></p>
+</li>
+<li>
+<p>Select <strong>Next</strong> again</p>
+</li>
+<li>
+<p><strong>Check both boxes</strong> acknowledging that CloudFormation may create IAM roles and that it may leverage CAPABILITY_AUTO_EXPAND.</p>
+</li>
+<li>
+<p>Select <strong>Update stack</strong></p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The stack will commence updating. In this case four nodes will be added to the cluster. This is
+not service impacting as the existing nodes are left untouched. There is a brief quorum bounce
+to add the four new nodes to the cluster. Below is a view of the AWS EC2 Console showing
+the new instances initializing.</p>
+</div>
+<div id="additional23" class="imageblock">
+<div class="content">
+<img src="images/image23.png" alt="Additional23">
+</div>
+<div class="title">Figure 25. EC2 instances</div>
+</div>
+<div class="paragraph">
+<p>Notice that the Provisioning instance is also being restarted. This is by design. The Provisioner
+will query the latest version of software running on the cluster and upgrade all new nodes to
+this version of software before joining them to the cluster. Further, it tags all the new EBS
+volumes and updates the floating IPs.</p>
+</div>
+<div class="paragraph">
+<p>This stack provisioned Public Management and Route 53 originally. With the addition of new
+nodes, IP addresses need to be added to the Load Balancer and the Route 53 Private Hosted
+Zone. The stack will automate these updates as well. You may review any nested stack to see
+what resources were modified or added in the stack <strong>Events</strong> tab. At the completion of node
+addition you may review any and all of the AWS infrastructure referencing the former section.
+As a final check make sure the Provisioning node shutdown which indicates success of all
+secondary provisioning.</p>
+</div>
+<div id="additional24" class="imageblock">
+<div class="content">
+<img src="images/image24.png" alt="Additional24">
+</div>
+<div class="title">Figure 26. EC2 instances</div>
+</div>
+<div class="paragraph">
+<p>Finally, login to the cluster and verify the node addition.</p>
+</div>
+<div id="additional25" class="imageblock">
+<div class="content">
+<img src="images/image25.png" alt="Additional25">
+</div>
+<div class="title">Figure 27. Qumulo cluster nodes</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_changing_the_number_of_floating_ips">Changing the number of Floating IPs</h4>
+<div class="paragraph">
+<p>A stack update may be used to change the number of floating IPs per EC2 instance. Follow the same steps as a Node Addition, but change the Floating IP for IP Failover field to the desired number of floating IPs per instance, 1-4, instead of changing the number of EC2 instances (steps 7 &amp; 8 above). Note, if DNS for the floating IPs is being managed outside of the stack, the UNC path for clients mounting the cluster will be impacted until DNS is manually updated. To avoid this use the R53 Private Hosted Zone feature of this template.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_updating_the_sidecar_software_version">Updating the Sidecar Software Version</h4>
+<div class="paragraph">
+<p>A stack update may be used to update the Sidecar software version. Follow the same steps as
+a Node Addition, but change the <strong>Sidecar Software Version</strong> field to the desired version instead
+of changing the number of EC2 instances (steps 7 &amp; 8 above). This is typically done after
+updating the cluster software via the Qumulo UI.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_adding_or_removing_public_management">Adding or Removing Public Management</h4>
+<div class="paragraph">
+<p>A stack update may be used to add or remove public management. Since this update is completely separate from the cluster there’s no changes required to the cluster infrastructure or infrastructure touched by the Provisioning instance. Hence, it will not restart. Follow the same steps as a Node Addition, but change the <strong>OPTIONAL: Provision Public IP for Qumulo Management</strong> parameter to ‘YES/NO’ instead of changing the number of EC2 instances (steps 7 &amp; 8 above). Note, the MGMTNLBSTACK will be deleted when removing public management. This is expected. The stack will show as DELETE_FAILED for a period of time while CloudFormation retries the delete of the Elastic IP. Ultimately it will succeed.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_adding_or_removing_route53_dns_private_hosted_zone">Adding or Removing Route53 DNS Private Hosted Zone</h4>
+<div class="paragraph">
+<p>It is possible to change the R53 FQDN, but AWS requires the deletion of the current Private
+Hosted Zone and a new one will be rebuilt if the FQDN is modified in a stack update. To
+remove the private hosted zone, set the FQDN back to NONE.local. In the stack update pages
+you can review the changes the update will make. Follow the same steps as a Node Addition,
+but change the <strong>OPTIONAL: FQDN for R53 Private Hosted Zone</strong> parameter to the desired
+value instead of changing the number of EC2 instances (steps 7 &amp; 8 above).</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_enabling_or_disabling_audit_logging">Enabling or Disabling Audit Logging</h4>
+<div class="paragraph">
+<p>A stack update may be used to enable or disable Qumulo audit logging. These logs are stored
+in a CloudWatch Logs log group. If a stack update is used to disable audit logging the log
+group will be deleted. Likewise, if audit logging is enabled in a stack update a log group will
+be created with the name <strong>/qumulo/[Stack Name]</strong>. Follow the same steps as a Node Addition,
+but change the <strong>OPTIONAL: Send Qumulo Audit Log messages to CloudWatch Logs?</strong>
+parameter to ‘YES/NO’ instead of changing the number of EC2 instances (steps 7 &amp; 8 above).</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_adding_the_qumulo_sidecar_lambdas">Adding the Qumulo Sidecar Lambdas</h4>
+<div class="paragraph">
+<p>If the Sidecar was not deployed with the Cluster originally, it may be added subsequently to the stack. Follow the same steps as a Node Addition, but change the <strong>Provision Qumulo Sidecar Lambdas</strong> parameter to ‘Yes’ instead of changing the number of EC2 instances (steps 7 &amp; 8 above). Removing the Sidecar lambdas is not supported.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_enabling_or_disabling_termination_protection">Enabling or Disabling Termination Protection</h4>
+<div class="paragraph">
+<p>A stack update may be used to enable or disable Termination Protection for the EC2 instances and the CloudFormation stack. Termination protection should be enabled in all production environments. Only disable it with a stack update prior to deleting the stack.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_other_stack_updates_and_the_qstack_policy">Other Stack Updates and the QSTACK Policy</h4>
+<div class="paragraph">
+<p>The only restrictions placed on stack updates are for the Qumulo cluster. Specifically this is
+the QSTACK. The stack policy is applied by the Provisioning instance, and it forbids any
+modifications, deletions, or recreations of QSTACK EC2 and EBS infrastructure. This is to
+protect production environments from erroneous stack updates. In the event a stack update is
+attempted for an unsupported change the update will simply fail and rollback without harm.
+Many stack updates are possible and not all permutations have been tested. The common
+examples are documented above that are most productive and well tested.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_changing_instance_types_and_ebs_volume_types">Changing Instance Types and EBS Volume Types</h4>
+<div class="paragraph">
+<p>Qumulo does not support changing the cluster instance types with a stack update. This is
+prevented with the aforementioned stack policy. While it would be possible if allowed, it
+would stop all the instances, change the instance type, and restart them. This would be
+service impacting in a production environment. Instead Qumulo recommends shutting down
+an instance at a time so the cluster can leverage floating IPs and maintain the production
+workload.</p>
+</div>
+<div class="paragraph">
+<p>Due to the permutations of EBS volume configurations the likelihood of user error is high
+attempting to change EBS volume types with a stack update. Rather than risk data loss this is
+blocked by the QSTACK policy.</p>
+</div>
+<div class="paragraph">
+<p>For both instance type changes and EBS volume type changes Qumulo offers simple scripts
+that are production friendly.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_termination_protection">Termination Protection</h3>
+<div class="paragraph">
+<p>In production deployments it is wise to enable Termination Protection for the entire stack and the EC2 instances. The template provides this protection by default.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_deleting_the_stack">Deleting the Stack</h3>
+<div class="paragraph">
+<p>When a cluster is no longer needed ensure all critical data has been removed from the cluster.
+Qumulo’s SHIFT functionality may be used to natively copy data from the cluster to S3.
+Alternatively, Qumulo supports S3 Snapshots but rehydration will require a cluster with the
+same EBS volume configuration. Once the data has been archived with the chosen method then use CloudFormation to update the stack to <strong>Disable Termination Protection</strong>.
+Finally, select the <strong>top-level stack</strong> in CloudFormation and choose <strong>Delete</strong>. All resources will be
+deleted. Note, disable Termination Protection before deleting the stack if it was enabled.</p>
+</div>
+<div class="paragraph">
+<p>If a Customer Managed Key was used for encryption at rest, the KMS CMK policy must be
+cleaned up. It’s simplest to do this after the stack is completely deleted. AWS CloudFormation
+does not support CMK policy modifications so it is unable to track these changes that the
+Provisioning instance applied. Go to the <strong>AWS Key Management Service</strong> and select the <strong>CMK</strong>
+that was used. Then <strong>Edit</strong> the policy. <strong>Delete</strong> the two SIDs for the Sidecar and select <strong>Save</strong>. If
+the key policy had no other SIDs applied to it, aside from the Qumulo Sidecar SIDs, it will have
+the following JSON structure before and after being cleaned up.</p>
+</div>
+<div id="additional26" class="imageblock">
+<div class="content">
+<img src="images/image26.png" alt="Additional26">
+</div>
+<div class="title">Figure 28. KMS key policy before cleanup</div>
+</div>
+<div id="additional27" class="imageblock">
+<div class="content">
+<img src="images/image27.png" alt="Additional27">
+</div>
+<div class="title">Figure 29. KMS key policy after cleanup</div>
+</div>
+<div class="paragraph">
+<p>As of the date of this document AWS CloudFormation will fail to delete all of the
+MGMTNLB stack resources (If Public Management was provisioned). Simply let the
+deletion finish, reselect the MGMTNLB stack and delete it again, and then delete the
+top-level stack.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_adding_a_dr_cluster">Adding a DR Cluster</h3>
+<div class="paragraph">
+<p>For disaster recovery and business continuity one or more clusters may be deployed in other Availability Zones or other Regions.
+The process to deploy in another Region is identical to the deployment addressed in this deployment guide.  Similarly, multi-AZ
+functionality may be leveraged by deploying a cluster in a second AZ within the chosen region.  The following steps demonstrate
+how to deploy a DR cluster assuming the production cluster was deployed in a new VPC.</p>
+</div>
+<div class="sect3">
+<h4 id="_deploy_the_dr_cluster">Deploy the DR Cluster</h4>
+<div class="paragraph">
+<p>Launch another quick start selecting the <strong>Deploy Cloud Q into an exisiting VPC</strong>.  Fill in the stack parameters
+to deploy the cluster in the VPC created with the QCluster1 CloudFormation stack and name this second stack, and the cluster, QCluster1-DR.
+However, choose the public and private subnet IDs associated with the <strong>DR</strong> subnets.  These will be apparent in the drop downs within the template.
+By choosing the DR subnets the cluster will be placed in the second availability zone built by the QCluster1 stack.
+In this example a Qumulo Hybrid sc1 cluster with 20TB of usable capacity is built with four EC2 instances and a mix of gp2 and sc1 EBS volume types.
+This is an example where the DR cluster may be sized and configured with completely different paramaters from the production cluster.
+Numerous reasons exist for this flexibility from cost savings to capacity planning, persisting
+snapshots for long periods of time, and curating file data before archival to S3.  For these reasons, and many more, the addition of a DR cluster
+is not automated when deploying the production cluster, but rather, handled as a subsequent deployment to provide the flexibility of location, size,
+and capability.</p>
+</div>
+<div id="additional28" class="imageblock">
+<div class="content">
+<img src="images/image28.png" alt="Additional28">
+</div>
+<div class="title">Figure 30. QCluster1-DR Dashboard</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configure_replication_on_the_source_qumulo_cluster">Configure Replication on the Source Qumulo cluster</h4>
+<div class="paragraph">
+<p>With Qumulo Core&#8217;s native replication, data may be copied from the production cluster to the DR cluster in a continuous fashion.
+This replication is asynchronous and resilient to any networking connectivity issues.  Whether you are replicating to a cluster in the
+same VPC or a cluster in another region, the replication job will not loose data due to networking issues.  In this example continuous replication
+will be enabled on the root directory of the source cluster to the root directory of the target cluster.  However, replication is
+configurable per directory, making it easy to select what data you want to replicate to the DR cluster.  First, click on <strong>Cluster</strong>, then choose
+<strong>Replication</strong>, then <strong>Create Relationship</strong>.  The figure below shows the configuration of the replication relationship on the production source cluster,
+<strong>QCluster1</strong>, targetting the DR cluster <strong>QCluster1-DR</strong>.  Note, a floating IP for the target cluster was used for the target IP address.
+Finally, select <strong>Save Relationship</strong></p>
+</div>
+<div id="additional29" class="imageblock">
+<div class="content">
+<img src="images/image29.png" alt="Additional29">
+</div>
+<div class="title">Figure 31. QCluster1 Replication Relationship Configuration</div>
+</div>
+<div class="paragraph">
+<p>Now the source cluster is waiting for the relationship to be accepted on the destination cluster QCluster1-DR.</p>
+</div>
+<div id="additional30" class="imageblock">
+<div class="content">
+<img src="images/image30.png" alt="Additional30">
+</div>
+<div class="title">Figure 32. QCluster1 Replication Relationship Waiting for Destination Acceptance</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_accept_the_replication_request_on_the_target_qumulo_cluster">Accept the Replication request on the Target Qumulo cluster</h4>
+<div class="paragraph">
+<p>QCluster1-DR will pop up a message alerting you to the fact that a new replication relationship has been requested.  Click on <strong>See Details</strong>.</p>
+</div>
+<div id="additional31" class="imageblock">
+<div class="content">
+<img src="images/image31.png" alt="Additional31">
+</div>
+<div class="title">Figure 33. QCluster1-DR Notification of Replication Relationship Authorization Request</div>
+</div>
+<div class="paragraph">
+<p>Now accept the replication request by selecting <strong>Authorize</strong> on QCluster1-DR which is the target for the replication as shown below.</p>
+</div>
+<div id="additional32" class="imageblock">
+<div class="content">
+<img src="images/image32.png" alt="Additional32">
+</div>
+<div class="title">Figure 34. QCluster1-DR Replication Relationship Authorization</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_monitor_the_status_of_the_replication_relationship_on_the_source_qumulo_cluster">Monitor the status of the Replication Relationship on the Source Qumulo cluster</h4>
+<div class="paragraph">
+<p>At any time the status of the replication relationship is shown on the source cluster, QCluster1 in this example.  Replication
+may be paused or terminated, as well.  Replication performance is based on a combination of cluster workload, network bandwidth,
+ and network latency.  Replication between Availability Zones in the same VPC will be faster than replication between regions due to the latency
+ of the network connectivity.  Replication performance can be increased by creating multiple replication jobs for multiple directories rather
+ than just replicating the root directory.  Below are two screen shots showing the replication job in progress and complete.</p>
+</div>
+<div id="additional33" class="imageblock">
+<div class="content">
+<img src="images/image33.png" alt="Additional33">
+</div>
+<div class="title">Figure 35. QCluster1 Replication In-Progress</div>
+</div>
+<div id="additional34" class="imageblock">
+<div class="content">
+<img src="images/image34.png" alt="Additional34">
+</div>
+<div class="title">Figure 36. QCluster1 Replication Complete</div>
+</div>
+<div class="paragraph">
+<p><em><strong>This portion of the deployment guide is located at <code>docs/partner_editable/faq_troubleshooting.adoc</code></strong></em></p>
+</div>
+<div class="preview_mode">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_faq">FAQ</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Q.</strong> I encountered a <strong>CREATE_FAILED</strong> error when I launched the Quick Start.</p>
+</div>
+<div class="paragraph">
+<p><strong>A.</strong> If AWS CloudFormation fails to create the stack, relaunch the template with <strong>Rollback on failure</strong> set to <strong>Disabled</strong>. This setting is under <strong>Advanced</strong> in the AWS CloudFormation console on the <strong>Configure stack options</strong> page. With this setting, the stack’s state is retained, and the instance keeps running so that you can troubleshoot the issue. (For Windows, look at the log files in <code>%ProgramFiles%\Amazon\EC2ConfigService</code> and <code>C:\cfn\log</code>.)</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+When you set <strong>Rollback on failure</strong> to <strong>Disabled</strong>, you continue to incur AWS charges for this stack. Delete the stack when you finish troubleshooting.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>For more information, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html" target="_blank" rel="noopener">Troubleshooting AWS CloudFormation</a>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Q.</strong> I encountered a size-limitation error when I deployed the AWS CloudFormation templates.</p>
+</div>
+<div class="paragraph">
+<p><strong>A.</strong> Launch the Quick Start templates from the links in this guide or from another S3 bucket. If you deploy the templates from a local copy on your computer or from a location other than an S3 bucket, you might encounter template-size limitations. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html" target="_blank" rel="noopener">AWS CloudFormation quotas</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_troubleshooting">Troubleshooting</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_wheres_the_uuid_for_the_cluster">Where’s the UUID for the cluster?</h3>
+<div class="paragraph">
+<p>The Provisioning instance grabs a copy of the UUID for the cluster after the first quorum is
+formed. Go to <strong>Parameter Store</strong> and filter on the top-level stack name. The following
+parameters are stored by the Provisioning instance. The UUID is last on the list. Select it to
+view the UUID.</p>
+</div>
+<div id="additional35" class="imageblock">
+<div class="content">
+<img src="images/image35.png" alt="Additional35">
+</div>
+<div class="title">Figure 37. Parameters</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_stack_failed_on_the_nested_stack_awsvpcstack_qlookupstack_or_the_secretsstack">The Stack failed on the nested stack AWSVPCSTACK, QLOOKUPSTACK, or the SECRETSSTACK</h3>
+<div class="paragraph">
+<p>The S3 Bucket, Key Name Prefix, or Object URL are not correct. Delete the stack and relaunch
+the template with the correct S3 parameters. Do NOT use the S3 URL, use the Object URL for
+the template or the stack will fail.  If deploying from the AWS Quick Start bucket do not change the bucket name, prefix, or region for the bucket.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_stack_failed_when_provisioning_the_qstack">The Stack failed when provisioning the QSTACK</h3>
+<div class="paragraph">
+<p>The four most common causes for this are:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>An AWS Marketplace offer has not been accepted that matches the <strong>Qumulo AWS Marketplace Offering Accepted</strong> parameter entered in the template</p>
+</li>
+<li>
+<p>The EBS volumes configuration doesn’t match the requirements for the <strong>Qumulo AMI ID</strong> entered when using the Specified-AMI-ID option</p>
+</li>
+<li>
+<p>The cluster failed to place in the placement group</p>
+</li>
+<li>
+<p>Service Quotas were not pre-planned and the QSTACK failed Review the AMI ID and marketplace subscriptions. Double check the EBS volume config selected in the template. If the cluster failed to place, choose a different AZ to deploy the cluster in to find more available resources by selecting a different private subnet ID within the VPC. Adjust Service Quotas if necessary. Delete the failed stack and relaunch the template after rectifying the problem.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_stack_update_failed_and_rolled_back">The Stack Update failed and rolled back</h3>
+<div class="paragraph">
+<p>No harm is done. No Qumulo Cluster parameters for the QSTACK, except the Number of EC2 Instances, can be changed. The number of instances can’t be decreased.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_cluster_didnt_form_quorum">The Cluster didn’t form quorum</h3>
+<div class="paragraph">
+<p>The four most common causes for this are:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>The software version specified in the template doesn’t exist</p>
+</li>
+<li>
+<p>The software version specified in the template is older than the AMI software version</p>
+</li>
+<li>
+<p>The S3 Bucket Region specified is incorrect</p>
+</li>
+<li>
+<p>The VPC doesn’t have public internet access, see <strong>The Provisioning instance didn’t shut down</strong></p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Check for typos by reviewing the parameters entered in the template in the CloudFormation
+console. Double check the software version specified for the cluster and make sure it is equal
+to or newer than the version the Marketplace offer lists. Finally, double check the S3 Bucket
+Region entered in the template.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_provisioning_instance_didnt_shut_down">The Provisioning instance didn’t shut down</h3>
+<div class="sect3">
+<h4 id="_common_causes">Common Causes</h4>
+<div class="paragraph">
+<p>The two most common causes for this are:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>The VPC doesn’t have access to the public Internet or DNS resolution is not functioning. Without access to public infrastructure the Provisioning instance can’t talk to AWS services like Secrets Manager, KMS, Parameter Store, or download the desired version of Qumulo Core software. Review the public and private subnets, their route tables, and the NAT Gateway. Review the AWS Parameter Store last-run-status to verify public internet connectivity (see the section below on last-run-status). Also double check that there are no Network ACLs blocking traffic.</p>
+</li>
+<li>
+<p>A Customer Managed Key was provisioned and the policy was unable to be modified for the CMK because the policy didn’t have valid SIDs before the template was launched.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Cleanup the CMK, correct the VPC infrastructure, delete the failed stack, and relaunch the template. See the section below ‘Provisioning Instance Logic Diagram’ for further troubleshooting details on the provisioning instance.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_aws_parameter_store_last_run_status">AWS Parameter Store last-run-status</h4>
+<div class="paragraph">
+<p>If the Provisioning instance doesn’t automatically shutdown, the AWS Systems Manager
+Parameter Store last-run-status parameter may be checked to see where it stopped. As
+shown below, the parameter history shows the major blocks in the code the provisioning
+instance executes. In this example the Provisioning instance has logged the software upgrades
+to the unconfigured nodes, first quorum, sidecar configuration on the cluster, CMK policy modification,
+and EBS tagging.  Parameter Store history will have mulitple pages enabling you to review the entire history
+of Provisioning instance activity.</p>
+</div>
+<div id="additional36" class="imageblock">
+<div class="content">
+<img src="images/image36.png" alt="Additional36">
+</div>
+<div class="title">Figure 38. Parameter Store history (1)</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_download_the_provisioning_instance_log">Download the Provisioning instance log</h4>
+<div class="paragraph">
+<p>In the event none of the troubleshooting steps help to rectify the problems it’s likely the
+Provisioning instance log will be helpful. To retrieve the log follow these steps:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Go to the AWS Console <strong>EC2 Instances</strong> page</p>
+</li>
+<li>
+<p><strong>Check the box</strong> beside the Provisioning instance</p>
+</li>
+<li>
+<p>Select <strong>Actions</strong> in the upper right corner</p>
+</li>
+<li>
+<p>Select <strong>Monitor &amp; troubleshoot</strong></p>
+</li>
+<li>
+<p>Select <strong>Get system log</strong></p>
+</li>
+<li>
+<p>Select Download in the upper right corner</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Feel free to review the log right in the AWS console or download it to collaborate with Qumulo
+to resolve the problem. Often the log will show an obvious error pointing you to the
+resolution.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_provisioning_instance_flow_chart">Provisioning instance flow chart</h4>
+<div class="paragraph">
+<p>The provisioning instance executes the code in user data every boot cycle. The abbreviated
+logic diagram below shows the major branches and AWS SSM Parameter Store values for
+<strong>last-run-status</strong> throughout the execution of the code.</p>
+</div>
+<div id="additional37" class="imageblock">
+<div class="content">
+<img src="images/image37.png" alt="Additional37">
+</div>
+<div class="title">Figure 39. Provisioning instance flow chart</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_customer_responsibility">Customer responsibility</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>After you successfully deploy this Quick Start, confirm that your resources and services are updated and configured — including any required patches — to meet your security and other needs. For more information, see the <a href="https://aws.amazon.com/compliance/shared-responsibility-model/" target="_blank" rel="noopener">AWS Shared Responsibility Model</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_parameter_reference">Parameter reference</h2>
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Unless you are customizing the Quick Start templates for your own deployment projects, keep the default settings for the parameters labeled <strong>Quick Start S3 bucket name</strong>, <strong>Quick Start S3 bucket Region</strong>, and <strong>Quick Start S3 key prefix</strong>. Changing these parameter settings automatically updates code references to point to a new Quick Start location. For more information, see the <a href="https://aws-quickstart.github.io/option1.html" target="_blank" rel="noopener">AWS Quick Start Contributor’s Guide</a>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_send_us_feedback">Send us feedback</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To post feedback, submit feature ideas, or report bugs, use the <strong>Issues</strong> section of the <a href="https://github.com/aws-quickstart/quickstart-qumulo-cloud-q" target="_blank" rel="noopener">GitHub repository</a> for this Quick Start. To submit code, see the <a href="https://aws-quickstart.github.io/" target="_blank" rel="noopener">Quick Start Contributor’s Guide</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_quick_start_reference_deployments">Quick Start reference deployments</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>See the <a href="https://aws.amazon.com/quickstart/" target="_blank" rel="noopener">AWS Quick Start home page</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_github_repository">GitHub repository</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Visit our <a href="https://github.com/aws-quickstart/quickstart-qumulo-cloud-q" target="_blank" rel="noopener">GitHub repository</a> to download
+the templates and scripts for this Quick Start, to post your comments,
+and to share your customizations with others.</p>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_notices">Notices</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This document is provided for informational purposes only. It represents AWS’s current product offerings and practices as of the date of issue of this document, which are subject to change without notice. Customers are responsible for making their own independent assessment of the information in this document and any use of AWS’s products or services, each of which is provided “as is” without warranty of any kind, whether expressed or implied. This document does not create any warranties, representations, contractual commitments, conditions, or assurances from AWS, its affiliates, suppliers, or licensors. The responsibilities and liabilities of AWS to its customers are controlled by AWS agreements, and this document is not part of, nor does it modify, any agreement between AWS and its customers.</p>
+</div>
+<div class="paragraph">
+<p>The software included with this paper is licensed under the Apache License, version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at <a href="http://aws.amazon.com/apache2.0/" target="_blank" rel="noopener">http://aws.amazon.com/apache2.0/</a> or in the accompanying "license" file. This code is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either expressed or implied. See the License for specific language governing permissions and limitations.</p>
+</div>
+</div>
+</div>
+</div>
+<p class="footer-text">
+<!-- We can use document attributes: -->
+<!-- Generated with Asciidoctor v2.0.12. -->
+<a href="https://aws.amazon.com/privacy/">Privacy</a> | <a href="https://aws.amazon.com/terms/">Site terms</a> | &copy; 2021, Amazon Web Services, Inc. or its affiliates and Qumulo. All rights reserved.
+</p>
+</body>
+</html>

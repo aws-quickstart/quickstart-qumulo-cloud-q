@@ -2,6 +2,6 @@
 // Identify your target audience and explain how/why they would use this Quick Start.
 //Avoid borrowing text from third-party websites (copying text from AWS service documentation is fine). Also, avoid marketing-speak, focusing instead on the technical aspect.
 
-This guide provides instructions for deploying the aws-sa-waf-cluster set of templates in AWS to fully provision the infrastructure for a Qumulo cluster. Any subsequent configuration for the file data platform is outside the scope of this document. Refer to the https://care.qumulo.com/hc/en-us/categories/115000637447-KNOWLEDGE-BASE[Qumulo Knowledge Base] for further information.
+This guide provides instructions for deploying {partner-product-short-name} Quick Start reference architecture in the AWS cloud. Any subsequent configuration for the file data platform is outside the scope of this document. Refer to the https://care.qumulo.com/hc/en-us/categories/115000637447-KNOWLEDGE-BASE[Qumulo Knowledge Base] for further information.
 
-This document is intended for anyone deploying an AWS Qumulo Solution Architect (SA) Well Architected Framework (WAF) Cluster.  This document is comprehensive and experienced AWS users may find it repetitive or obvious. Less experienced users will benefit from the detailed documentation. Leverage the Table of Contents to jump to the area of interest.
+This Quick Start is for users who want to build a scale-out, multip-protocol, file data platform with 1TB to 6PB of usable capacity in a single name space hosted in AWS.

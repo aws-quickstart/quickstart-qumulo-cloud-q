@@ -12,11 +12,11 @@ image::../images/architecture_diagram.png[Architecture]
 
 As shown in <<architecture1>>, the Quick Start sets up the following:
 
-* A VPC configured with public and private subnets, according to AWS best practices, to provide you with your own virtual network on AWS.*
-* In the public subnet:
-** A managed network address translation (NAT) gateway to allow outbound internet access for resources in the private subnet.*
+* A VPC configured with public and private subnets, in two Availability Zones, according to AWS best practices, to provide you with your own virtual network on AWS.*
+* In the public production subnet:
+** A managed Network Address Translation (NAT) gateway to allow outbound Internet access for resources in the private subnet.*
 // ** A Linux bastion host in an Auto Scaling group to allow inbound Secure Shell (SSH) access to EC2 instances in public and private subnets.*
-* In the private subnet:
+* In the private production subnet:
 ** A cluster of Qumulo EC2 instances
 *** 4 to 20 nodes
 *** 1TB to 6PB of usable capacity
@@ -33,7 +33,7 @@ As shown in <<architecture1>>, the Quick Start sets up the following:
 *** Note, this NLB listens on port 443 and has some inherent DoS capabilities.
 *** As a best practice the cluster should be managed long-term via a secure host in the public or private subnet.
 *** This functionality is only intended for initial configuration inspection and validation in the event no other EC2 machines exist in the VPC to manage the cluster
-** Provisioner
+** Provisioner Instance
 *** An EC2 instance configures multiple parameters on the Qumulo cluster and within the AWS infrastructure
 *** This instance automatically shuts down after successful provisioning
 *** It is also restarted during stack updates to provision modifications to the infrastructure

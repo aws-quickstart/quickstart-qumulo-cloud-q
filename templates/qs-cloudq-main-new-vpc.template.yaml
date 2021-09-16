@@ -36,7 +36,7 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
-          default: AWS Template Configuration - Cloud Q Quick Start v3.3
+          default: AWS Template Configuration - Cloud Q Quick Start v3.6
         Parameters:
           - QSS3BucketName
           - QSS3KeyPrefix
@@ -47,10 +47,13 @@ Metadata:
       - Label: 
           default: AWS Network Configuration
         Parameters:
-          - AvailabilityZone
           - VpcCidr
+          - AvailabilityZone
           - PublicSubnetCidr               
           - PrivateSubnetCidr     
+          - AvailabilityZoneDR
+          - PublicSubnetCidrDR               
+          - PrivateSubnetCidrDR 
           - QClusterLocalZone
           - SideCarAZ
           - SideCarPrivateSubnetCidr
@@ -98,14 +101,20 @@ Metadata:
         default: "AWS Key-Pair Name"
       EnvType:
         default: "OPTIONAL: Environment Type"
+      VpcCidr:
+        default: "AWS VPC CIDR"
       AvailabilityZone:
         default: "Specify an Availability Zone"
-      VpcCidr:
-        default: "AWS VPC Subnet"
       PrivateSubnetCidr:
-        default: "AWS VPC Private Subnet"
+        default: "AWS VPC Private Subnet CIDR"
       PublicSubnetCidr:
-        default: "AWS VPC Public Subnet"
+        default: "AWS VPC Public Subnet CIDR"
+      AvailabilityZoneDR:
+        default: "Specify an Availability Zone for a future DR cluster"
+      PrivateSubnetCidrDR:
+        default: "AWS VPC Private Subnet CIDR for a future DR cluster"
+      PublicSubnetCidrDR:
+        default: "AWS VPC Public Subnet CIDR for a future DR cluster"
       QPublicMgmt: 
         default: "OPTIONAL: Provision Public IP for Qumulo Management"
       QPublicRepl: 
@@ -139,7 +148,7 @@ Metadata:
       QPermissionsBoundary:
         default: "OPTIONAL: AWS Permissions Boundary Policy Name"        
       QInstanceRecoveryTopic:
-        default: "OPTIONAL: Qumulo Instance Recovery Topic"
+        default: "OPTIONAL: Qumulo EC2 Instance Recovery Topic"
       QAuditLog:
         default: "OPTIONAL: Send Qumulo Audit Log messages to CloudWatch Logs? "
       TermProtection:
@@ -159,7 +168,7 @@ Metadata:
       SideCarPassword:
         default: "Qumulo Sidecar Password "
       SideCarSNSTopic:
-        default: "OPTIONAL: Qumulo Sidecar SNS Topic "
+        default: "OPTIONAL: Qumulo EBS Volume Recovery SNS Topic "
 
 Parameters:
 
@@ -218,27 +227,54 @@ Parameters:
     Type: String
     Default: dev
 
+  VpcCidr:
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$"
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Description: Must be specified as an IPv4 address followed by / and a subnet mask of 16-28.
+    Type: String
+    Default: "10.0.0.0/16"
+
   AvailabilityZone:
     Description: The Qumulo Cluster will be deployed in the chosen AZ
     Type: AWS::EC2::AvailabilityZone::Name
 
-  VpcCidr:
-    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(3[0-2]|[1-2][0-9]|[0-9]))$"
-    Description: Must be specified as an IPv4 address followed by / and a subnet mask of 0-32.
-    Type: String
-    Default: "10.0.0.0/16"
-
   PublicSubnetCidr:
     AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(3[0-2]|[1-2][0-9]|[0-9]))$"
-    Description: AWS Public Subnet CIDR for the AZ. Must be specified as an IPv4 address followed by / and a subnet mask of 0-32.
+    Description: Public Subnet CIDR in the AZ. Must be specified as an IPv4 address followed by / and a subnet mask of 17-28.
     Type: String
     Default: "10.0.0.0/20"
 
   PrivateSubnetCidr:
     AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(3[0-2]|[1-2][0-9]|[0-9]))$"
-    Description: AWS Private Subnet CIDR in the AZ. Must be specified as an IPv4 address followed by / and a subnet mask of 0-32.
+    Description: Private Subnet CIDR in the AZ. Must be specified as an IPv4 address followed by / and a subnet mask of 17-28.
+    Type: String
+    Default: "10.0.128.0/20"
+
+  AvailabilityZoneDR:
+    Description: Choose an AZ for a future DR cluster.
+    Type: AWS::EC2::AvailabilityZone::Name
+
+  PublicSubnetCidrDR:
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(3[0-2]|[1-2][0-9]|[0-9]))$"
+    Description: Public Subnet CIDR in the DR AZ. Must be specified as an IPv4 address followed by / and a subnet mask of 17-28.
     Type: String
     Default: "10.0.16.0/20"
+
+  PrivateSubnetCidrDR:
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(3[0-2]|[1-2][0-9]|[0-9]))$"
+    Description: Private Subnet CIDR in the DR AZ. Must be specified as an IPv4 address followed by / and a subnet mask of 17-28.
+    Type: String
+    Default: "10.0.144.0/20"
+
+  SideCarAZ:
+    Description: An AZ MUST be selected. It is only used if YES for Local Zone was selected above. Select an AZ in the region (not a Local Zone).
+    Type: AWS::EC2::AvailabilityZone::Name
+
+  SideCarPrivateSubnetCidr:
+    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(3[0-2]|[1-2][0-9]|[0-9]))$"
+    Description: This CIDR is only used if YES for Local Zone was selected above.  Must be specified as an IPv4 address followed by / and a subnet mask of 0-32.
+    Type: String
+    Default: "10.0.160.0/20"
 
   QPublicMgmt:
     AllowedValues:
@@ -445,16 +481,6 @@ Parameters:
     Type: String
     Default: "NO"
 
-  SideCarAZ:
-    Description: An AZ MUST be selected. It is only used if YES for Local Zone was selected above. Select an AZ in the region (not a Local Zone).
-    Type: AWS::EC2::AvailabilityZone::Name
-
-  SideCarPrivateSubnetCidr:
-    AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(3[0-2]|[1-2][0-9]|[0-9]))$"
-    Description: This CIDR is only used if YES for Local Zone was selected above.  Must be specified as an IPv4 address followed by / and a subnet mask of 0-32.
-    Type: String
-    Default: "10.0.32.0/20"
-
   SideCarProv:
     Description: "By default the Qumulo Sidecar Lambdas are deployed to monitor and replace failed EBS volumes plus send metrics to CloudWatch.  Leave this at default for production environments with WAF compliance.  
                   The ability to disable this provisioning is offerred just for test environments."
@@ -512,6 +538,10 @@ Conditions:
   ProvMgmt: !And [Condition: PubMgmt, !Not [Condition: LocalAZ]]
 
 Rules:
+  AZRule:
+    Assertions: 
+      - Assert: !Not [!Equals [!Ref AvailabilityZone, !Ref AvailabilityZoneDR]]
+        AssertDescription: "The Primary Cluster AZ and the future DR AZ must be unique. "
   CustomRule:
     RuleCondition: !Equals [!Ref QMarketPlaceType, "Custom-1TB-6PB"]
     Assertions:
@@ -596,14 +626,17 @@ Rules:
         - !Ref QInstanceType
         AssertDescription: "Disastery Recovery Clusters support m5.2xlarge, m5.4xlarge, and m5.8xlarge instance types.  Select one of these EC2 instance types. "
       - Assert: !Contains 
-        - - 35TiB-Hybrid-sc1
+        - - 8TiB-Hybrid-sc1
+          - 13TiB-Hybrid-sc1
+          - 20TB-Hybrid-sc1
+          - 35TiB-Hybrid-sc1
           - 55TiB-Hybrid-sc1
           - 90TiB-Hybrid-sc1
           - 160TiB-Hybrid-sc1
           - 256TiB-Hybrid-sc1
           - 320TiB-Hybrid-sc1
         - !Ref QDiskConfig
-        AssertDescription: "Disastery Recovery Clusters support Hybrid-sc1 with 35TiB, 55TiB, 90TiB, 160TiB, 256TiB, and 320TiB capacities.  Select one of these EBS configurations."    
+        AssertDescription: "Disastery Recovery Clusters support Hybrid-sc1.  Select one of these EBS configurations."           
 
 Resources:
 
@@ -611,13 +644,16 @@ Resources:
     Type: "AWS::CloudFormation::Stack"
     Properties:
       Parameters:
-        PrivateSubnetCidr: !Ref PrivateSubnetCidr
-        PublicSubnetCidr: !Ref PublicSubnetCidr
         VpcCidr: !Ref VpcCidr
         AvailabilityZone: !Ref AvailabilityZone
-        SideCarPrivateSubnetCidr: !Ref SideCarPrivateSubnetCidr
+        PrivateSubnetCidr: !Ref PrivateSubnetCidr
+        PublicSubnetCidr: !Ref PublicSubnetCidr
+        AvailabilityZoneDR: !Ref AvailabilityZoneDR
+        PublicSubnetCidrDR: !Ref PublicSubnetCidrDR
+        PrivateSubnetCidrDR: !Ref PrivateSubnetCidrDR
+        QClusterLocalZone: !Ref QClusterLocalZone     
         SideCarAZ: !Ref SideCarAZ
-        QClusterLocalZone: !Ref QClusterLocalZone        
+        SideCarPrivateSubnetCidr: !Ref SideCarPrivateSubnetCidr
       TemplateURL:
         !Sub
           - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/aws-vpc.cft.yaml
