@@ -25,15 +25,15 @@ formed. Go to **Parameter Store** and filter on the top-level stack name. The fo
 parameters are stored by the Provisioning instance. The UUID is last on the list. Select it to
 view the UUID.
 
-[#additional28]
+[#additional35]
 .Parameters
-image::../images/image28.png[Additional28]
+image::../images/image35.png[Additional35]
 
-=== The Stack failed on the first nested stack, QLOOKUP or SECRETSSTACK
+=== The Stack failed on the nested stack AWSVPCSTACK, QLOOKUPSTACK, or the SECRETSSTACK
 
 The S3 Bucket, Key Name Prefix, or Object URL are not correct. Delete the stack and relaunch
 the template with the correct S3 parameters. Do NOT use the S3 URL, use the Object URL for
-the template or the stack will fail.
+the template or the stack will fail.  If deploying from the AWS Quick Start bucket do not change the bucket name, prefix, or region for the bucket.
 
 === The Stack failed when provisioning the QSTACK
 
@@ -42,7 +42,7 @@ The four most common causes for this are:
 1. An AWS Marketplace offer has not been accepted that matches the **Qumulo AWS Marketplace Offering Accepted** parameter entered in the template
 2. The EBS volumes configuration doesn’t match the requirements for the **Qumulo AMI ID** entered when using the Specified-AMI-ID option
 3. The cluster failed to place in the placement group
-4. Service Quotas were not pre-planned and the QSTACK failed Review the AMI ID and marketplace subscriptions. Double check the EBS volume config selected in the template. If the cluster failed to place, choose a different AZ to deploy the cluster in to find more available resources by selecting a different private subnet ID within the VPC. Adjust Service Quotas if necessary. Delete the failed stack and relaunch the template after rectifying the problem.
+4. Service Quotas were not pre-planned and the QSTACK failed. Review the AMI ID and marketplace subscriptions. Double check the EBS volume config selected in the template. If the cluster failed to place, choose a different AZ to deploy the cluster in to find more available resources by selecting a different private subnet ID within the VPC. Adjust Service Quotas if necessary. Delete the failed stack and relaunch the template after rectifying the problem.
 
 === The Stack Update failed and rolled back
 
@@ -59,8 +59,7 @@ The four most common causes for this are:
 
 Check for typos by reviewing the parameters entered in the template in the CloudFormation
 console. Double check the software version specified for the cluster and make sure it is equal
-to or newer than the version the Marketplace offer lists. Finally, double check the S3 Bucket
-Region entered in the template.
+to or newer than the version the Marketplace offer lists. 
 
 === The Provisioning instance didn’t shut down
 
@@ -78,12 +77,14 @@ Cleanup the CMK, correct the VPC infrastructure, delete the failed stack, and re
 If the Provisioning instance doesn’t automatically shutdown, the AWS Systems Manager
 Parameter Store last-run-status parameter may be checked to see where it stopped. As
 shown below, the parameter history shows the major blocks in the code the provisioning
-instance executes. In this example QCluster1 was built for the first time as noted by the NEW
-CLUSTER update to the last-run-status parameter.
+instance executes. In this example the Provisioning instance has logged the software upgrades
+to the unconfigured nodes, first quorum, sidecar configuration on the cluster, CMK policy modification,
+and EBS tagging.  Parameter Store history will have mulitple pages enabling you to review the entire history
+of Provisioning instance activity.
 
-[#additional29]
-.Parameter Store history
-image::../images/image29.png[Additional29]
+[#additional36]
+.Parameter Store history (1)
+image::../images/image36.png[Additional36]
 
 ==== Download the Provisioning instance log
 
@@ -107,6 +108,6 @@ The provisioning instance executes the code in user data every boot cycle. The a
 logic diagram below shows the major branches and AWS SSM Parameter Store values for
 **last-run-status** throughout the execution of the code.
 
-[#additional30]
+[#additional37]
 .Provisioning instance flow chart
-image::../images/image30.png[Additional30]
+image::../images/image37.png[Additional37]

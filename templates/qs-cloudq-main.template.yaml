@@ -39,7 +39,7 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
-          default: AWS Template Configuration - Cloud Q Quick Start v3.3
+          default: AWS Template Configuration - Cloud Q Quick Start v3.6
         Parameters:
           - QSS3BucketName
           - QSS3KeyPrefix
@@ -141,7 +141,7 @@ Metadata:
       QPermissionsBoundary:
         default: "OPTIONAL: AWS Permissions Boundary Policy Name"
       QInstanceRecoveryTopic:
-        default: "OPTIONAL: Qumulo Instance Recovery Topic"
+        default: "OPTIONAL: Qumulo EC2 Instance Recovery Topic"
       QAuditLog:
         default: "OPTIONAL: Send Qumulo Audit Log messages to CloudWatch Logs? "
       TermProtection:
@@ -159,7 +159,7 @@ Metadata:
       SideCarPassword:
         default: "Qumulo Sidecar Password "
       SideCarSNSTopic:
-        default: "OPTIONAL: Qumulo Sidecar SNS Topic "
+        default: "OPTIONAL: Qumulo EBS Volume Recovery SNS Topic "
 
 Parameters:
 
@@ -670,16 +670,34 @@ Rules:
         - !Ref QInstanceType
         AssertDescription: "Disastery Recovery Clusters support m5.2xlarge, m5.4xlarge, and m5.8xlarge instance types.  Select one of these EC2 instance types. "
       - Assert: !Contains 
-        - - 35TiB-Hybrid-sc1
+        - - 8TiB-Hybrid-sc1
+          - 13TiB-Hybrid-sc1
+          - 20TB-Hybrid-sc1
+          - 35TiB-Hybrid-sc1
           - 55TiB-Hybrid-sc1
           - 90TiB-Hybrid-sc1
           - 160TiB-Hybrid-sc1
           - 256TiB-Hybrid-sc1
           - 320TiB-Hybrid-sc1
         - !Ref QDiskConfig
-        AssertDescription: "Disastery Recovery Clusters support Hybrid-sc1 with 35TiB, 55TiB, 90TiB, 160TiB, 256TiB, and 320TiB capacities.  Select one of these EBS configurations."        
+        AssertDescription: "Disastery Recovery Clusters support Hybrid-sc1.  Select one of these EBS configurations."        
 
 Resources:
+
+  SECRETSSTACK:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      Parameters:
+        SideCarUsername: !If [ProvSideCar, !Ref SideCarUsername, ""]
+        SideCarPassword: !If [ProvSideCar, !Ref SideCarPassword, ""]
+        ClusterAdminPwd: !Ref QClusterAdminPwd
+
+      TemplateURL:
+        !Sub
+          - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/store-secrets.cft.yaml
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+      TimeoutInMinutes: 150         
 
   QLOOKUPSTACK:
     Type: "AWS::CloudFormation::Stack"
@@ -689,30 +707,17 @@ Resources:
         MarketPlaceType: !FindInMap [ConfigMap, !Ref QMarketPlaceType, ShortName]
       TemplateURL:
         !Sub
-          - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/qami-id-lookup.cft.yaml
+          - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/qami-id-lookup-4.2.0.cft.yaml
           - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
             S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
-      TimeoutInMinutes: 150      
-
-  SECRETSSTACK:
-    Type: "AWS::CloudFormation::Stack"
-    Properties:
-      Parameters:
-        SideCarUsername: !If [ProvSideCar, !Ref SideCarUsername, ""]
-        SideCarPassword: !If [ProvSideCar, !Ref SideCarPassword, ""]
-        ClusterAdminPwd: !Ref QClusterAdminPwd 
-      TemplateURL:
-        !Sub
-          - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/store-secrets.cft.yaml
-          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
-            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
-      TimeoutInMinutes: 150         
+      TimeoutInMinutes: 150   
 
   QIAMSTACK:
     Type: "AWS::CloudFormation::Stack"
     Properties:
       Parameters:
         QPermissionsBoundary: !Ref QPermissionsBoundary
+        VolumesEncryptionKey: !Ref VolumesEncryptionKey        
       TemplateURL:
         !Sub
           - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/qiam.cft.yaml
