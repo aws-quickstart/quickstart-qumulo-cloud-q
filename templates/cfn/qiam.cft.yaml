@@ -93,7 +93,7 @@ Resources:
                   - "kms:ReEncryptTo"
                   - "kms:DescribeKey"
                   - "kms:CreateGrant"
-                Resource: !If [ProvCMK, !Sub "arn:aws:kms:::key/${VolumesEncryptionKey}", "arn:aws:kms:::alias/aws/ebs"]
+                Resource: !If [ProvCMK, !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/${VolumesEncryptionKey}", !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/ebs"]
 
   QumuloAccessProfile:
     Type: "AWS::IAM::InstanceProfile"
