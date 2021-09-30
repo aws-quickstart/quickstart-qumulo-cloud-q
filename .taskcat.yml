@@ -16,6 +16,7 @@ tests:
       QClusterAdminPwd: P!$[taskcat_genpass_12A]
       SideCarAZ: $[taskcat_getaz_1]
       SideCarPassword: P!$[taskcat_genpass_12A]
+      AvailabilityZoneDR: $[taskcat_getaz_1]
     regions:
     - us-east-1
     template: templates/qs-cloudq-main-new-vpc.template.yaml
