@@ -28,4 +28,4 @@ This Quick Start supports the following Regions:
 * eu-south-1, Europe (Milan)
 * me-south-1, Middle East (Bahrain)
 
-//Full list: https://docs.aws.amazon.com/general/latest/gr/rande.html
+// Full list: https://docs.aws.amazon.com/general/latest/gr/rande.html

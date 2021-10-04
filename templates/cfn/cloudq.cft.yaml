@@ -1,0 +1,442 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+# MIT License
+#
+# Copyright (c) 2021 Qumulo, Inc.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal 
+# in the Software without restriction, including without limitation the rights 
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+# copies of the Software, and to permit persons to whom the Software is 
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all 
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
+# SOFTWARE.
+
+Description: This is the main template to spin up a Qumulo Cluster in an existing VPC.  It calls subordinate CloudFormation templates to instantiate the infrastructure. (qs-1s6n2i6af)
+
+Metadata:
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W9006
+        - W9901
+        - E9902 #Unknown exception while processing rule E9902
+        - E9903 #Unknown exception while processing rule E9903
+        - E9904 #Unknown exception while processing rule E9904
+ 
+Parameters:
+
+  QSS3BucketName:
+    Type: String
+  QSS3BucketRegion:
+    Type: String
+  QSS3KeyPrefix:
+    Type: String
+  KeyPair:
+    Type: String
+  EnvType:
+    Type: String
+  VPCId:
+    Type: String
+  QPublicMgmt:
+    Type: String
+  QPublicRepl:
+    Type: String
+  PublicSubnetID:
+    Type: String
+  PrivateSubnetID:
+    Type: String
+  DomainName:
+    Type: String
+  QDr:
+    Type: String
+  QFloatRecordName:
+    Type: String
+  QNodeCount:
+    Type: String
+  QDiskConfig:
+    Type: String
+  QAmiID:
+    Type: String
+  QMarketPlaceType:
+    Type: String
+  QFloatingIP:
+    Type: String
+  QClusterName:
+    Type: String
+  QClusterVersion:
+    Type: String
+  QClusterAdminPwd:
+    Type: String
+    NoEcho: "true"
+  QInstanceType:
+    Type: String
+  VolumesEncryptionKey: 
+    Type: String
+  QPermissionsBoundary:
+    Type: String
+  QInstanceRecoveryTopic:
+    Type: String
+  QSgCidr1:
+    Type: String
+  QSgCidr2:
+    Type: String
+  QSgCidr3:
+    Type: String
+  QSgCidr4:
+    Type: String
+  TermProtection:
+    Type: String
+  QClusterLocalZone:
+    Type: String
+  QAuditLog:
+    Type: String
+  SideCarPrivateSubnetID:
+    Type: String
+  SideCarProv:   
+    Type: String
+  SideCarVersion:
+    Type: String
+  SideCarUsername:
+    Type: String
+  SideCarPassword:
+    Type: String
+    NoEcho: "true"
+  SideCarSNSTopic:
+    Type: String
+
+Conditions:
+
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
+  
+  ProvSg2: !Not
+    - !Equals
+      - !Ref QSgCidr2
+      - ""
+
+  ProvSg3: !Not
+    - !Equals
+      - !Ref QSgCidr3
+      - ""      
+
+  ProvSg4: !Not
+    - !Equals
+      - !Ref QSgCidr4
+      - ""
+
+  AddQSgCidr: !Or [Condition: ProvSg2, Condition: ProvSg3, Condition: ProvSg4]
+
+  ProvR53: !Not
+    - !Equals
+      - !Ref DomainName
+      - ""
+
+  ProvSideCar: !Equals
+    - !Ref SideCarProv
+    - "YES"
+
+  PubMgmt: !Not
+    - !Equals
+      - !Ref QPublicMgmt
+      - "NO"
+
+  LocalAZ: !Not
+    - !Equals
+      - !Ref QClusterLocalZone
+      - "NO"
+
+  ProvMgmt: !And [Condition: PubMgmt, !Not [Condition: LocalAZ]]
+
+  CustomAMI: !Equals
+    - !Ref QMarketPlaceType
+    - "Specified-AMI-ID"
+
+  CustomMP: !Or 
+    - !Equals
+      - !Ref QMarketPlaceType
+      - "Custom-1TB-6PB"
+    - !Equals
+      - !Ref QMarketPlaceType
+      - "Specified-AMI-ID"
+
+  CustomDC: !Not
+    - !Equals
+      - !Ref QDiskConfig
+      - "Select for Custom Offering"
+
+  CustomNC: !Not
+    - !Equals
+      - !Ref QNodeCount
+      - "Select for Custom Offering OR Expanding Cluster"
+
+  LookupAMI: !Not [Condition: CustomAMI]
+
+  Custom: !And [Condition: CustomMP,  Condition: CustomDC, Condition: CustomNC]
+
+Mappings:
+  ConfigMap:
+    1TB-Usable-All-Flash:
+      DiskConfig: 600GiB-AF
+      NodeCount: "4"
+      ShortName: 1TB
+    12TB-Usable-Hybrid-st1:
+      DiskConfig: 5TB-Hybrid-st1
+      NodeCount: "4"
+      ShortName: 12TB      
+    96TB-Usable-Hybrid-st1:
+      DiskConfig: 20TB-Hybrid-st1
+      NodeCount: "6"      
+      ShortName: 96TB      
+    103TB-Usable-All-Flash:
+      DiskConfig: 30TB-AF
+      NodeCount: "5"      
+      ShortName: 103TB      
+    270TB-Usable-Hybrid-st1:
+      DiskConfig: 55TiB-Hybrid-st1
+      NodeCount: "6"      
+      ShortName: 270TB      
+    809TB-Usable-Hybrid-st1:
+      DiskConfig: 160TiB-Hybrid-st1
+      NodeCount: "6"      
+      ShortName: 809TB      
+    Custom-1TB-6PB:
+      DiskConfig: CUSTOM-ERROR--NEED-TO-SELECT-DISK-CONFIG
+      NodeCount: CUSTOM-ERROR--NEED-TO-SELECT-NODE-COUNT      
+      ShortName: Custom 
+    Specified-AMI-ID:
+      DiskConfig: SPECIFIED-AMI-ID-ERROR--NEED-TO-SELECT-DISK-CONFIG
+      NodeCount: SPECIFIED-AMI-ID-ERROR--NEED-TO-SELECT-NODE-COUNT      
+      ShortName: Custom 
+
+Resources:
+
+  SECRETSSTACK:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      Parameters:
+        SideCarUsername: !If [ProvSideCar, !Ref SideCarUsername, ""]
+        SideCarPassword: !If [ProvSideCar, !Ref SideCarPassword, ""]
+        ClusterAdminPwd: !Ref QClusterAdminPwd
+
+      TemplateURL:
+        !Sub
+          - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/store-secrets.cft.yaml
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+      TimeoutInMinutes: 150         
+
+  QLOOKUPSTACK:
+    Type: "AWS::CloudFormation::Stack"
+    Condition: LookupAMI
+    Properties:
+      Parameters:
+        MarketPlaceType: !FindInMap [ConfigMap, !Ref QMarketPlaceType, ShortName]
+      TemplateURL:
+        !Sub
+          - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/qami-id-lookup-4.2.0.cft.yaml
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+      TimeoutInMinutes: 150   
+
+  QIAMSTACK:
+    Type: "AWS::CloudFormation::Stack"
+    Properties:
+      Parameters:
+        QPermissionsBoundary: !Ref QPermissionsBoundary
+        VolumesEncryptionKey: !Ref VolumesEncryptionKey        
+      TemplateURL:
+        !Sub
+          - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/qiam.cft.yaml
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+      TimeoutInMinutes: 150   
+
+  QSTACK:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      Parameters:
+        ClusterName: !Ref QClusterName
+        ClusterAMI: !If [LookupAMI, !GetAtt QLOOKUPSTACK.Outputs.AmiId, !Ref QAmiID]
+        FloatingIPCount: !Ref QFloatingIP
+        IamInstanceProfile: !GetAtt QIAMSTACK.Outputs.QumuloIAMProfile
+        InstanceRecoveryTopic: !Ref QInstanceRecoveryTopic
+        InstanceType: !Ref QInstanceType
+        KeyName: !Ref KeyPair
+        SgCidr: !Ref QSgCidr1
+        SubnetId: !Ref PrivateSubnetID
+        VolumesEncryptionKey: !Ref VolumesEncryptionKey
+        VpcId: !Ref VPCId
+      TemplateURL: !If
+          - Custom
+          - !Sub
+            - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/cluster-configs/${QNodeCount}x${QDiskConfig}-SA.cft.json
+            - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+              S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+          - !Join
+            - ""
+            - - !Sub 
+                - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/cluster-configs/
+                - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                  S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+              - !If [CustomNC, !Ref QNodeCount, !FindInMap [ConfigMap, !Ref QMarketPlaceType, NodeCount]]
+              - "x"
+              - !FindInMap [ConfigMap, !Ref QMarketPlaceType, DiskConfig]
+              - "-SA.cft.json"
+      TimeoutInMinutes: 150
+
+  QADDCIDRSTACK:
+    Type: 'AWS::CloudFormation::Stack'
+    Condition: AddQSgCidr
+    Properties:
+      Parameters:
+        QSgId: !GetAtt QSTACK.Outputs.ClusterSGID        
+        QSgCidr2: !Ref QSgCidr2        
+        QSgCidr3: !Ref QSgCidr3   
+        QSgCidr4: !Ref QSgCidr4     
+      TemplateURL:
+        !Sub
+          - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/qadd-sg-cidrs.cft.yaml
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+      TimeoutInMinutes: 150       
+
+  QSIDECARSTACK:
+    Type: 'AWS::CloudFormation::Stack'
+    Condition: ProvSideCar
+    Properties:
+      Parameters:
+        SecurityGroup: !GetAtt QSTACK.Outputs.ClusterSGID
+        SNSTopic: !Ref SideCarSNSTopic
+        Subnet: !If [LocalAZ, !Ref SideCarPrivateSubnetID, !Ref PrivateSubnetID]
+        Username: !Ref SideCarUsername
+        Password: !Ref SideCarPassword
+        Hosts: !GetAtt QSTACK.Outputs.ClusterPrivateIPs
+      TemplateURL: !Sub "https://qumulo-sidecar-us-east-1.s3.amazonaws.com/${SideCarVersion}/sidecar_cft.json"
+      TimeoutInMinutes: 150
+
+  PROVISIONINGSTACK:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      Parameters:
+        SideCarProv: !Ref SideCarProv
+        TermProtection: !Ref TermProtection
+        SecretsManagedPolicy: "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
+        KeyName: !Ref KeyPair
+        Region: !Ref AWS::Region
+        PrivateSubnetId: !Ref PrivateSubnetID
+        PrivateSubnetCidr: !Ref QSgCidr1
+        Node1IP: !Select [0, !Split [", ", !GetAtt QSTACK.Outputs.ClusterPrivateIPs]]
+        NodeIPs: !GetAtt QSTACK.Outputs.ClusterPrivateIPs
+        FloatIPs: !GetAtt QSTACK.Outputs.ClusterSecondaryPrivateIPs
+        InstanceIDs: !GetAtt QSTACK.Outputs.ClusterInstanceIDs
+        ClusterPwd: !GetAtt QSTACK.Outputs.TemporaryPassword
+        VPCID: !Ref VPCId
+        SideCarSecretsArn: !GetAtt SECRETSSTACK.Outputs.SideCarSecretsArn
+        ClusterSecretsArn: !GetAtt SECRETSSTACK.Outputs.ClusterSecretsArn
+        SoftwareSecretsArn: !GetAtt SECRETSSTACK.Outputs.SoftwareSecretsArn
+        CMK: !Ref VolumesEncryptionKey
+        StackName: !Ref AWS::StackName
+        QStackName: !GetAtt QSTACK.Outputs.AWSStackName
+        QClusterName: !Ref QClusterName  
+        QClusterVersion: !Ref QClusterVersion
+        QPermissionsBoundary: !Ref QPermissionsBoundary        
+        BucketName: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+        BucketRegion: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+        KeyPrefix: !Ref QSS3KeyPrefix
+      TemplateURL:
+        !Sub
+          - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/provisioning-node.cft.yaml
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+      TimeoutInMinutes: 150   
+
+  CLOUDWATCHSTACK:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      Parameters:
+        QClusterName: !Ref QClusterName        
+        QStackID: !GetAtt QSTACK.Outputs.AWSStackID
+        QStackName: !GetAtt QSTACK.Outputs.AWSStackName
+        TopStackName: !Ref AWS::StackName
+        AllFlash: !Select [1, !Split ["-", !If [Custom, !Ref QDiskConfig, !FindInMap [ConfigMap, !Ref QMarketPlaceType, DiskConfig]]]]
+        QAuditLog: !Ref QAuditLog
+        Region: !Ref AWS::Region        
+      TemplateURL:
+        !Sub
+          - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/cloud-watch.cft.yaml
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+      TimeoutInMinutes: 150   
+
+  MGMTNLBSTACK:
+    Type: 'AWS::CloudFormation::Stack'
+    Condition: ProvMgmt
+    Properties:
+      Parameters:
+        VPCID: !Ref VPCId
+        PublicSubnetID: !Ref PublicSubnetID
+        NodeIPs: !GetAtt QSTACK.Outputs.ClusterPrivateIPs
+        NumNodes: !If [CustomNC, !Ref QNodeCount, !FindInMap [ConfigMap, !Ref QMarketPlaceType, NodeCount]]
+        EnableReplication: !Ref QPublicRepl
+      TemplateURL:
+        !Sub
+          - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/mgmt-nlb.cft.yaml
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+      TimeoutInMinutes: 150   
+
+  DNSSTACK:
+    Type: 'AWS::CloudFormation::Stack'
+    Condition: ProvR53
+    Properties:
+      Parameters:
+        FQDName: !Ref DomainName
+        VPCId: !Ref VPCId
+        Region: !Ref AWS::Region
+        FloatIPs: !GetAtt QSTACK.Outputs.ClusterSecondaryPrivateIPs
+        NumNodes: !If [CustomNC, !Ref QNodeCount, !FindInMap [ConfigMap, !Ref QMarketPlaceType, NodeCount]]
+        NumIPs: !Ref QFloatingIP
+        RecordName: !Ref QFloatRecordName
+      TemplateURL:
+        !Sub
+          - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/r53-private-zone.cft.yaml
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+      TimeoutInMinutes: 150   
+
+Outputs:
+
+  QumuloPrivateIP:
+    Description: Private IP for Qumulo Cluster Management
+    Value: !If
+      - ProvR53
+      - !Join
+        - ""
+        - - "https://"
+          - !GetAtt DNSSTACK.Outputs.ClusterDNS
+      - !GetAtt QSTACK.Outputs.LinkToManagement
+  QumuloPublicIP:
+    Condition: ProvMgmt
+    Description: Public IP for Qumulo Cluster Management and Replication
+    Value: !GetAtt MGMTNLBSTACK.Outputs.ManagementEIP
+  QumuloPrivateDNSName:
+    Condition: ProvR53
+    Description: Private DNS Name for Qumulo Cluster
+    Value: !GetAtt DNSSTACK.Outputs.ClusterDNS
+  QumuloKnowledgeBase:
+    Description: Qumulo Knowledge Base
+    Value: !GetAtt QSTACK.Outputs.QumuloKnowledgeBase
+    
+
+
+

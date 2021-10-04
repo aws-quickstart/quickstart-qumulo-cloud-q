@@ -15,7 +15,6 @@ in this guide *Adding a DR Cluster*.
 ==== CloudQStack Nested Stack
 
 If deploying in a new VPC, all subsequent nested stacks will be contained within the CloudQStack.  
-If deploying in an existing VPC, all stack activity will consist of the stacks contained within the CloudQStack.
 
 ===== QLOOKUPSTACK Nested Stack
 
@@ -25,10 +24,9 @@ when selecting the Specified-AMI-ID option.
 
 ===== SECRETSSTACK Nested Stack
 
-The first two stacks are launched in parallel. The SECRETS Stack stores usernames and
-passwords in Secrets Manager for the cluster, sidecar, and downloading software from Qumulo
-Trends. The purpose of leveraging Secrets Manager is to provide a secure reference for
-subsequent stacks and users who may forget the passwords assigned.
+The SECRETS Stack stores usernames and passwords in Secrets Manager for the cluster, sidecar, 
+and downloading software from Qumulo Trends. The purpose of leveraging Secrets Manager is to 
+provide a secure reference for subsequent stacks and users who may forget the passwords assigned.
 
 ===== QIAMSTACK Nested Stack
 
@@ -43,6 +41,11 @@ The Q Stack spins up all the EC2 instances and EBS volumes for the cluster. It a
 placement group for the cluster and tags all the EC2 instances with the appropriate stack
 name and node number. In addition, it creates CloudWatch alarms for EC2 instance failure and
 a security group for the cluster with the CIDR specified in the template.
+
+===== QADDCIDRSTACK
+All stacks subsequent to QSTACK execute in parallel.  If additional CIDRs for the Qumulo
+Security Group were populated, then this nested stack will execute.  It simply adds the
+additional CIDRs for ingress traffic respective of all the ports in the security group.
 
 ===== MGMTNLBSTACK Nested Stack
 
@@ -369,18 +372,18 @@ under **Cluster** -> **Local Users & Groups** and **Cluster** -> **Role Manageme
 |===
 ||Add |Del |Change
 
-// Space needed to maintain table headers
+// space for headers
 |Total Number of Qumulo EC2 Instances | | |increase
 |Floating IPs for IP Failover | | |✓
 |Provision Qumulo SideCar Lambdas |✓ | |
 |Qumulo Sidecar Software Version | | |✓
+|Qumulo Security Group CIDRs #2, #3, #4 |✓ |✓ |
 |Enable Termination Protection |✓ |✓ |✓
 |OPTIONAL: Provision Public IP for Qumulo Management |✓ |✓ |✓
 |OPTIONAL: Enable Replication Port for Qumulo Public IP |✓ |✓ |✓
 |OPTIONAL: FQDN for R53 Private Hosted Zone |✓ |✓ |✓
 |OPTIONAL: R53 Record Name for Qumulo RR DNS |✓ |✓ |✓
 |OPTIONAL: Send Qumulo Audit Log messages to CloudWatch Logs? |✓ |✓ |✓
-
 |===
 
 ==== Adding Node(s) to the Cluster
@@ -517,7 +520,7 @@ Qumulo’s SHIFT functionality may be used to natively copy data from the cluste
 Alternatively, Qumulo supports S3 Snapshots but rehydration will require a cluster with the
 same EBS volume configuration. Once the data has been archived with the chosen method then use CloudFormation to update the stack to **Disable Termination Protection**.
 Finally, select the **top-level stack** in CloudFormation and choose **Delete**. All resources will be
-deleted. Note, disable Termination Protection before deleting the stack if it was enabled.
+deleted.
 
 If a Customer Managed Key was used for encryption at rest, the KMS CMK policy must be
 cleaned up. It’s simplest to do this after the stack is completely deleted. AWS CloudFormation

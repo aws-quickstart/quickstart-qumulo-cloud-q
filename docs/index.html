@@ -1378,6 +1378,102 @@ deploy, and operate your infrastructure and applications on the AWS Cloud.</p>
 <div class="paragraph">
 <p>Before launching the Quick Start, you must sign in to the AWS Management Console with IAM permissions for the resources that the templates deploy. The <em>AdministratorAccess</em> managed policy within IAM provides sufficient permissions, although your organization may choose to use a custom policy with more restrictions. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_job-functions.html" target="_blank" rel="noopener">AWS managed policies for job functions</a>.</p>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_deployment_options">Deployment options</h4>
+<div class="paragraph">
+<p><em><strong>This portion of the deployment guide is located at <code>docs/partner_editable/deployment_options.adoc</code></strong></em></p>
+</div>
+<table class="tableblock frame-all grid-all stretch preview_mode">
+<colgroup>
+<col style="width: 100%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>This Quick Start provides three deployment options:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Deploy Cloud Q into a new VPC</strong>. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateway, security groups, and other infrastructure components. It then deploys Cloud Q into this new VPC with all the parameters of the advanced template.</p>
+</li>
+<li>
+<p><strong>Deploy Cloud Q into an existing VPC - Advanced</strong>. This option provisions Cloud Q in your existing AWS infrastructure with all advanced parameters configurable.</p>
+</li>
+<li>
+<p><strong>Deploy Cloud Q into an existing VPC - Standard</strong>. This option provisions Cloud Q in your existing AWS infrastructure with a minimal set of parameters.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The Quick Start provides separate templates for these options. It also lets you configure Classless Inter-Domain Routing (CIDR) blocks, instance types, and Cloud Q settings, as discussed later in this guide.</p>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>||Existing VPC - Standard |Exiting VPC - Advanced |New VPC
+|Deploy from Quick Start Bucket |✓ |✓ |✓
+|Deploy from your own Bucket | |✓ |✓
+|Deploy Any Qumulo Marketplace Offering |✓ |✓ |✓
+|Deploy with a Qumulo Custom AMI-ID | |✓ |✓
+|Deploy in a Local Zone | |✓ |✓
+|Deploy on Outpost | |✓ |
+|Deploy in a VPC with no Internet Access | |✓ |
+|Customize Qumulo Admin Password |✓ |✓ |✓
+|Customize Qumulo EC2 Instance Type |✓ |✓ |✓
+|Customize Qumulo Node Count |✓ |✓ |✓
+|Customize Termination Protection |✓ |✓ |✓
+|Customize Qumulo Name | |✓ |✓
+|Customize Qumulo Software Version | |✓ |✓
+|Customize Qumulo Sidecar deployment | |✓ |✓
+|Customize Qumulo # of Floating IPs | |✓ |✓
+|Optional: Add Route 53 PHZ DNS for Floating IPs | |✓ |✓
+|Optional: Add CIDRs to Qumulo Security Group | |✓ |✓
+|Optional: Add Qumulo Public Management | |✓ |✓
+|Optional: Add Qumulo Public Replication Port | |✓ |✓
+|Optional: Enable CloudWatch Audit Log Messages | |✓ |✓
+|Optional: Apply CMK for EBS Encryption | |✓ |✓
+|Optional: Set IAM Permissions Boundary | |✓ |✓
+|Optional: Specify Environment type | |✓ |✓</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 100%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">==== Deploying in a VPC with no Internet access</p>
+<p class="tableblock">The architecure referenced herein expects a NAT Gateway in the VPC.  It is possible to deploy this Quick Start in an existing VPC without Internet access.  To support deployments without public Internet connectivity the following VPC and an S3 bucket requirements must be met:</p>
+<p class="tableblock">* VPC Interface Endpoints to support AWS services
+* A security group applied to each VPC Interface Endpoint
+* The code for the Quick Start must be downloaded from GitHub and placed in your own S3 bucket
+* If software upgrades are to be performed by the template then Qumulo Core software must be placed in the /upgrade folder within the bucket in Qumulo Trends format</p>
+<p class="tableblock">===== VPC Interface Endpoints (for VPCs with no Internet Access)</p>
+<p class="tableblock">It is recommended to leave the policy for each endpoint as Full Access. The following VPC Interface Endpoints must be configured when deploying without Internet Access:</p>
+<p class="tableblock">* ec2
+* events
+* kms
+* lambda
+* logs
+* monitoring
+* profile
+* s3 (gateway endpoint)
+* secretsmanager
+* sns
+* ssm
+* sts
+* sqs</p>
+<p class="tableblock">===== VPC Interface Endpoints Security Group rules (for VPCs with no Internet Access)</p>
+<p class="tableblock">To allow traffic from the provisioning node and the Qumulo cluster, the security group applied to the VPC interface endpoints must have the following Security Groups added as Inbound Rule Sources:</p>
+<p class="tableblock">* [stack name]-PROVISIONINGSTACK-[aws 12 digit code]-ProvisionerSG-[aws 12 digit code]
+* [stack name]-QSTACK-[aws 12 digit code]-QumuloSecurityGroup-[aws 12 digit code]</p>
+<p class="tableblock">===== Automated Qumulo Core upgrades during deployment (for deployments without Internet Access)</p>
+<p class="tableblock">If you enter a newer software version than the Qumulo Core AMI was released with, the provisioning instance will expect to find the code via the Internet, or in this case from the S3 bucket.  Since the provisioning instance will not be able to reach the public Internet, it will look for code in the template’s S3 bucket at the following prefix: [your prefix]/upgrade. Typically this is quickstart-qumulo-cloudq-main/upgrade. All quarterly released images between the AMI ID release version to, and including, the requested version must be present in the bucket. For example, if the AMI was released with 4.0.6 and the desired version is 4.2.3, then 4.1.0.1, 4.2.0, and 4.2.3 versions must be in the bucket. If the software images are not present in the S3 bucket the Provisioning instance will not shutdown, nor will it progress with provisioning activities. To see the quarterly release cadence just cat the file [your prefix/cfn-init/upgrade-order.txt. Place the image(s) in the bucket and restart the provisioning instance if this occurs. The image(s) must be in the Qumulo Trends format: qumulo_upgrade_cloud_x.y.z_num.qimg. If you don’t have access to Qumulo Trends, contact Qumulo for support.</p></td>
+</tr>
+</tbody>
+</table>
 <div class="paragraph">
 <p><em><strong>This portion of the deployment guide is located at <code>docs/partner_editable/pre-reqs.adoc</code></strong></em></p>
 </div>
@@ -1462,167 +1558,6 @@ deploy, and operate your infrastructure and applications on the AWS Cloud.</p>
 <p>tag:*</p>
 </li>
 </ul>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_deployment_options">Deployment options</h4>
-<div class="paragraph">
-<p><em><strong>This portion of the deployment guide is located at <code>docs/partner_editable/deployment_options.adoc</code></strong></em></p>
-</div>
-<table class="tableblock frame-all grid-all stretch preview_mode">
-<colgroup>
-<col style="width: 100%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>This Quick Start provides two deployment options:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Deploy Cloud Q into a new VPC</strong>. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateways, security groups, bastion hosts, and other infrastructure components. It then deploys Cloud Q into this new VPC.</p>
-</li>
-<li>
-<p><strong>Deploy Cloud Q into an existing VPC</strong>. This option provisions Cloud Q in your existing AWS infrastructure.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>The Quick Start provides separate templates for these options. It also lets you configure Classless Inter-Domain Routing (CIDR) blocks, instance types, and Cloud Q settings, as discussed later in this guide.</p>
-</div>
-<div class="paragraph">
-<p>The following parameters are optional:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>AWS Local Zone deployment when deploying in a new VPC (Local Zone OR Outpost when deploying in an existing VPC)</p>
-</li>
-<li>
-<p>Public IP Management</p>
-</li>
-<li>
-<p>R53 Private Hosted Zone configuration</p>
-</li>
-<li>
-<p>Customer Managed Key configuration</p>
-</li>
-<li>
-<p>SNS Notifications</p>
-</li>
-<li>
-<p>CloudWatch audit log configuration</p>
-</li>
-</ul>
-</div>
-<div class="sect3">
-<h4 id="_deploying_in_a_vpc_without_internet_access">Deploying in a VPC without Internet access</h4>
-<div class="paragraph">
-<p>The architecure referenced herein expects a NAT Gateway in the VPC.  It is possible to deploy this Quick Start in an existing VPC without Internet access.  To support deployments without public Internet connectivity the following VPC and an S3 bucket requirements must be met:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>VPC Interface Endpoints to support AWS services</p>
-</li>
-<li>
-<p>A security group applied to each VPC Interface Endpoint</p>
-</li>
-<li>
-<p>The code for the Quick Start must be downloaded from GitHub and placed in your own S3 bucket</p>
-</li>
-<li>
-<p>If software upgrades are to be performed by the template then Qumulo Core software must be placed in the /upgrade folder within the bucket in Qumulo Trends format</p>
-</li>
-</ul>
-</div>
-<div class="sect4">
-<h5 id="_vpc_interface_endpoints_for_deployments_without_internet_access">VPC Interface Endpoints (for deployments without Internet Access)</h5>
-<div class="paragraph">
-<p>It is recommended to leave the policy for each endpoint as Full Access. The following VPC Interface Endpoints must be configured when deploying without Internet Access:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>cloudformation</p>
-</li>
-<li>
-<p>cloudtrail</p>
-</li>
-<li>
-<p>ec2</p>
-</li>
-<li>
-<p>events</p>
-</li>
-<li>
-<p>kms</p>
-</li>
-<li>
-<p>lambda</p>
-</li>
-<li>
-<p>logs</p>
-</li>
-<li>
-<p>monitoring</p>
-</li>
-<li>
-<p>profile</p>
-</li>
-<li>
-<p>S3</p>
-</li>
-<li>
-<p>secretsmanager</p>
-</li>
-<li>
-<p>sns</p>
-</li>
-<li>
-<p>ssm</p>
-</li>
-<li>
-<p>sts</p>
-</li>
-<li>
-<p>sqs</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_vpc_interface_endpoints_security_group_rules_for_deployments_without_internet_access">VPC Interface Endpoints Security Group rules (for deployments without Internet Access)</h5>
-<div class="paragraph">
-<p>To allow traffic from the provisioning node and the Qumulo cluster, the security group applied to the VPC interface endpoints must have the following Security Groups added as Inbound Rule Sources:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>[stack name]-PROVISIONINGSTACK-[aws 12 digit code]-ProvisionerSG-[aws 12 digit code]</p>
-</li>
-<li>
-<p>[stack name]-QSTACK-[aws 12 digit code]-QumuloSecurityGroup-[aws 12 digit code]</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_automated_qumulo_core_upgrades_during_deployment_for_deployments_without_internet_access">Automated Qumulo Core upgrades during deployment (for deployments without Internet Access)</h5>
-<div class="paragraph">
-<p>If you enter a newer software version than the Qumulo Core AMI was released with, the provisioning instance will expect to find the code via the Internet, or in this case from the S3 bucket.  Since the provisioning instance will not be able to reach the public Internet, it will look for code in the template’s S3 bucket at the following prefix: [your prefix]/upgrade. Typically this is quickstart-qumulo-cloudq-main/upgrade. All quarterly released images between the AMI ID release version to, and including, the requested version must be present in the bucket. For example, if the AMI was released with 4.0.6 and the desired version is 4.2.3, then 4.1.0.1, 4.2.0, and 4.2.3 versions must be in the bucket. If the software images are not present in the S3 bucket the Provisioning instance will not shutdown, nor will it progress with provisioning activities. To see the quarterly release cadence just cat the file [your prefix/cfn-init/upgrade-order.txt. Place the image(s) in the bucket and restart the provisioning instance if this occurs. The image(s) must be in the Qumulo Trends format: qumulo_upgrade_cloud_x.y.z_num.qimg. If you don’t have access to Qumulo Trends, contact Qumulo for support.</p>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_deploying_on_outpost">Deploying on Outpost</h4>
-<div class="paragraph">
-<p>For Outpost deployments use the <strong>Deploy Cloud Q into an exisiting VPC</strong> option.</p>
-</div>
 </div></div></td>
 </tr>
 </tbody>
@@ -1753,8 +1688,7 @@ in this guide <strong>Adding a DR Cluster</strong>.</p>
 <div class="sect3">
 <h4 id="_cloudqstack_nested_stack">CloudQStack Nested Stack</h4>
 <div class="paragraph">
-<p>If deploying in a new VPC, all subsequent nested stacks will be contained within the CloudQStack.
-If deploying in an existing VPC, all stack activity will consist of the stacks contained within the CloudQStack.</p>
+<p>If deploying in a new VPC, all subsequent nested stacks will be contained within the CloudQStack.</p>
 </div>
 <div class="sect4">
 <h5 id="_qlookupstack_nested_stack">QLOOKUPSTACK Nested Stack</h5>
@@ -1767,10 +1701,9 @@ when selecting the Specified-AMI-ID option.</p>
 <div class="sect4">
 <h5 id="_secretsstack_nested_stack">SECRETSSTACK Nested Stack</h5>
 <div class="paragraph">
-<p>The first two stacks are launched in parallel. The SECRETS Stack stores usernames and
-passwords in Secrets Manager for the cluster, sidecar, and downloading software from Qumulo
-Trends. The purpose of leveraging Secrets Manager is to provide a secure reference for
-subsequent stacks and users who may forget the passwords assigned.</p>
+<p>The SECRETS Stack stores usernames and passwords in Secrets Manager for the cluster, sidecar,
+and downloading software from Qumulo Trends. The purpose of leveraging Secrets Manager is to
+provide a secure reference for subsequent stacks and users who may forget the passwords assigned.</p>
 </div>
 </div>
 <div class="sect4">
@@ -1789,6 +1722,14 @@ alarmed if the QIAM stack takes 3 or 4 minutes.</p>
 placement group for the cluster and tags all the EC2 instances with the appropriate stack
 name and node number. In addition, it creates CloudWatch alarms for EC2 instance failure and
 a security group for the cluster with the CIDR specified in the template.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_qaddcidrstack">QADDCIDRSTACK</h5>
+<div class="paragraph">
+<p>All stacks subsequent to QSTACK execute in parallel.  If additional CIDRs for the Qumulo
+Security Group were populated, then this nested stack will execute.  It simply adds the
+additional CIDRs for ingress traffic respective of all the ports in the security group.</p>
 </div>
 </div>
 <div class="sect4">
@@ -2300,6 +2241,12 @@ under <strong>Cluster</strong> &#8594; <strong>Local Users &amp; Groups</strong>
 <td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qumulo Security Group CIDRs #2, #3, #4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Enable Termination Protection</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">✓</p></td>
@@ -2536,7 +2483,7 @@ Qumulo’s SHIFT functionality may be used to natively copy data from the cluste
 Alternatively, Qumulo supports S3 Snapshots but rehydration will require a cluster with the
 same EBS volume configuration. Once the data has been archived with the chosen method then use CloudFormation to update the stack to <strong>Disable Termination Protection</strong>.
 Finally, select the <strong>top-level stack</strong> in CloudFormation and choose <strong>Delete</strong>. All resources will be
-deleted. Note, disable Termination Protection before deleting the stack if it was enabled.</p>
+deleted.</p>
 </div>
 <div class="paragraph">
 <p>If a Customer Managed Key was used for encryption at rest, the KMS CMK policy must be
@@ -2748,7 +2695,7 @@ the template or the stack will fail.  If deploying from the AWS Quick Start buck
 <p>The cluster failed to place in the placement group</p>
 </li>
 <li>
-<p>Service Quotas were not pre-planned and the QSTACK failed Review the AMI ID and marketplace subscriptions. Double check the EBS volume config selected in the template. If the cluster failed to place, choose a different AZ to deploy the cluster in to find more available resources by selecting a different private subnet ID within the VPC. Adjust Service Quotas if necessary. Delete the failed stack and relaunch the template after rectifying the problem.</p>
+<p>Service Quotas were not pre-planned and the QSTACK failed. Review the AMI ID and marketplace subscriptions. Double check the EBS volume config selected in the template. If the cluster failed to place, choose a different AZ to deploy the cluster in to find more available resources by selecting a different private subnet ID within the VPC. Adjust Service Quotas if necessary. Delete the failed stack and relaunch the template after rectifying the problem.</p>
 </li>
 </ol>
 </div>
@@ -2783,8 +2730,7 @@ the template or the stack will fail.  If deploying from the AWS Quick Start buck
 <div class="paragraph">
 <p>Check for typos by reviewing the parameters entered in the template in the CloudFormation
 console. Double check the software version specified for the cluster and make sure it is equal
-to or newer than the version the Marketplace offer lists. Finally, double check the S3 Bucket
-Region entered in the template.</p>
+to or newer than the version the Marketplace offer lists.</p>
 </div>
 </div>
 <div class="sect2">
