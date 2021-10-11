@@ -36,7 +36,7 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
-          default: AWS Template Configuration - Cloud Q Quick Start v3.7
+          default: AWS Template Configuration - Cloud Q Quick Start Existing VPC - Standard v3.7
         Parameters:
           - KeyPair
 
@@ -54,8 +54,13 @@ Metadata:
           - QInstanceType
           - QNodeCount
           - QDiskConfig
-          - QClusterAdminPwd    
-          - TermProtection            
+          - QClusterAdminPwd
+          - TermProtection
+
+      - Label:
+          default: Qumulo EBS Monitoring/Replacement & CloudWatch Metrics Configuration
+        Parameters:
+          - SideCarVersion                    
 
     ParameterLabels:
       KeyPair:
@@ -77,7 +82,9 @@ Metadata:
       QMarketPlaceType:
         default: "Qumulo AWS Marketplace Offering Accepted"
       TermProtection:
-        default: "Enable Termination Protection "        
+        default: "Enable Termination Protection"  
+      SideCarVersion:
+        default: "Qumulo Sidecar Software Version "            
 
 Parameters:
 
@@ -204,6 +211,14 @@ Parameters:
     Type: String
     Default: "YES"    
 
+  SideCarVersion:
+    Description: "Keep default value for new deployments.  NOTE: This field may be used to upgrade the SideCar software version 
+                  with a CloudFormation Stack Update after upgrading the cluster via the Web UI or REST API."
+    MaxLength: 11
+    MinLength: 5
+    Type: String
+    Default: "4.2.4"
+
 Rules:
   CustomRule:
     RuleCondition: !Equals [!Ref QMarketPlaceType, "Custom-1TB-6PB"]
@@ -240,11 +255,12 @@ Resources:
         QFloatRecordName: ""
         QMarketPlaceType: !Ref QMarketPlaceType
         QAmiID: "Only for Specified AMI-ID Offering"
+        QAmiVer: "4.2.0"
         QInstanceType: !Ref QInstanceType
         QNodeCount: !Ref QNodeCount
         QDiskConfig: !Ref QDiskConfig
         QFloatingIP: "3"
-        QClusterVersion: "4.2.3"
+        QClusterVersion: "4.2.4"
         QClusterName: "Cloud-Q"
         QClusterAdminPwd: !Ref QClusterAdminPwd
         VolumesEncryptionKey: ""
@@ -255,7 +271,7 @@ Resources:
         SideCarProv: "YES"
         SideCarUsername: "SideCarUser"
         SideCarPassword: !Ref QClusterAdminPwd
-        SideCarVersion: "4.2.3"
+        SideCarVersion: !Ref SideCarVersion
         SideCarSNSTopic: ""
       TemplateURL: !Sub "https://dackss3-dev.s3.${AWS::Region}.${AWS::URLSuffix}/quickstart-qumulo-cloud-q/templates/cfn/cloudq.cft.yaml"
 

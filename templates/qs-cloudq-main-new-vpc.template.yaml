@@ -36,7 +36,7 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
-          default: AWS Template Configuration - Cloud Q Quick Start v3.7
+          default: AWS Template Configuration - Cloud Q Quick Start New VPC - v3.7
         Parameters:
           - QSS3BucketName
           - QSS3KeyPrefix
@@ -435,7 +435,7 @@ Parameters:
     MaxLength: 11
     MinLength: 5
     Type: String
-    Default: "4.2.3"
+    Default: "4.2.4"
 
   QClusterAdminPwd:
     AllowedPattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&\\-_])[A-Za-z\\d@$!%*?&\\-_]{8,}$"
@@ -516,7 +516,7 @@ Parameters:
     MaxLength: 11
     MinLength: 5
     Type: String
-    Default: "4.2.3"
+    Default: "4.2.4"
 
   SideCarSNSTopic:
     Description: Optionally enter an SNS topic ARN that lambda errors and successful disk replacements will be published to.
@@ -693,6 +693,7 @@ Resources:
         QFloatRecordName: !Ref QFloatRecordName
         QMarketPlaceType: !Ref QMarketPlaceType
         QAmiID: !Ref QAmiID
+        QAmiVer: "4.2.0"        
         QInstanceType: !Ref QInstanceType
         QNodeCount: !Ref QNodeCount
         QDiskConfig: !Ref QDiskConfig

@@ -68,6 +68,8 @@ Parameters:
     Type: String
   QAmiID:
     Type: String
+  QAmiVer:
+    Type: String
   QMarketPlaceType:
     Type: String
   QFloatingIP:
@@ -243,7 +245,7 @@ Resources:
         MarketPlaceType: !FindInMap [ConfigMap, !Ref QMarketPlaceType, ShortName]
       TemplateURL:
         !Sub
-          - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/qami-id-lookup-4.2.0.cft.yaml
+          - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/qami-id-lookup-${QAmiVer}.cft.yaml
           - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
             S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       TimeoutInMinutes: 150   
