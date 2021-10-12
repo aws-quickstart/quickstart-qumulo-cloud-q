@@ -29,9 +29,13 @@ view the UUID.
 .Parameters
 image::../images/image35.png[Additional35]
 
-=== The Stack failed on the nested stack AWSVPCSTACK, QLOOKUPSTACK, or the SECRETSSTACK
+=== Forgot the cluster admin password
 
-The S3 Bucket, Key Name Prefix, or Object URL are not correct. Delete the stack and relaunch
+The admin password entered when the cluster was originally provisioned is stored in AWS Secrets Manager.  Go to *Secrets Manager* and filter on the top-level stack name.  Then look for *ClusterSecrets* and then *Retrieve secret value*.   Also, if the admin password is changed post-deployment, it must be updated in Secrets Manager for stack updates to function correctly.
+
+=== The Stack failed on the nested stack AWSVPCSTACK or CloudQStack
+
+The S3 Bucket, Key Name Prefix, or Object URL are not correct when deploying from your own S3 bucket. Delete the stack and relaunch
 the template with the correct S3 parameters. Do NOT use the S3 URL, use the Object URL for
 the template or the stack will fail.  If deploying from the AWS Quick Start bucket do not change the bucket name, prefix, or region for the bucket.
 
@@ -42,7 +46,9 @@ The four most common causes for this are:
 1. An AWS Marketplace offer has not been accepted that matches the **Qumulo AWS Marketplace Offering Accepted** parameter entered in the template
 2. The EBS volumes configuration doesn’t match the requirements for the **Qumulo AMI ID** entered when using the Specified-AMI-ID option
 3. The cluster failed to place in the placement group
-4. Service Quotas were not pre-planned and the QSTACK failed. Review the AMI ID and marketplace subscriptions. Double check the EBS volume config selected in the template. If the cluster failed to place, choose a different AZ to deploy the cluster in to find more available resources by selecting a different private subnet ID within the VPC. Adjust Service Quotas if necessary. Delete the failed stack and relaunch the template after rectifying the problem.
+4. Service Quotas were not pre-planned and the QSTACK failed. 
+
+Review the AMI ID and marketplace subscriptions. Double check the EBS volume config selected in the template. If the cluster failed to place, choose a different AZ to deploy the cluster in to find more available resources by selecting a different private subnet ID within the VPC. Adjust Service Quotas if necessary. Delete the failed stack and relaunch the template after rectifying the problem.
 
 === The Stack Update failed and rolled back
 
@@ -50,41 +56,51 @@ No harm is done. No Qumulo Cluster parameters for the QSTACK, except the Number 
 
 === The Cluster didn’t form quorum
 
+If the quorum has not been formed the UI will appear as below.  DO NOT form quorum manually because the provisioning instance will not
+be able to complete secondary provisioning of the cluster and AWS infrastructure.
+
+[#additional36]
+.UI for a Cluster that hasn't formed quorum
+image::../images/image36.png[Additional36]
+
 The four most common causes for this are:
 
 1. The software version specified in the template doesn’t exist
 2. The software version specified in the template is older than the AMI software version
-3. The S3 Bucket Region specified is incorrect
-4. The VPC doesn’t have public internet access, see **The Provisioning instance didn’t shut down**
+3. The VPC doesn't have public internet access
+4. The VPC doesn’t have public internet access and the upgrade image(s) were not placed in the /upgrade folder in the S3 bucket, see see **The Provisioning instance didn’t shut down**
 
 Check for typos by reviewing the parameters entered in the template in the CloudFormation
 console. Double check the software version specified for the cluster and make sure it is equal
-to or newer than the version the Marketplace offer lists. 
+to or newer than the version the Marketplace offer lists. Rectify and restart the Provisioning instance or delete the stack and redeploy.
 
 === The Provisioning instance didn’t shut down
 
+In most use cases the provisioning instance will shutdown in 5 minutes or less after the stack has completed deployment.  If the Provisioning instance hasn't shutdown after 15 minutes there's likely an issue.  Each software upgrade takes ~4 minutes.  The instances are upgraded in parallel so instance count has a minimal impact on execution time.  If you have an AMI ID with an older software verison it may have to do multiple upgrades to get the cluster on the desired version.  See the *AWS Parameter Store last-run-status* section below.
+
 ==== Common Causes
 
-The two most common causes for this are:
+The four most common causes for this are:
 
-1. The VPC doesn’t have access to the public Internet or DNS resolution is not functioning. Without access to public infrastructure the Provisioning instance can’t talk to AWS services like Secrets Manager, KMS, Parameter Store, or download the desired version of Qumulo Core software. Review the public and private subnets, their route tables, and the NAT Gateway. Review the AWS Parameter Store last-run-status to verify public internet connectivity (see the section below on last-run-status). Also double check that there are no Network ACLs blocking traffic.
-2. A Customer Managed Key was provisioned and the policy was unable to be modified for the CMK because the policy didn’t have valid SIDs before the template was launched.
+1. The VPC doesn’t have access to the public Internet or DNS resolution is not functioning.  Without access to public infrastructure the Provisioning instance can’t talk to AWS services like Secrets Manager, KMS, Parameter Store, or download the desired version of Qumulo Core software.  Review the public and private subnets, their route tables, and the NAT Gateway.  Review the AWS Parameter Store *last-run-status* to verify public internet connectivity (see the section below on last-run-status). Also double check that there are no Network ACLs blocking traffic.
+2. The VPC doesn’t have access to the public Internet, but this was planned.  One or more VPC Endpoints may be missing.  The VPC Interface Endpoints Security Group is not correct.  The desired Qumulo Core software version has not been placed in the S3 Bucket /upgrade folder.  See the section *Deploying without Internet Access*.
+3. A Customer Managed Key was provisioned and the policy was unable to be modified for the CMK because the policy didn’t have valid SIDs before the template was launched.
+4. A stack update was executed to add nodes.  The stack update succeeded but the provisioning instance didn’t shutdown and the nodes were not added to the cluster.  Most likely the Cluster’s admin password was changed post deployment.  If this is the case go to *Secrets Manager*, filter on the top-level stack name, and look for *ClusterSecrets*.  *Retrieve secret value* and *Edit*.  Update the admin password and save the secret.  Then stop and restart the provisioning instance.
 
-Cleanup the CMK, correct the VPC infrastructure, delete the failed stack, and relaunch the template. See the section below ‘Provisioning Instance Logic Diagram’ for further troubleshooting details on the provisioning instance.
+Cleanup the CMK, correct the VPC infrastructure, update the admin password and restart the provisioning instance.  See the sections that follow on restarting the provisioning instance, monitoring its status in the Parameter Store, and downloading logs.
 
 ==== AWS Parameter Store last-run-status
 
-If the Provisioning instance doesn’t automatically shutdown, the AWS Systems Manager
-Parameter Store last-run-status parameter may be checked to see where it stopped. As
-shown below, the parameter history shows the major blocks in the code the provisioning
-instance executes. In this example the Provisioning instance has logged the software upgrades
-to the unconfigured nodes, first quorum, sidecar configuration on the cluster, CMK policy modification,
-and EBS tagging.  Parameter Store history will have mulitple pages enabling you to review the entire history
-of Provisioning instance activity.
+If the Provisioning instance doesn’t automatically shutdown, the AWS Systems Manager Parameter Store *last-run-status* parameter may be checked to see where it stopped.  As shown below, the parameter history shows the major blocks in the code the provisioning instance executes.  In this example QCluster1 was built for the first time as noted by the *Forming first quorum and configuring cluster* update to the last-run-status parameter.  Note that two software upgrades were also performed per the Qumulo quarterly cadence to reach the 4.2.0 software release.
 
-[#additional36]
-.Parameter Store history (1)
-image::../images/image36.png[Additional36]
+
+[#additional37]
+.Parameter Store history
+image::../images/image37.png[Additional37]
+
+==== Restarting the Provisioning Instance
+
+The Provisioning instance is designed to restart with every Stack Update.  Further, it may be manually stopped from the AWS Console, if it doesn’t automatically stop, and then manually restarted.  Examples where this may be very helpful are if software wasn’t placed in the S3 bucket when deploying without internet access, a CMK policy wasn’t cleaned up prior to deployment, or intended internet connectivity wasn’t functioning as expected and has been rectified.
 
 ==== Download the Provisioning instance log
 
@@ -108,6 +124,6 @@ The provisioning instance executes the code in user data every boot cycle. The a
 logic diagram below shows the major branches and AWS SSM Parameter Store values for
 **last-run-status** throughout the execution of the code.
 
-[#additional37]
+[#additional38]
 .Provisioning instance flow chart
-image::../images/image37.png[Additional37]
+image::../images/image38.png[Additional38]

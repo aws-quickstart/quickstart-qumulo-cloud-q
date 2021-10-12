@@ -139,6 +139,11 @@ Mappings:
 
 Conditions:
 
+  ProvRecordName: !Not
+    - !Equals
+      - !Ref RecordName
+      - ""
+
   Ripple: !Equals ["A", "A"]
 
   Provision5:  !Or  [!Equals [!FindInMap [FloatMap, !Ref NumNodes, !Ref NumIPs], "5"],  Condition: Provision6]
@@ -240,28 +245,28 @@ Resources:
       Comment: "A Records for DNS RR to Qumulo Cluster Frontend"
       HostedZoneId: !Ref DNSZone
       RecordSets:
-        - Name: !Sub "${RecordName}.${FQDName}"
+        - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
           ResourceRecords: 
             - !Select [0, !Split [", ", !Ref FloatIPs]]
           SetIdentifier: "Qumulo FIP 1"
           Type: A
           TTL: "0"
           Weight: 0
-        - Name: !Sub "${RecordName}.${FQDName}"
+        - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
           ResourceRecords: 
             - !Select [1, !Split [", ", !Ref FloatIPs]]
           SetIdentifier: "Qumulo FIP 2"
           Type: A
           TTL: "0"
           Weight: 0
-        - Name: !Sub "${RecordName}.${FQDName}"
+        - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
           ResourceRecords: 
             - !Select [2, !Split [", ", !Ref FloatIPs]]
           SetIdentifier: "Qumulo FIP 3"
           Type: A
           TTL: "0"
           Weight: 0
-        - Name: !Sub "${RecordName}.${FQDName}"
+        - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
           ResourceRecords: 
             - !Select [3, !Split [", ", !Ref FloatIPs]]
           SetIdentifier: "Qumulo FIP 4"
@@ -270,7 +275,7 @@ Resources:
           Weight: 0
         - !If
           - Provision5
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [4, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 5"
@@ -280,7 +285,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision6
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [5, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 6"
@@ -290,7 +295,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision7
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [6, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 7"
@@ -300,7 +305,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision8
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [7, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 8"
@@ -310,7 +315,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision9
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [8, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 9"
@@ -320,7 +325,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision10
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [9, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 10"
@@ -330,7 +335,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision11
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [10, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 11"
@@ -340,7 +345,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision12
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [11, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 12"
@@ -350,7 +355,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision13
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [12, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 13"
@@ -360,7 +365,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision14
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [13, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 14"
@@ -370,7 +375,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision15
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [14, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 15"
@@ -380,7 +385,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision16
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [15, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 16"
@@ -390,7 +395,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision17
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [16, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 17"
@@ -400,7 +405,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision18
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [17, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 18"
@@ -410,7 +415,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision19
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [18, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 19"
@@ -420,7 +425,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision20
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [19, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 20"
@@ -430,7 +435,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision21
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [20, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 21"
@@ -440,7 +445,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision22
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [21, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 22"
@@ -450,7 +455,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision23
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [22, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 23"
@@ -460,7 +465,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision24
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [23, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 24"
@@ -470,7 +475,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision25
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [24, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 25"
@@ -480,7 +485,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision26
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [25, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 26"
@@ -490,7 +495,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision27
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [26, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 27"
@@ -500,7 +505,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision28
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [27, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 28"
@@ -510,7 +515,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision29
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [28, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 29"
@@ -520,7 +525,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision30
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [29, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 30"
@@ -530,7 +535,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision31
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [30, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 31"
@@ -540,7 +545,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision32
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [31, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 32"
@@ -550,7 +555,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision33
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [32, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 33"
@@ -560,7 +565,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision34
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [33, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 34"
@@ -570,7 +575,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision35
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [34, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 35"
@@ -580,7 +585,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision36
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [35, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 36"
@@ -590,7 +595,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision37
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [36, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 37"
@@ -600,7 +605,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision38
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [37, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 38"
@@ -610,7 +615,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision39
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [38, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 39"
@@ -620,7 +625,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision40
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [39, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 40"
@@ -630,7 +635,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision41
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [40, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 41"
@@ -640,7 +645,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision42
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [41, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 42"
@@ -650,7 +655,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision43
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [42, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 43"
@@ -660,7 +665,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision44
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [43, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 44"
@@ -670,7 +675,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision45
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [44, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 45"
@@ -680,7 +685,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision46
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [45, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 46"
@@ -690,7 +695,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision47
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [46, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 47"
@@ -700,7 +705,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision48
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [47, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 48"
@@ -710,7 +715,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision49
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [48, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 49"
@@ -720,7 +725,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision50
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [49, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 50"
@@ -730,7 +735,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision51
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [50, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 51"
@@ -740,7 +745,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision52
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [51, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 52"
@@ -750,7 +755,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision53
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [52, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 53"
@@ -760,7 +765,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision54
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [53, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 54"
@@ -770,7 +775,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision55
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [54, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 55"
@@ -780,7 +785,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision56
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [55, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 56"
@@ -790,7 +795,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision57
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [56, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 57"
@@ -800,7 +805,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision58
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [57, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 58"
@@ -810,7 +815,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision59
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [58, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 59"
@@ -820,7 +825,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision60
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [59, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 60"
@@ -830,7 +835,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision61
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [60, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 61"
@@ -840,7 +845,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision62
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [61, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 62"
@@ -850,7 +855,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision63
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [62, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 63"
@@ -860,7 +865,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision64
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [63, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 64"
@@ -870,7 +875,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision65
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [64, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 65"
@@ -880,7 +885,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision66
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [65, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 66"
@@ -890,7 +895,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision67
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [66, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 67"
@@ -900,7 +905,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision68
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [67, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 68"
@@ -910,7 +915,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision69
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [68, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 69"
@@ -920,7 +925,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision70
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [69, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 70"
@@ -930,7 +935,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision71
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [70, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 71"
@@ -940,7 +945,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision72
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [71, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 72"
@@ -950,7 +955,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision73
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [72, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 73"
@@ -960,7 +965,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision74
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [73, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 74"
@@ -970,7 +975,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision75
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [74, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 75"
@@ -980,7 +985,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision76
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [75, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 76"
@@ -990,7 +995,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision77
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [76, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 77"
@@ -1000,7 +1005,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision78
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [77, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 78"
@@ -1010,7 +1015,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision79
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [78, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 79"
@@ -1020,7 +1025,7 @@ Resources:
           - !Ref AWS::NoValue
         - !If
           - Provision80
-          - Name: !Sub "${RecordName}.${FQDName}"
+          - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
               - !Select [79, !Split [", ", !Ref FloatIPs]]
             SetIdentifier: "Qumulo FIP 80"

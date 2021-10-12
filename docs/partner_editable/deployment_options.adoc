@@ -1,56 +1,43 @@
 // Edit this placeholder text to accurately describe your architecture.
 
-This Quick Start provides two deployment options:
+This Quick Start provides three deployment options:
 
-* *Deploy {partner-product-short-name} into a new VPC*. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateways, security groups, bastion hosts, and other infrastructure components. It then deploys {partner-product-short-name} into this new VPC.
-* *Deploy {partner-product-short-name} into an existing VPC*. This option provisions {partner-product-short-name} in your existing AWS infrastructure.
+* *Deploy {partner-product-short-name} into a new VPC*. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateway, security groups, and other infrastructure components. It then deploys {partner-product-short-name} into this new VPC with all the parameters of the advanced template.
+* *Deploy {partner-product-short-name} into an existing VPC - Advanced*. This option provisions {partner-product-short-name} in your existing AWS infrastructure with all advanced parameters configurable.
+* *Deploy {partner-product-short-name} into an existing VPC - Standard*. This option provisions {partner-product-short-name} in your existing AWS infrastructure with a minimal set of parameters.
 
 The Quick Start provides separate templates for these options. It also lets you configure Classless Inter-Domain Routing (CIDR) blocks, instance types, and {partner-product-short-name} settings, as discussed later in this guide.
 
-The following parameters are optional:
+==== Choose the template that matches the deployment requirements
+The table below compares the deployment, customization, and optional parameters between the three templates.
 
-* AWS Local Zone deployment when deploying in a new VPC (Local Zone OR Outpost when deploying in an existing VPC)
-* Public IP Management
-* R53 Private Hosted Zone configuration
-* Customer Managed Key configuration
-* SNS Notifications
-* CloudWatch audit log configuration
+|===
 
-==== Deploying in a VPC without Internet access
-The architecure referenced herein expects a NAT Gateway in the VPC.  It is possible to deploy this Quick Start in an existing VPC without Internet access.  To support deployments without public Internet connectivity the following VPC and an S3 bucket requirements must be met:
+// space for headers
+||Existing VPC - Standard |Exiting VPC - Advanced |New VPC
+|Deploy from Quick Start Bucket |✓ |✓ |✓
+|Deploy from your own Bucket | |✓ |✓ 
+|Deploy Any Qumulo Marketplace Offering |✓ |✓ |✓ 
+|Deploy with a Qumulo Custom AMI-ID | |✓ |✓ 
+|Deploy in a Local Zone | |✓ |✓ 
+|Deploy on Outpost | |✓ | 
+|Deploy in a VPC with no Internet Access | |✓ | 
+|Customize Qumulo Admin Password |✓ |✓ |✓ 
+|Customize Qumulo EC2 Instance Type |✓ |✓ |✓ 
+|Customize Qumulo EC2 Instance Count |✓ |✓ |✓ 
+|Customize Termination Protection |✓ |✓ |✓ 
+|Customize Qumulo Name | |✓ |✓ 
+|Customize Qumulo Software Version | |✓ |✓ 
+|Customize Qumulo Sidecar deployment | |✓ |✓ 
+|Customize Qumulo # of Floating IPs | |✓ |✓ 
+|Optional: Add SNS Topics for Instance an Volume recovery | |✓ |✓ 
+|Optional: Add Route 53 PHZ DNS for Floating IPs | |✓ |✓ 
+|Optional: Add CIDRs to Qumulo Security Group | |✓ |✓ 
+|Optional: Add Qumulo Public Management | |✓ |✓ 
+|Optional: Add Qumulo Public Replication Port | |✓ |✓ 
+|Optional: Enable CloudWatch Audit Log Messages | |✓ |✓ 
+|Optional: Apply CMK for EBS Encryption | |✓ |✓ 
+|Optional: Set IAM Permissions Boundary | |✓ |✓ 
+|Optional: Specify Environment type | |✓ |✓ 
+|===
 
-* VPC Interface Endpoints to support AWS services
-* A security group applied to each VPC Interface Endpoint
-* The code for the Quick Start must be downloaded from GitHub and placed in your own S3 bucket
-* If software upgrades are to be performed by the template then Qumulo Core software must be placed in the /upgrade folder within the bucket in Qumulo Trends format
-
-===== VPC Interface Endpoints (for deployments without Internet Access)
-It is recommended to leave the policy for each endpoint as Full Access. The following VPC Interface Endpoints must be configured when deploying without Internet Access:
-
-* cloudformation 
-* cloudtrail
-* ec2
-* events
-* kms
-* lambda 
-* logs 
-* monitoring 
-* profile 
-* S3 
-* secretsmanager
-* sns
-* ssm
-* sts
-* sqs
-
-===== VPC Interface Endpoints Security Group rules (for deployments without Internet Access)
-To allow traffic from the provisioning node and the Qumulo cluster, the security group applied to the VPC interface endpoints must have the following Security Groups added as Inbound Rule Sources:
-
-* [stack name]-PROVISIONINGSTACK-[aws 12 digit code]-ProvisionerSG-[aws 12 digit code]
-* [stack name]-QSTACK-[aws 12 digit code]-QumuloSecurityGroup-[aws 12 digit code]
-
-===== Automated Qumulo Core upgrades during deployment (for deployments without Internet Access)
-If you enter a newer software version than the Qumulo Core AMI was released with, the provisioning instance will expect to find the code via the Internet, or in this case from the S3 bucket.  Since the provisioning instance will not be able to reach the public Internet, it will look for code in the template’s S3 bucket at the following prefix: [your prefix]/upgrade. Typically this is quickstart-qumulo-cloudq-main/upgrade. All quarterly released images between the AMI ID release version to, and including, the requested version must be present in the bucket. For example, if the AMI was released with 4.0.6 and the desired version is 4.2.3, then 4.1.0.1, 4.2.0, and 4.2.3 versions must be in the bucket. If the software images are not present in the S3 bucket the Provisioning instance will not shutdown, nor will it progress with provisioning activities. To see the quarterly release cadence just cat the file [your prefix/cfn-init/upgrade-order.txt. Place the image(s) in the bucket and restart the provisioning instance if this occurs. The image(s) must be in the Qumulo Trends format: qumulo_upgrade_cloud_x.y.z_num.qimg. If you don’t have access to Qumulo Trends, contact Qumulo for support.
-
-==== Deploying on Outpost
-For Outpost deployments use the *Deploy {partner-product-short-name} into an exisiting VPC* option.

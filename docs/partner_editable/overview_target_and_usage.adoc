@@ -4,4 +4,4 @@
 
 This guide provides instructions for deploying {partner-product-short-name} Quick Start reference architecture in the AWS cloud. Any subsequent configuration for the file data platform is outside the scope of this document. Refer to the https://care.qumulo.com/hc/en-us/categories/115000637447-KNOWLEDGE-BASE[Qumulo Knowledge Base] for further information.
 
-This Quick Start is for users who want to build a scale-out, multip-protocol, file data platform with 1TB to 6PB of usable capacity in a single name space hosted in AWS.
+This Quick Start is for users who want to build a scale-out, multi-protocol, file data platform with 1TB to 6PB of usable capacity in a single name space hosted in AWS.
