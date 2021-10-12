@@ -13,18 +13,24 @@ Metadata:
 Parameters:
   VpcCidr:
     Type: String
+  AvailabilityZone:
+    Type: String
   PublicSubnetCidr:
     Type: String
   PrivateSubnetCidr:
     Type: String
-  AvailabilityZone:
+  AvailabilityZoneDR:
+    Type: String  
+  PublicSubnetCidrDR:
+    Type: String
+  PrivateSubnetCidrDR:
+    Type: String
+  QClusterLocalZone:
     Type: String
   SideCarAZ:
     Type: String
   SideCarPrivateSubnetCidr:
     Type: String    
-  QClusterLocalZone:
-    Type: String
 
 Conditions:
   LocalAZ: !Not
@@ -41,7 +47,7 @@ Resources:
       CidrBlock: !Ref VpcCidr
       Tags:
         - Key: Name
-          Value: !Sub "${AWS::StackName} - Cloud-Q Quickstart"
+          Value: !Sub "${AWS::StackName} - Cloud-Q-Quickstart"
 
   PublicSubnet:
     Type: "AWS::EC2::Subnet"
@@ -51,7 +57,7 @@ Resources:
       AvailabilityZone: !Ref AvailabilityZone
       Tags:
         - Key: Name
-          Value: !Sub "${AWS::StackName} - Public"
+          Value: !Sub "${AWS::StackName} - Public-Prod"
 
   PrivateSubnet:
     Type: "AWS::EC2::Subnet"
@@ -61,7 +67,27 @@ Resources:
       AvailabilityZone: !Ref AvailabilityZone
       Tags:
         - Key: Name
-          Value: !Sub "${AWS::StackName} - Private"
+          Value: !Sub "${AWS::StackName} - Private-Prod"
+
+  PublicSubnetDR:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Ref PublicSubnetCidrDR
+      AvailabilityZone: !Ref AvailabilityZoneDR
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName} - Public-DR"
+
+  PrivateSubnetDR:
+    Type: "AWS::EC2::Subnet"
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: !Ref PrivateSubnetCidrDR
+      AvailabilityZone: !Ref AvailabilityZoneDR
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName} - Private-DR"
 
   SideCarPrivateSubnet:
     Type: "AWS::EC2::Subnet"
@@ -72,14 +98,14 @@ Resources:
       AvailabilityZone: !Ref SideCarAZ
       Tags:
         - Key: Name
-          Value: !Sub "${AWS::StackName} - Private for Lambda"
+          Value: !Sub "${AWS::StackName} - Private-Lambda"
 
   InternetGateway:
     Type: "AWS::EC2::InternetGateway"
     Properties:
       Tags:
         - Key: Name
-          Value: !Sub "${AWS::StackName} - Cloud-Q Quickstart"
+          Value: !Sub "${AWS::StackName} - Cloud-Q-Quickstart"
 
   VPCGatewayAttachment:
     Type: "AWS::EC2::VPCGatewayAttachment"
@@ -123,6 +149,18 @@ Resources:
       SubnetId: !Ref PrivateSubnet
       RouteTableId: !Ref PrivateRouteTable
 
+  PublicSubnetDRRouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref PublicSubnetDR
+      RouteTableId: !Ref PublicRouteTable
+
+  PrivateSubnetDRRouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      SubnetId: !Ref PrivateSubnetDR
+      RouteTableId: !Ref PrivateRouteTable
+
   SideCarPrivateSubnetRouteTableAssociation:
     Type: "AWS::EC2::SubnetRouteTableAssociation"
     Condition: LocalAZ
@@ -139,7 +177,7 @@ Resources:
       SubnetId: !Ref PublicSubnet
       Tags:
         - Key: Name
-          Value: !Sub "${AWS::StackName} - Cloud-Q Quickstart"
+          Value: !Sub "${AWS::StackName} - Cloud-Q-Quickstart"
 
   NatEIP:
     DependsOn: VPCGatewayAttachment
@@ -148,7 +186,7 @@ Resources:
       Domain: vpc
       Tags:
         - Key: Name
-          Value: !Sub "${AWS::StackName} - Cloud-Q Quickstart"
+          Value: !Sub "${AWS::StackName} - Cloud-Q-Quickstart"
 
   NatRoute:
     Type: "AWS::EC2::Route"
@@ -157,11 +195,20 @@ Resources:
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId: !Ref NatGateway
 
-  default:
+  DefaultSg:
     Type: "AWS::EC2::SecurityGroup"
     Properties:
       GroupDescription: default
       VpcId: !Ref VPC
+
+  S3Endpoint:
+    Type: 'AWS::EC2::VPCEndpoint'
+    Properties:
+      RouteTableIds:
+        - !Ref PrivateRouteTable
+        - !Ref PublicRouteTable
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.s3'
+      VpcId: !Ref VPC      
 
 Outputs:
   VPCID:
@@ -170,6 +217,10 @@ Outputs:
     Value: !Ref PrivateSubnet
   PublicSubnetId:
     Value: !Ref PublicSubnet
+  PrivateSubnetIdDR:
+    Value: !Ref PrivateSubnetDR
+  PublicSubnetIdDR:
+    Value: !Ref PublicSubnetDR 
   SideCarPrivateSubnetId:
     Value: !If [LocalAZ, !Ref SideCarPrivateSubnet, !Ref PrivateSubnet]
 

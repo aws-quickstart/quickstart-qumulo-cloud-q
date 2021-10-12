@@ -7,15 +7,16 @@ project:
 tests:
   quickstart-qumulo-cloud-q:
     parameters:
-      AvailabilityZone: $[taskcat_getaz_1]
+      AvailabilityZone: us-east-1a
       QSS3BucketName: $[taskcat_autobucket]
       QSS3BucketRegion: $[taskcat_current_region]
       KeyPair: $[taskcat_getkeypair]
       QPublicMgmt: "YES"
       QDiskConfig: "600GiB-AF"
-      QClusterAdminPwd: "Password1!"
-      SideCarAZ: $[taskcat_getaz_1]
-      SideCarPassword: "Password1!"
+      QClusterAdminPwd: P!$[taskcat_genpass_12A]
+      SideCarAZ: us-east-1b
+      SideCarPassword: P!$[taskcat_genpass_12A]
+      AvailabilityZoneDR: us-east-1c
     regions:
     - us-east-1
     template: templates/qs-cloudq-main-new-vpc.template.yaml

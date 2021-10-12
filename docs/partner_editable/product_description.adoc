@@ -2,8 +2,8 @@
 // Briefly describe the software. Use consistent and clear branding. 
 // Include the benefits of using the software on AWS, and provide details on usage scenarios.
 
-Qumulo for AWS is the world’s most efficient, high-performance file storage in the public cloud and runs natively on AWS. Support thousands of elastic compute nodes with enterprise-grade file storage to tackle your toughest data processing challenges problems.
+Qumulo for AWS is the world’s most efficient, high-performance file storage in the public cloud and runs natively on AWS. Support thousands of elastic compute nodes with enterprise-grade file storage to tackle your toughest data processing challenges.
 
-* Integrates with native AWS services and features like CloudWatch, and Amazon S3.
+* Integrates with native AWS services and features including EC2, EBS, Amazon S3, Amazon SNS, and Cloudwatch.
 * Runs applications, even workstation or data center applications, at native speeds–no reconfiguring applications, or retraining users.
 * Offers the cloud’s most advanced file system, with unlimited scale and API programmability.

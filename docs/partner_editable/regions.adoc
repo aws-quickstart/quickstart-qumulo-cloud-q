@@ -9,6 +9,7 @@ This Quick Start supports the following Regions:
 * us-gov-east-1
 * ca-central-1, Canada (Central)
 * sa-east-1, South America (São Paulo)
+* af-south-1, Africa (Cape Town)
 
 ===== Asia Pacific
 * ap-northeast-1, Asia Pacific (Tokyo)
@@ -27,4 +28,4 @@ This Quick Start supports the following Regions:
 * eu-south-1, Europe (Milan)
 * me-south-1, Middle East (Bahrain)
 
-//Full list: https://docs.aws.amazon.com/general/latest/gr/rande.html
+// Full list: https://docs.aws.amazon.com/general/latest/gr/rande.html
