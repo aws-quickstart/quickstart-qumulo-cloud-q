@@ -1,6 +1,6 @@
 // If no preperation is required, remove all content from here
 
-==== Deploying with a custome IAM role
+==== Deploying with a custom IAM role
 
 If you don't have the AWS recommended _AdministratorAccess_ managed policy then the following AWS services are required in a custom IAM role or IAM user to deploy this template:
 
