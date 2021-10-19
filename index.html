@@ -852,7 +852,8 @@ p.footer-text a{color:#d7d8d8}
 <li><a href="#_updating_to_the_advanced_template">Updating to the Advanced Template</a></li>
 <li><a href="#_termination_protection">Termination Protection</a></li>
 <li><a href="#_deleting_the_stack">Deleting the Stack</a></li>
-<li><a href="#_adding_a_dr_cluster">Adding a DR Cluster</a></li>
+<li><a href="#_qumulo_shift_for_amazon_s3">Qumulo SHIFT for Amazon S3</a></li>
+<li><a href="#_multi_az_with_qumulo_dr">Multi-AZ with Qumulo DR</a></li>
 </ul>
 </li>
 <li><a href="#_faq">FAQ</a></li>
@@ -2794,7 +2795,25 @@ top-level stack.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_adding_a_dr_cluster">Adding a DR Cluster</h3>
+<h3 id="_qumulo_shift_for_amazon_s3">Qumulo SHIFT for Amazon S3</h3>
+<div class="paragraph">
+<p>Qumulo Core supports copying data to and from Amazon S3.  After the cluster is up and running you may populate data on it by
+copying data from a chosen S3 bucket.  To create a SHIFT job, login to the Qumulo UI and select <strong>Cluster</strong> &gt; <strong>Copy to/from S3</strong> and fill in the parameters.
+For detailed documentation on the Qumulo SHIFT feature set, UI, and CLI please refer to the following Qumulo documents:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/Qumulo/docs/blob/gh-pages/shift-from-s3.md" target="_blank" rel="noopener">Qumulo SHIFT - Copy from S3</a></p>
+</li>
+<li>
+<p><a href="https://care.qumulo.com/hc/en-us/articles/360053162273-Qumulo-Shift-for-Amazon-S3" target="_blank" rel="noopener">Qumulo SHIFT - Copy to S3</a></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_multi_az_with_qumulo_dr">Multi-AZ with Qumulo DR</h3>
 <div class="paragraph">
 <p>For disaster recovery and business continuity one or more clusters may be deployed in other Availability Zones or other Regions.
 The process to deploy in another Region is identical to the deployment addressed in this deployment guide.  Similarly, multi-AZ
@@ -3378,7 +3397,7 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Qumulo Core Software Version
 (<code>QClusterVersion</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>4.2.4</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>4.2.5</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Software version to install on the cluster.  NOTE: This field CAN NOT be used to upgrade the cluster with a CloudFormation Stack Update. All Updates after initial creation must follow the quarterly release cadence using the Web UI or REST API.</p></td>
 </tr>
 <tr>
@@ -3449,7 +3468,7 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Qumulo Sidecar Software Version
 (<code>SideCarVersion</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>4.2.4</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>4.2.5</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Software Version should match the desired cluster version at creation.  NOTE: This field may be used to upgrade the SideCar software version with a CloudFormation Stack Update after upgrading the cluster via the Web UI or REST API.</p></td>
 </tr>
 <tr>
@@ -3592,7 +3611,7 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Qumulo Sidecar Software Version
 (<code>SideCarVersion</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>4.2.4</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>4.2.5</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Keep default value for new deployments.  NOTE: This field may be used to upgrade the SideCar software version with a CloudFormation Stack Update after upgrading the cluster via the Web UI or REST API.</p></td>
 </tr>
 </tbody>
@@ -3802,7 +3821,7 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Qumulo Core Software Version
 (<code>QClusterVersion</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>4.2.4</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>4.2.5</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Software version to install on the cluster.  NOTE: This field CAN NOT be used to upgrade the cluster with a CloudFormation Stack Update. All Updates after initial creation must follow the quarterly release cadence using the Web UI or REST API.</p></td>
 </tr>
 <tr>
@@ -3873,7 +3892,7 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Qumulo Sidecar Software Version
 (<code>SideCarVersion</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>4.2.4</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>4.2.5</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Software Version should match the desired cluster version at creation.  NOTE: This field may be used to upgrade the SideCar software version with a CloudFormation Stack Update after upgrading the cluster via the Web UI or REST API.</p></td>
 </tr>
 <tr>
@@ -3935,7 +3954,7 @@ and to share your customizations with others.</p>
 </html>
 <!--
 repo commit:
-aa00d60096ec8837c2166ccffb38ed1d54b00bc9
+5c176897551de0faac1255339c1c7f2ebedd77eb
 
 submodule config:
  eea042d0b9c005d2549a71349e5f28b02c81af75 docs/boilerplate (heads/main)

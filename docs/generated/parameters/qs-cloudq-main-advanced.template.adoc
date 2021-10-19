@@ -38,7 +38,7 @@
 (`QNodeCount`)|`Select for Custom Offering OR Expanding Cluster`|Total number of EC2 instances, or Qumulo Nodes, in the Qumulo Cluster: (4-10).  NOTE: This field may be used to add nodes with a CloudFormation Stack Update after initial provisioning.|EBS Volume Configuration per EC2 Instance
 (`QDiskConfig`)|`Select for Custom Offering`|Choose the EBS Volume configuration and type for the Qumulo EC2 instances: AF= SSD, Hybrid st1= SSD+HDD st1, Hybrid sc1= SSD+HDD sc1. NOTE: This must match the EBS capacity and type of the Customizable Private Offer.|Floating IP for IP Failover
 (`QFloatingIP`)|`3`|Number of EC2 Secondary IPs to be configured for each instance in the cluster, 1-4.|Qumulo Core Software Version
-(`QClusterVersion`)|`4.2.4`|Software version to install on the cluster.  NOTE: This field CAN NOT be used to upgrade the cluster with a CloudFormation Stack Update. All Updates after initial creation must follow the quarterly release cadence using the Web UI or REST API.|Qumulo Cluster Name
+(`QClusterVersion`)|`4.2.5`|Software version to install on the cluster.  NOTE: This field CAN NOT be used to upgrade the cluster with a CloudFormation Stack Update. All Updates after initial creation must follow the quarterly release cadence using the Web UI or REST API.|Qumulo Cluster Name
 (`QClusterName`)|`Cloud-Q`|Name must be an alpha-numeric string between 2 and 15 characters. Dash (-) is allowed if not the first or last character.|Qumulo Cluster Admin Password
 (`QClusterAdminPwd`)|`**__Requires input__**`|Minumum 8 characters and must include one each of: uppercase, lowercase, and a special character.|OPTIONAL: AWS EBS Volumes Encryption Key 
 (`VolumesEncryptionKey`)|`**__Blank string__**`|Leave Blank and AWS will generate a key. To specify a Customer Managed Key provide the KMS CMK ID: 12345678-1234-1234-1234-1234567890ab|OPTIONAL: AWS Permissions Boundary Policy Name
@@ -52,6 +52,6 @@
 |===
 |Parameter label (name) |Default value|Description|Provision Qumulo Sidecar Lambdas
 (`SideCarProv`)|`YES`|By default the Qumulo Sidecar Lambdas are deployed to monitor and replace failed EBS volumes plus send metrics to CloudWatch.  Leave this at default for production environments with WAF compliance. The ability to disable this provisioning is offerred just for test environments.|Qumulo Sidecar Software Version 
-(`SideCarVersion`)|`4.2.4`|Software Version should match the desired cluster version at creation.  NOTE: This field may be used to upgrade the SideCar software version with a CloudFormation Stack Update after upgrading the cluster via the Web UI or REST API.|OPTIONAL: Qumulo EBS Volume Recovery SNS Topic 
+(`SideCarVersion`)|`4.2.5`|Software Version should match the desired cluster version at creation.  NOTE: This field may be used to upgrade the SideCar software version with a CloudFormation Stack Update after upgrading the cluster via the Web UI or REST API.|OPTIONAL: Qumulo EBS Volume Recovery SNS Topic 
 (`SideCarSNSTopic`)|`**__Blank string__**`|Optionally enter an SNS topic ARN that lambda errors and successful disk replacements will be published to.
 |===

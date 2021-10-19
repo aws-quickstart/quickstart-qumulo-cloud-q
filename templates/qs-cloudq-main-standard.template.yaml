@@ -217,7 +217,7 @@ Parameters:
     MaxLength: 11
     MinLength: 5
     Type: String
-    Default: "4.2.4"
+    Default: "4.2.5"
 
 Rules:
   CustomRule:
@@ -260,7 +260,7 @@ Resources:
         QNodeCount: !Ref QNodeCount
         QDiskConfig: !Ref QDiskConfig
         QFloatingIP: "3"
-        QClusterVersion: "4.2.4"
+        QClusterVersion: "4.2.5"
         QClusterName: "Cloud-Q"
         QClusterAdminPwd: !Ref QClusterAdminPwd
         VolumesEncryptionKey: ""

@@ -28,5 +28,5 @@
 [width="100%",cols="16%,11%,73%",options="header",]
 |===
 |Parameter label (name) |Default value|Description|Qumulo Sidecar Software Version 
-(`SideCarVersion`)|`4.2.4`|Keep default value for new deployments.  NOTE: This field may be used to upgrade the SideCar software version with a CloudFormation Stack Update after upgrading the cluster via the Web UI or REST API.
+(`SideCarVersion`)|`4.2.5`|Keep default value for new deployments.  NOTE: This field may be used to upgrade the SideCar software version with a CloudFormation Stack Update after upgrading the cluster via the Web UI or REST API.
 |===

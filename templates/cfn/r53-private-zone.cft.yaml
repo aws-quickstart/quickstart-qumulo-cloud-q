@@ -1037,4 +1037,4 @@ Resources:
           
 Outputs:
   ClusterDNS:
-    Value: !Sub "${RecordName}.${FQDName}"
+    Value: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
