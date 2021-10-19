@@ -610,7 +610,16 @@ MGMTNLB stack resources (If Public Management was provisioned). Simply let the
 deletion finish, reselect the MGMTNLB stack and delete it again, and then delete the
 top-level stack.
 
-=== Adding a DR Cluster
+=== Qumulo SHIFT for Amazon S3
+
+Qumulo Core supports copying data to and from Amazon S3.  After the cluster is up and running you may populate data on it by
+copying data from a chosen S3 bucket.  To create a SHIFT job, login to the Qumulo UI and select *Cluster* > *Copy to/from S3* and fill in the parameters.  
+For detailed documentation on the Qumulo SHIFT feature set, UI, and CLI please refer to the following Qumulo documents:
+
+* https://github.com/Qumulo/docs/blob/gh-pages/shift-from-s3.md[Qumulo SHIFT - Copy from S3^]
+* https://care.qumulo.com/hc/en-us/articles/360053162273-Qumulo-Shift-for-Amazon-S3[Qumulo SHIFT - Copy to S3^]
+
+=== Multi-AZ with Qumulo DR
 
 For disaster recovery and business continuity one or more clusters may be deployed in other Availability Zones or other Regions.
 The process to deploy in another Region is identical to the deployment addressed in this deployment guide.  Similarly, multi-AZ

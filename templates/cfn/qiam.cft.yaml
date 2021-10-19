@@ -64,7 +64,7 @@ Resources:
             Action:
               - "sts:AssumeRole"
       Path: /
-      PermissionsBoundary: !If [ProvBoundary, !Sub "arn:aws:iam::${AWS::AccountId}:policy/${QPermissionsBoundary}", !Ref "AWS::NoValue"]
+      PermissionsBoundary: !If [ProvBoundary, !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:policy/${QPermissionsBoundary}", !Ref "AWS::NoValue"]
       Policies:
         - PolicyName: QumuloAccess-EC2-CW-Logs
           PolicyDocument:
@@ -93,7 +93,7 @@ Resources:
                   - "kms:ReEncryptTo"
                   - "kms:DescribeKey"
                   - "kms:CreateGrant"
-                Resource: !If [ProvCMK, !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/${VolumesEncryptionKey}", !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/ebs"]
+                Resource: !If [ProvCMK, !Sub "arn:${AWS::Partition}:kms:${AWS::Region}:${AWS::AccountId}:key/${VolumesEncryptionKey}", !Sub "arn:${AWS::Partition}:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/ebs"]
 
   QumuloAccessProfile:
     Type: "AWS::IAM::InstanceProfile"

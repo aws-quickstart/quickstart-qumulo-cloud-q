@@ -371,7 +371,7 @@ Parameters:
     MaxLength: 11
     MinLength: 5
     Type: String
-    Default: "4.2.4"
+    Default: "4.2.5"
 
   QClusterAdminPwd:
     AllowedPattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&\\-_])[A-Za-z\\d@$!%*?&\\-_]{8,}$"
@@ -480,7 +480,7 @@ Parameters:
     MaxLength: 11
     MinLength: 5
     Type: String
-    Default: "4.2.4"
+    Default: "4.2.5"
 
   SideCarSNSTopic:
     Description: Optionally enter an SNS topic ARN that lambda errors and successful disk replacements will be published to.
