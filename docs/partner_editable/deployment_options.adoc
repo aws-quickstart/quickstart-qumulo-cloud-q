@@ -14,7 +14,7 @@ The table below compares the deployment, customization, and optional parameters 
 |===
 
 // space for headers
-||Existing VPC - Standard |Exiting VPC - Advanced |New VPC
+||Existing VPC - Standard |Existing VPC - Advanced |New VPC
 |Deploy from Quick Start Bucket |✓ |✓ |✓
 |Deploy from your own Bucket | |✓ |✓ 
 |Deploy Any Qumulo Marketplace Offering |✓ |✓ |✓ 
