@@ -1343,7 +1343,7 @@ deploy, and operate your infrastructure and applications on the AWS Cloud.</p>
 <tr>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Existing VPC - Standard</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Exiting VPC - Advanced</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Existing VPC - Advanced</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">New VPC</p></td>
 </tr>
 <tr>
@@ -3172,7 +3172,144 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 <div class="sect2">
 <h3 id="_parameters_for_deploying_into_a_new_vpc">Parameters for deploying into a new VPC</h3>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. AWS Template Configuration - Cloud Q Quick Start New VPC - v3.7</caption>
+<caption class="title">Table 1. AWS Template Configuration - Cloud Q Quick Start Existing VPC - Standard v3.7</caption>
+<colgroup>
+<col style="width: 16%;">
+<col style="width: 11%;">
+<col style="width: 73%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter label (name)</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AWS Key-Pair Name
+(<code>KeyPair</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mykeypair</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of an existing EC2 Key Pair to enable authentication to instances</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. AWS Network Configuration</caption>
+<colgroup>
+<col style="width: 16%;">
+<col style="width: 11%;">
+<col style="width: 73%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter label (name)</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AWS VPC ID
+(<code>VPCId</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AWS VPC ID.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qumulo Security Group CIDR
+(<code>QSgCidr1</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10.0.0.0/16</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">An IPv4 CIDR block for specifying the generated security group&#8217;s allowed addresses for inbound traffic. Typically set to the VPC CIDR.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AWS VPC Private Subnet ID
+(<code>PrivateSubnetID</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AWS Private Subnet in the VPC.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. Qumulo File Data Platform Configuration</caption>
+<colgroup>
+<col style="width: 16%;">
+<col style="width: 11%;">
+<col style="width: 73%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter label (name)</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qumulo AWS Marketplace Offering Accepted
+(<code>QMarketPlaceType</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1TB-Usable-All-Flash</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Select the Qumulo Cluster usable capacity per the accpeted AWS Marketplace offering.  Customizable offerings typically leverage a Private Offer via AWS Marketplace and can be used to deploy 1TB to 6PB with this template.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qumulo EC2 Instance Type
+(<code>QInstanceType</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>m5.2xlarge</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EC2 instance type for Qumulo nodes.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Total Number of Qumulo EC2 Instances
+(<code>QNodeCount</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Select for Custom Offering OR Expanding Cluster</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Total number of EC2 instances, or Qumulo Nodes, in the Qumulo Cluster: (4-10).  NOTE: This field may be used to add nodes with a CloudFormation Stack Update after initial provisioning.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EBS Volume Configuration per EC2 Instance
+(<code>QDiskConfig</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Select for Custom Offering</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Choose the EBS Volume configuration and type for the Qumulo EC2 instances: AF= SSD, Hybrid st1= SSD+HDD st1, Hybrid sc1= SSD+HDD sc1. NOTE: This must match the EBS capacity and type of the Customizable Private Offer.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qumulo Cluster Admin Password
+(<code>QClusterAdminPwd</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Minumum 8 characters and must include one each of: uppercase, lowercase, and a special character.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable Termination Protection
+(<code>TermProtection</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>YES</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable Termination Protection for EC2 instances and the CloudFormation stack</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 4. Qumulo EBS Monitoring/Replacement &amp; CloudWatch Metrics Configuration</caption>
+<colgroup>
+<col style="width: 16%;">
+<col style="width: 11%;">
+<col style="width: 73%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter label (name)</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qumulo Sidecar Software Version
+(<code>SideCarVersion</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>4.2.5</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Keep default value for new deployments.  NOTE: This field may be used to upgrade the SideCar software version with a CloudFormation Stack Update after upgrading the cluster via the Web UI or REST API.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_parameters_for_deploying_into_a_new_vpc_2">Parameters for deploying into a new VPC</h3>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 5. AWS Template Configuration - Cloud Q Quick Start New VPC - v3.7</caption>
 <colgroup>
 <col style="width: 16%;">
 <col style="width: 11%;">
@@ -3219,7 +3356,7 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 2. AWS Network Configuration</caption>
+<caption class="title">Table 6. AWS Network Configuration</caption>
 <colgroup>
 <col style="width: 16%;">
 <col style="width: 11%;">
@@ -3338,7 +3475,7 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 3. Qumulo File Data Platform Configuration</caption>
+<caption class="title">Table 7. Qumulo File Data Platform Configuration</caption>
 <colgroup>
 <col style="width: 16%;">
 <col style="width: 11%;">
@@ -3445,7 +3582,7 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 4. Qumulo EBS Monitoring/Replacement &amp; CloudWatch Metrics Configuration</caption>
+<caption class="title">Table 8. Qumulo EBS Monitoring/Replacement &amp; CloudWatch Metrics Configuration</caption>
 <colgroup>
 <col style="width: 16%;">
 <col style="width: 11%;">
@@ -3476,143 +3613,6 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 (<code>SideCarSNSTopic</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Blank string</em></strong></code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Optionally enter an SNS topic ARN that lambda errors and successful disk replacements will be published to.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_parameters_for_deploying_into_a_new_vpc_2">Parameters for deploying into a new VPC</h3>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 5. AWS Template Configuration - Cloud Q Quick Start Existing VPC - Standard v3.7</caption>
-<colgroup>
-<col style="width: 16%;">
-<col style="width: 11%;">
-<col style="width: 73%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter label (name)</th>
-<th class="tableblock halign-left valign-top">Default value</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AWS Key-Pair Name
-(<code>KeyPair</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mykeypair</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Name of an existing EC2 Key Pair to enable authentication to instances</p></td>
-</tr>
-</tbody>
-</table>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 6. AWS Network Configuration</caption>
-<colgroup>
-<col style="width: 16%;">
-<col style="width: 11%;">
-<col style="width: 73%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter label (name)</th>
-<th class="tableblock halign-left valign-top">Default value</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AWS VPC ID
-(<code>VPCId</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AWS VPC ID.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Qumulo Security Group CIDR
-(<code>QSgCidr1</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10.0.0.0/16</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">An IPv4 CIDR block for specifying the generated security group&#8217;s allowed addresses for inbound traffic. Typically set to the VPC CIDR.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AWS VPC Private Subnet ID
-(<code>PrivateSubnetID</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AWS Private Subnet in the VPC.</p></td>
-</tr>
-</tbody>
-</table>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 7. Qumulo File Data Platform Configuration</caption>
-<colgroup>
-<col style="width: 16%;">
-<col style="width: 11%;">
-<col style="width: 73%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter label (name)</th>
-<th class="tableblock halign-left valign-top">Default value</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Qumulo AWS Marketplace Offering Accepted
-(<code>QMarketPlaceType</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1TB-Usable-All-Flash</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Select the Qumulo Cluster usable capacity per the accpeted AWS Marketplace offering.  Customizable offerings typically leverage a Private Offer via AWS Marketplace and can be used to deploy 1TB to 6PB with this template.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Qumulo EC2 Instance Type
-(<code>QInstanceType</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>m5.2xlarge</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">EC2 instance type for Qumulo nodes.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Total Number of Qumulo EC2 Instances
-(<code>QNodeCount</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Select for Custom Offering OR Expanding Cluster</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Total number of EC2 instances, or Qumulo Nodes, in the Qumulo Cluster: (4-10).  NOTE: This field may be used to add nodes with a CloudFormation Stack Update after initial provisioning.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">EBS Volume Configuration per EC2 Instance
-(<code>QDiskConfig</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Select for Custom Offering</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Choose the EBS Volume configuration and type for the Qumulo EC2 instances: AF= SSD, Hybrid st1= SSD+HDD st1, Hybrid sc1= SSD+HDD sc1. NOTE: This must match the EBS capacity and type of the Customizable Private Offer.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Qumulo Cluster Admin Password
-(<code>QClusterAdminPwd</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code><strong><em>Requires input</em></strong></code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Minumum 8 characters and must include one each of: uppercase, lowercase, and a special character.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Enable Termination Protection
-(<code>TermProtection</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>YES</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Enable Termination Protection for EC2 instances and the CloudFormation stack</p></td>
-</tr>
-</tbody>
-</table>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 8. Qumulo EBS Monitoring/Replacement &amp; CloudWatch Metrics Configuration</caption>
-<colgroup>
-<col style="width: 16%;">
-<col style="width: 11%;">
-<col style="width: 73%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter label (name)</th>
-<th class="tableblock halign-left valign-top">Default value</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Qumulo Sidecar Software Version
-(<code>SideCarVersion</code>)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>4.2.5</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Keep default value for new deployments.  NOTE: This field may be used to upgrade the SideCar software version with a CloudFormation Stack Update after upgrading the cluster via the Web UI or REST API.</p></td>
 </tr>
 </tbody>
 </table>
@@ -3954,7 +3954,7 @@ and to share your customizations with others.</p>
 </html>
 <!--
 repo commit:
-5c176897551de0faac1255339c1c7f2ebedd77eb
+9c2186c0fa2404667e735b5b7b454c7ac56c006e
 
 submodule config:
  eea042d0b9c005d2549a71349e5f28b02c81af75 docs/boilerplate (heads/main)
