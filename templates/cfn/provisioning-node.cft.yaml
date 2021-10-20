@@ -361,12 +361,12 @@ Resources:
             exit 1
           fi
           
-          if [[ -e "functions-v2.sh" ]]; then
-            echo "functions-v2 exist"
+          if [[ -e "functions-v3.sh" ]]; then
+            echo "functions-v3 exist"
           else
-            aws s3 cp s3://$bkt_pfx"templates/cfn-init/functions-v2.sh" ./functions-v2.sh --quiet
+            aws s3 cp s3://$bkt_pfx"templates/cfn-init/functions-v3.sh" ./functions-v3.sh --quiet
           fi
-          source functions-v2.sh
+          source functions-v3.sh
 
           if [ $(curl -sL -w "%{http_code}\\n" "trends.qumulo.com" -o /dev/null --connect-timeout 3 --max-time 5) == "200" ]; then
             ssmput "last-run-status" "$region" "$q_stackname" "BOOTED. Public Internet Reachable"
@@ -449,7 +449,7 @@ Resources:
             new_cluster="true"
 
             aws s3 cp s3://$bkt_pfx"templates/cfn-init/stack-policy.json" ./stack_policy.json
-            aws cloudformation set-stack-policy --region $region --stack-name $q_stackname --stack-policy-body file://./stack_policy.json
+            setstackpolicy "$region" "$q_stackname" "./stack_policy.json"
 
             chk=$(vercomp $req_ver "4.2.1"; echo $?)
             chk1=$(vercomp $req_ver "4.2.2"; echo $?)

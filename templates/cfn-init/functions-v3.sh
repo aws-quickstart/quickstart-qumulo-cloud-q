@@ -48,6 +48,22 @@ ec2protect () {
   fi    
 }
 
+setstackpolicy () {
+  local region=$1 stackname=$2 policyfile=$3
+  local stack_status
+
+  stack_status=$(aws cloudformation describe-stacks --region $region --stack-name $stackname --query Stacks[].StackStatus --output text)
+
+  while [ "$stack_status" != "CREATE_COMPLETE" ] && [ "$stack_status" != "UPDATE_COMPLETE" ]; do
+    echo $stack_status
+    echo "CF Stack Not Complete: $stackname. Waiting on Stack to complete."
+    sleep 15
+    stack_status=$(aws cloudformation describe-stacks --region $region --stack-name $stackname --query Stacks[].StackStatus --output text)
+  done
+
+  aws cloudformation set-stack-policy --region $region --stack-name $stackname --stack-policy-body file://$policyfile
+}
+
 vercomp () {        
   if [[ $1 == $2 ]]; then
     return 0
