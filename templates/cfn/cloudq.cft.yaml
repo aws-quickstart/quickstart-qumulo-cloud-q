@@ -332,7 +332,7 @@ Resources:
       Parameters:
         SideCarProv: !Ref SideCarProv
         TermProtection: !Ref TermProtection
-        SecretsManagedPolicy: "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
+        SecretsManagedPolicy: !Sub "arn:${AWS::Partition}:iam::aws:policy/SecretsManagerReadWrite"
         KeyName: !Ref KeyPair
         Region: !Ref AWS::Region
         PrivateSubnetId: !Ref PrivateSubnetID
