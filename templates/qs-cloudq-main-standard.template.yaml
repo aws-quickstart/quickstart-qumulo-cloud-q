@@ -31,8 +31,8 @@ Metadata:
         - W9006
         - W9901
   QuickStartDocumentation:
-    EntrypointName: 'Parameters for deploying into a new VPC'
-    Order: '1'
+    EntrypointName: 'Parameters for deploying into an existing VPC'
+    Order: '2'
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:

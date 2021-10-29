@@ -34,8 +34,8 @@ Metadata:
         - E9903 #Unknown exception while processing rule E9903
         - E9904 #Unknown exception while processing rule E9904
   QuickStartDocumentation:
-    EntrypointName: 'Parameters for deploying into an existing VPC'
-    Order: '2'
+    EntrypointName: 'Parameters for deploying into an existing VPC with advanced parameters'
+    Order: '3'
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
