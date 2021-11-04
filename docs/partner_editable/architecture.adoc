@@ -13,10 +13,10 @@ image::../images/architecture_diagram.png[Architecture]
 As shown in <<architecture1>>, the Quick Start sets up the following:
 
 * A VPC configured with public and private subnets, in two Availability Zones, according to AWS best practices, to provide you with your own virtual network on AWS.*
-* In the public production subnet:
+* In the first public subnet:
 ** A managed Network Address Translation (NAT) gateway to allow outbound Internet access for resources in the private subnet.
 ** (Optional) A network load balancer with an elastic IP address
-* In the private production subnet:
+* In the first private subnet:
 ** A cluster of Qumulo EC2 instances
 *** 4 to 20 nodes
 *** 1TB to 6PB of usable capacity
@@ -26,10 +26,17 @@ As shown in <<architecture1>>, the Quick Start sets up the following:
 ** Two Qumulo Sidecar Lambda functions
 *** One Lambda function sends Qumulo cluster metrics to Cloudwatch
 *** The other Lambda function monitors the health of EBS volumes and automatically replaces any unhealthy volumes
-** (Optional) AWS Route 53 private hosted zone
+** (Optional) an AWS Route 53 private hosted zone
 *** If R53 is resolving all DNS for the VPC then a R53 private hosted zone may be optionally provisioned to configure DNS A records for the cluster.
 ** A Provisioner EC2 Instance, which automatically shuts down after provisioning the Qumulo cluster and automatically restarts during stack updates.
 // Add bullet points for any additional components that are included in the deployment. Make sure that the additional components are also represented in the architecture diagram. End each bullet with a period.
 //* <describe any additional components>.
+* A private key stored in AWS Key Management Service (KMS)
+* Credentials stored in AWS Secrets Manager
+* AWS Identity and Access Management (IAM) roles
+* Amazon CloudWatch alerts to log Qumulo cluster metrics
+* Amazon Simple Notification Service (SNS) alerts triggered by EBS volume anomalies
+* AWS Lambda functions to collect Qumulo cluster metrics and monitor EBS volume health
+
 
 [.small]#* The templates that deploy the Quick Start into an existing VPC skip the components marked by an asterisk and prompt you for your existing VPC configuration.#
