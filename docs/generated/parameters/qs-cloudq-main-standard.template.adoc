@@ -1,0 +1,32 @@
+
+.AWS Template Configuration - Cloud Q Quick Start Existing VPC - Standard v3.7
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|AWS Key-Pair Name
+(`KeyPair`)|`mykeypair`|Name of an existing EC2 Key Pair to enable authentication to instances
+|===
+.AWS Network Configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|AWS VPC ID
+(`VPCId`)|`**__Requires input__**`|AWS VPC ID.|Qumulo Security Group CIDR
+(`QSgCidr1`)|`10.0.0.0/16`|An IPv4 CIDR block for specifying the generated security group's allowed addresses for inbound traffic. Typically set to the VPC CIDR.|AWS VPC Private Subnet ID
+(`PrivateSubnetID`)|`**__Requires input__**`|AWS Private Subnet in the VPC.
+|===
+.Qumulo File Data Platform Configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Qumulo AWS Marketplace Offering Accepted
+(`QMarketPlaceType`)|`1TB-Usable-All-Flash`|Select the Qumulo Cluster usable capacity per the accpeted AWS Marketplace offering.  Customizable offerings typically leverage a Private Offer via AWS Marketplace and can be used to deploy 1TB to 6PB with this template.|Qumulo EC2 Instance Type
+(`QInstanceType`)|`m5.2xlarge`|EC2 instance type for Qumulo nodes.|Total Number of Qumulo EC2 Instances
+(`QNodeCount`)|`Select for Custom Offering OR Expanding Cluster`|Total number of EC2 instances, or Qumulo Nodes, in the Qumulo Cluster: (4-10).  NOTE: This field may be used to add nodes with a CloudFormation Stack Update after initial provisioning.|EBS Volume Configuration per EC2 Instance
+(`QDiskConfig`)|`Select for Custom Offering`|Choose the EBS Volume configuration and type for the Qumulo EC2 instances: AF= SSD, Hybrid st1= SSD+HDD st1, Hybrid sc1= SSD+HDD sc1. NOTE: This must match the EBS capacity and type of the Customizable Private Offer.|Qumulo Cluster Admin Password
+(`QClusterAdminPwd`)|`**__Requires input__**`|Minumum 8 characters and must include one each of: uppercase, lowercase, and a special character.|Enable Termination Protection
+(`TermProtection`)|`YES`|Enable Termination Protection for EC2 instances and the CloudFormation stack
+|===
+.Qumulo EBS Monitoring/Replacement & CloudWatch Metrics Configuration
+[width="100%",cols="16%,11%,73%",options="header",]
+|===
+|Parameter label (name) |Default value|Description|Qumulo Sidecar Software Version 
+(`SideCarVersion`)|`4.2.5`|Keep default value for new deployments.  NOTE: This field may be used to upgrade the SideCar software version with a CloudFormation Stack Update after upgrading the cluster via the Web UI or REST API.
+|===
