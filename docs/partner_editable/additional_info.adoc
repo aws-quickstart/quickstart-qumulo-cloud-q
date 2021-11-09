@@ -3,16 +3,28 @@
 
 == Post-deployment steps
 
-Once the top-level stack event log shows **CREATE_COMPLETE**, CloudFormation has completed instantiation of all stack resources. Below are the steps to validate the deployment.
+To validate the deployment, complete the following steps.
 
-=== Review & Verify the AWS Infrastructure
+//TODO Dave, Throughout, please number the section headings so that we can clearly see the progression of tasks. I've started with #1 for the following heading.
 
-==== Verify the Cluster Instances are Running
+=== 1. Review and verify the AWS infrastructure
 
-In the **AWS EC2 Console** filter on the stack name, clear the running instance filter, and verify
-the number of instances for the cluster is as expected. Four in this example.
+//TODO Dave, Please add a, b, etc., in the headings for the substeps. I've started with a & b in the following headings.
 
-==== Verify the Provisioning Instance has Stopped
+==== a. Confirm that the cluster instances are running
+
+//TODO Dave, Within each subsection, number the steps so that we can easily follow. I've started with periods for the following steps:
+
+. Open the AWS EC2 console.
+. Filter on the stack name.
+. Clear the running instance filter, and confirm that
+the number of instances for the cluster is as expected (four in this example).
+
+//TODO Dave, In that preceding sentence, what example are we referring to?
+
+==== b. Verify that the provisioning instance has stopped
+
+//TODO Dave, Please use periods for steps here as I've done above (and throughout the rest of the doc).
 
 CloudFormation has completed the instantiation of all resources, but this does not mean all
 resources are fully initialized and running. Specifically, the Provisioning instance will still be
@@ -25,7 +37,7 @@ provisioning instance has not stopped after 15 minutes, jump to the troubleshoot
 .Deployed EC2 instances
 image::../images/image2.png[Additional2]
 
-==== Verify the EC2 Security Groups
+==== Verify the EC2 security groups
 
 In the AWS Console go to the **EC2 Security Groups** page and filter on the top-level stack
 name. There will be two Security Groups that have been created. Select either to inspect the
@@ -58,7 +70,7 @@ image::../images/image5.png[Additional5]
 ==== Verify EBS Volume Tags
 
 If the Provisioning instance has stopped the EBS volumes will be tagged accordingly for the
-cluster and EBS volume configuration. Go to the **AWS Console Elastic Block Store Volumes**
+cluster and EBS volume configuration. Go to the **AWS Console Elastic Block Store Volumes**.
 page to verify. The type and number of EBS volumes will vary depending on EBS volume
 configuration chosen in the template and the number of EC2 instances.
 
@@ -66,7 +78,7 @@ configuration chosen in the template and the number of EC2 instances.
 .EBS volume tags
 image::../images/image6.png[Additional6]
 
-==== Verify EBS Encryption with a CMK (Optional)
+==== (Optional) Verify EBS encryption with a CMK
 
 On the same page scroll to the right to verify that the volumes are encrypted with the
 Customer Managed Key assigned in the template. This is only relevant if a CMK was specified.
@@ -76,7 +88,7 @@ If the field was left blank in the template, AWS will generate a key to encrypt 
 .EBS encryption
 image::../images/image7.png[Additional7]
 
-==== Verify the KMS CMK Policy (Optional)
+==== (Optional) Verify the KMS CMK policy
 
 In the AWS Console go to the **Key Management Service** page and select the CMK that was
 chosen in the template. Verify that the policy has been updated with two SIDs, one for the

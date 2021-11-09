@@ -1,3 +1,5 @@
+//TODO Dave, How quickly/often is this list likely to become outdated? We don't usually list Regions any more.
+
 This Quick Start supports the following Regions:
 
 ===== Americas

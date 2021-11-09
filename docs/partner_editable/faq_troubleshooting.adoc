@@ -11,6 +11,8 @@ WARNING: When you set *Rollback on failure* to *Disabled*, you continue to incur
 
 For more information, see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html[Troubleshooting AWS CloudFormation^].
 
+'''
+
 *Q.* I encountered a size-limitation error when I deployed the AWS CloudFormation templates.
 
 *A.* Launch the Quick Start templates from the links in this guide or from another S3 bucket. If you deploy the templates from a local copy on your computer or from a location other than an S3 bucket, you might encounter template-size limitations. For more information, see http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-limits.html[AWS CloudFormation quotas^].
@@ -18,16 +20,35 @@ For more information, see https://docs.aws.amazon.com/AWSCloudFormation/latest/U
 
 == Troubleshooting
 
+//TODO Dave, What's the use case for all the descriptive (nonactionable) information in this section? 
+
 === CloudFormation nested stack deployment
 
-During deployment, you can monitor the progress of the stack by choosing **Events** on the top-level stack. Below is a description of each nested stack’s function in the order in which they are deployed.
+As described earlier in the link:#_launch_the_quick_start [Launch the Quick Start] section, you can monitor the progress of the stack during deployment. To see the nested stacks after deployment, go to the CloudFormation page, choose the top-level stack name, and choose **Events**. 
+
+Below is the event view for the top-level stack followed by the event view for CloudQStack. Note the timestamps to manage expectations on the duration for each nested stack.
+
+[#additional0]
+.CloudFormation top-level stack events
+image::../images/image0.png[Additional0,width=50%,height=50%]
+
+[#additional1]
+.CloudFormation CloudQStack events
+image::../images/image1.png[Additional1]
+
+Following are descriptions of each nested stack, listed in the order of deployment.
 
 ==== AWSVPCSTACK Nested Stack
 
 If deploying in a new VPC, this is the first nested stack that will appear in the CloudFormation console events view.
-This stack creates the VPC, private subnet, public subnet, route tables, NAT gateway, Internet gateway, and a Gateway 
-VPC Endpoint for S3.  It also creates public and private subnets in a second Availability Zone for a future DR cluster.  
+This stack creates the VPC, private subnet, public subnet, route tables, NAT gateway, internet gateway, and a Gateway 
+VPC Endpoint for S3.  It also creates public and private subnets in a second Availability Zone for a future DR cluster.
+
 See the section later in this guide *Adding a DR Cluster*.
+
+//TODO Add links to cross-references like this one above.
+
+//TODO Point to the troubleshooting section "The stack failed on the nested stack AWSVPCSTACK or CloudQStack"? (Similar question for the following descriptions.)
 
 ==== CloudQStack Nested Stack
 
@@ -106,6 +127,8 @@ provisioning instance.
 
 This instance automatically shuts down upon completion of its provisioning tasks. **Do not delete this EC2 instance. It will be used for stack updates.**
 
+//TODO Dave, During what task would people need the above warning? As is, it's buried in a nonactionable chunk of info.
+
 ===== CLOUDWATCHSTACK Nested Stack
 
 This stack creates resource groups, a CloudWatch dashboard, and a CloudWatch log group
@@ -131,17 +154,9 @@ Lambda that sends Qumulo metrics to CloudWatch. The second is the Disk Recovery 
 that monitors EBS volumes and automatically replaces any failed EBS volumes. IAM roles,
 permissions, and events are created for each Lambda function.
 
-Below is the event view for the top-level stack followed by the event view for the CloudQStack. Note the timestamps to manage expectations on the duration for each nested stack.
-
-[#additional0]
-.CloudFormation top-level stack events
-image::../images/image0.png[Additional0,width=50%,height=50%]
-
-[#additional1]
-.CloudFormation CloudQStack events
-image::../images/image1.png[Additional1]
-
 === Where’s the UUID for the cluster?
+
+//TODO Dave, What's a UUID? When and why will people need to look it up? What will they do with it when they find it?
 
 The Provisioning instance grabs a copy of the UUID for the cluster after the first quorum is
 formed. Go to **Parameter Store** and filter on the top-level stack name. The following
@@ -154,15 +169,24 @@ image::../images/image35.png[Additional35]
 
 === Forgot the cluster admin password
 
-The admin password entered when the cluster was originally provisioned is stored in AWS Secrets Manager.  Go to *Secrets Manager* and filter on the top-level stack name.  Then look for *ClusterSecrets* and then *Retrieve secret value*.   Also, if the admin password is changed post-deployment, it must be updated in Secrets Manager for stack updates to function correctly.
+//TODO Dave, What are we accomplishing here? I've added step numbers, but the task is unclear, and the actions seem incomplete.
 
-=== The Stack failed on the nested stack AWSVPCSTACK or CloudQStack
+The admin password entered when the cluster was originally provisioned is stored in AWS Secrets Manager. 
+
+. [___?]
+. Choose *Secrets Manager*, and filter on the top-level stack name. 
+. Look for *ClusterSecrets* and then *Retrieve secret value*.
+. [___?] 
+
+If the admin password is changed postdeployment, it must be updated in Secrets Manager for stack updates to function correctly.
+
+=== The stack failed on the nested stack AWSVPCSTACK or CloudQStack
 
 The S3 Bucket, Key Name Prefix, or Object URL are not correct when deploying from your own S3 bucket. Delete the stack and relaunch
 the template with the correct S3 parameters. Do NOT use the S3 URL, use the Object URL for
 the template or the stack will fail.  If deploying from the AWS Quick Start bucket do not change the bucket name, prefix, or region for the bucket.
 
-=== The Stack failed when provisioning the QSTACK
+=== The stack failed when provisioning the QSTACK
 
 The four most common causes for this are:
 
@@ -173,17 +197,17 @@ The four most common causes for this are:
 
 Review the AMI ID and marketplace subscriptions. Double check the EBS volume config selected in the template. If the cluster failed to place, choose a different AZ to deploy the cluster in to find more available resources by selecting a different private subnet ID within the VPC. Adjust Service Quotas if necessary. Delete the failed stack and relaunch the template after rectifying the problem.
 
-=== The Stack Update failed and rolled back
+=== The stack update failed and rolled back
 
 No harm is done. No Qumulo Cluster parameters for the QSTACK, except the Number of EC2 Instances, can be changed. The number of instances can’t be decreased.
 
-=== The Cluster didn’t form quorum
+=== The cluster didn’t form quorum
 
 If the quorum has not been formed the UI will appear as below.  DO NOT form quorum manually because the provisioning instance will not
 be able to complete secondary provisioning of the cluster and AWS infrastructure.
 
 [#additional36]
-.UI for a Cluster that hasn't formed quorum
+.UI for a cluster that hasn't formed quorum
 image::../images/image36.png[Additional36]
 
 The four most common causes for this are:
@@ -197,11 +221,11 @@ Check for typos by reviewing the parameters entered in the template in the Cloud
 console. Double check the software version specified for the cluster and make sure it is equal
 to or newer than the version the Marketplace offer lists. Rectify and restart the Provisioning instance or delete the stack and redeploy.
 
-=== The Provisioning instance didn’t shut down
+=== The provisioning instance didn’t shut down
 
 In most use cases the provisioning instance will shutdown in 5 minutes or less after the stack has completed deployment.  If the Provisioning instance hasn't shutdown after 15 minutes there's likely an issue.  Each software upgrade takes ~4 minutes.  The instances are upgraded in parallel so instance count has a minimal impact on execution time.  If you have an AMI ID with an older software verison it may have to do multiple upgrades to get the cluster on the desired version.  See the *AWS Parameter Store last-run-status* section below.
 
-==== Common Causes
+==== Common causes
 
 The four most common causes for this are:
 

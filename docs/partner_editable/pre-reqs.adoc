@@ -1,40 +1,52 @@
-// If no preperation is required, remove all content from here
+// If no preparation is required, remove all content from here
+
+//TODO Dave, This "pre-reqs.adoc" file is packed with implied task information that's not clear. Let's review together.
 
 ==== Deploying with a custom IAM role
 
+//TODO Dave, What are the steps within this task? When do we do them?
+
 If you don't have the AWS recommended _AdministratorAccess_ managed policy then the following AWS services are required in a custom IAM role or IAM user to deploy this template:
 
-* application-autoscaling:*
-* applicationinsights:*
-* autoscaling:*
-* cloudformation:*
-* cloudtrail:*
-* cloudwatch:*
-* compute-optimizer:*
-* ec2:*
-* elasticloadbalancing:*
-* events:*
-* health:*
-* iam:*
-* kms:*
-* lambda:*
-* logs:*
-* resource-groups:*
-* route53:*
-* s3:*
-* secretsmanager:*
-* sns:*
-* ssm:*
-* sqs:*
-* tag:*
+//TODO Dave, How do people find out if they have the recommended managed policy? 
+
+//TODO Dave, Some of these items aren't services, as we call them above. What are all these?
+
+* application-autoscaling:
+* applicationinsights:
+* autoscaling:
+* cloudformation:
+* cloudtrail:
+* cloudwatch:
+* compute-optimizer:
+* ec2:
+* elasticloadbalancing:
+* events:
+* health:
+* iam:
+* kms:
+* lambda:
+* logs:
+* resource-groups:
+* route53:
+* s3:
+* secretsmanager:
+* sns:
+* ssm:
+* sqs:
+* tag:
 
 ==== Deploying without a Route 53 Private Hosted Zone
 
-Customers using Active Directory will often use DNS hosted by the domain controller or another DNS server.  Reference this Qumulo whitepaper for DNS options in AWS for a comprehensive discussion of the topic: https://qumulo.com/resources/qumulo-dns-options-in-aws/[DNS options in AWS to enable IP Failover and Client Distribution^]
+//TODO Dave, For whom does this section apply? What are the steps within this task? When do people do them?
+
+Customers using Active Directory will often use DNS hosted by the domain controller or another DNS server. Reference this Qumulo whitepaper for DNS options in AWS for a comprehensive discussion of the topic: https://qumulo.com/resources/qumulo-dns-options-in-aws/[DNS options in AWS to enable IP Failover and Client Distribution^]
 
 ==== Deploying in a VPC with no Internet access
 
-The architecure referenced herein expects a NAT Gateway in the VPC.  It is possible to deploy this Quick Start in an existing VPC without Internet access.  To support deployments without public Internet access the following VPC and S3 bucket requirements must be met:
+//TODO Dave, For whom does this section apply? What are the steps within this task? When do people do them?
+
+The architecture referenced herein expects a NAT gateway in the VPC. It is possible to deploy this Quick Start in an existing VPC without Internet access. To support deployments without public internet access the following VPC and S3 bucket requirements must be met:
 
 * VPC Interface Endpoints to support AWS services
 * A security group applied to each VPC Interface Endpoint
@@ -43,6 +55,8 @@ The architecure referenced herein expects a NAT Gateway in the VPC.  It is possi
 * If software upgrades are to be performed by the template then Qumulo Core software must be placed in the /upgrade folder within the bucket in Qumulo Trends format
 
 ===== VPC Interface Endpoints (for VPCs with no Internet access)
+
+//TODO Dave, For whom does this section apply? What are the steps within this task? When do people do them?
 
 It is recommended to leave the policy for each endpoint as Full Access. The following VPC Interface Endpoints must be configured when deploying without Internet Access:
 
@@ -62,6 +76,8 @@ It is recommended to leave the policy for each endpoint as Full Access. The foll
 
 ===== VPC Interface Endpoints Security Group rules (for VPCs with no Internet access)
 
+//TODO Dave, For whom does this section apply? What are the steps within this task? When do people do them?
+
 To allow traffic from the provisioning node and the Qumulo cluster, the security group applied to the VPC interface endpoints must have the following Security Groups added as Inbound Rule Sources:
 
 * [stack name]-PROVISIONINGSTACK-[aws 12 digit code]-ProvisionerSG-[aws 12 digit code]
@@ -69,13 +85,17 @@ To allow traffic from the provisioning node and the Qumulo cluster, the security
 
 ===== Automated Qumulo Core upgrades during deployment (for VPCs with no Internet access)
 
+//TODO Dave, For whom does this section apply? What are the steps within this task? When do people do them?
+
 If you enter a newer software version than the Qumulo Core AMI was released with, the provisioning instance will expect to find the code via the Internet, or in this case from the S3 bucket.  Since the provisioning instance will not be able to reach the public Internet, it will look for code in the template’s S3 bucket at the following prefix: [your prefix]/upgrade/. Typically this is quickstart-qumulo-cloud-q-main/upgrade/. All quarterly released images between the AMI ID release version to, and including, the requested version must be present in the bucket. For example, if the AMI was released with 4.0.6 and the desired version is 4.2.3, then 4.1.0.1, 4.2.0, and 4.2.3 versions must be in the bucket. If the software images are not present in the S3 bucket the Provisioning instance will not shutdown, nor will it progress with provisioning activities. To see the quarterly release cadence just cat the file [your prefix/cfn-init/upgrade-order.txt. Place the image(s) in the bucket and restart the provisioning instance if this occurs. The image(s) must be in the Qumulo Trends format: qumulo_upgrade_cloud_x.y.z.qimg. If you have downloaded Qumulo .img files from Box.com just rename them to the Qumulo Trends format and place them in your S3 bucket.
 
 ==== Whitelisting Qumulo public access for customers with AWS Direct Connect
 
-Customers with Direct Connect may choose to restrict public access to specific URLs with a corporate firewall.  Below is a list of the Qumulo public URLs and their purpose.  The Public IP addresses of these URLs are highly static, but may occasionally change.  Whitelist the URL if you can.  Whitelist the IP Address resolved if you must.
+//TODO Dave, For whom does this section apply? What are the steps within this task? When do people do them? (AWS doesn't say "whitelist" any more.)
+
+Customers with Direct Connect may choose to restrict public access to specific URLs with a corporate firewall.  Below is a list of the Qumulo public URLs and their purpose.  The Public IP addresses of these URLs are highly static, but may occasionally change. Whitelist the URL if you can. Whitelist the IP Address resolved if you must.
 
 * https://trends.qumulo.com This URL is used to pull code for software upgrades during provisioning and may also be leveraged by customers for historical statistics for their cluster.
-* https://missionq.qumulo.com This URL is used by the cluster to deliver statitistics to Qumulo's remote monitoring service which is included free of charge in your Qumulo subscription.
+* https://missionq.qumulo.com This URL is used by the cluster to deliver statistics to Qumulo's remote monitoring service which is included free of charge in your Qumulo subscription.
 * https://ep1.qumulo.com This URL is used by the cluster if you enable remote VPN support for Qumulo Customer Success.  This is disabled by default.
 * https://monitor.qumulo.com This URL also leverages remote VPN support to deliver logs when collaborating with Qumulo Customer Success.
