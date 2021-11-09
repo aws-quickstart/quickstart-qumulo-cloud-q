@@ -3,8 +3,8 @@
 This Quick Start provides three deployment options:
 
 * *Deploy {partner-product-short-name} into a new VPC*. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateway, security groups, and other infrastructure components. It then deploys {partner-product-short-name} into this new VPC with all the parameters of the advanced template.
-* *Deploy {partner-product-short-name} into an existing VPC - Advanced*. This option provisions {partner-product-short-name} in your existing AWS infrastructure with all advanced parameters configurable.
 * *Deploy {partner-product-short-name} into an existing VPC - Standard*. This option provisions {partner-product-short-name} in your existing AWS infrastructure with a minimal set of parameters.
+* *Deploy {partner-product-short-name} into an existing VPC - Advanced*. This option provisions {partner-product-short-name} in your existing AWS infrastructure with all advanced parameters configurable.
 
 The Quick Start provides separate templates for these options. It also lets you configure Classless Inter-Domain Routing (CIDR) blocks, instance types, and {partner-product-short-name} settings, as discussed later in this guide.
 
@@ -41,3 +41,6 @@ The table below compares the deployment, customization, and optional parameters 
 |Optional: Specify Environment type | |✓ |✓ 
 |===
 
+//TODO Dave, Does it help customers to group the rows this way (deploy, customize, and optional groupings)? Seems like we'd group all the standard parameters at the top.
+
+//TODO Dave, Shouldn't we say "Optional" for every row that's not in the existing-standard template?
