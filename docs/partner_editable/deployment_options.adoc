@@ -43,4 +43,8 @@ The table below compares the deployment, customization, and optional parameters 
 
 //TODO Dave, Does it help customers to group the rows this way (deploy, customize, and optional groupings)? Seems like we'd group all the standard parameters at the top.
 
+// Marcia, I think it makes sense, but if you disagree I'm happy to re-order the list.
+
 //TODO Dave, Shouldn't we say "Optional" for every row that's not in the existing-standard template?
+
+// Marcia, almost everything in the list is optional. For instance, "Deploy from Quick Start Bucket" and "Deploy from your own Bucket" are both optional since they are mutually exclusive. Also, the things like "Customize Qumulo EC2 instance type" and "Customize Qumulo EC2 Instance Count" are optional since customers can simply accept the default values. The items marked "optional" in the table are things that the customer can choose to deploy but that aren't deployed by default.

@@ -6,10 +6,14 @@ This guide provides instructions for deploying {partner-product-short-name} Quic
 
 //TODO Dave, What do we want people to understand by "file data platform"? This doesn't seem to be an industry term; a Google search brings up only Qumulo pages.
 
+//Marcia, it is specific to Qumulo. Their product combines file storage and management (which lots of other companies offer) but also includes an API for building custom file management actions.
+
 This Quick Start is for users who want to build a scale-out, multiprotocol, file data platform with 1TB to 6PB of usable capacity in a single name space hosted on AWS.
 
 //TODO Dave, What do we want people to understand by "scale-out"?
 
 //TODO Dave, What do we want people to understand by "multiprotocol"?
+
+//Marcia, "scale-out" means it can be dynamically expanded as the customer's storage demand increases, and "multiprotocol" means that data can be accessed simultaneously via SMB and NFS. I thought the link to their knowledge base was sufficient for customers wanting to dive deeper.
 
 For more information, see the https://care.qumulo.com/hc/en-us/categories/115000637447-KNOWLEDGE-BASE[Qumulo knowledge base^].

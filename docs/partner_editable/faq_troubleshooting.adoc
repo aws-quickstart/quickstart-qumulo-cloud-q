@@ -22,6 +22,8 @@ For more information, see https://docs.aws.amazon.com/AWSCloudFormation/latest/U
 
 //TODO Dave, What's the use case for all the descriptive (nonactionable) information in this section? 
 
+// Marcia, this was moved from an earlier section in the guide. In my opinion the entire "CloudFormation nested stack deployment" section can be removed since it's just telling the customer how to view nested stacks during deployment.
+
 === CloudFormation nested stack deployment
 
 As described earlier in the link:#_launch_the_quick_start [Launch the Quick Start] section, you can monitor the progress of the stack during deployment. To see the nested stacks after deployment, go to the CloudFormation page, choose the top-level stack name, and choose **Events**. 
@@ -44,11 +46,7 @@ If deploying in a new VPC, this is the first nested stack that will appear in th
 This stack creates the VPC, private subnet, public subnet, route tables, NAT gateway, internet gateway, and a Gateway 
 VPC Endpoint for S3.  It also creates public and private subnets in a second Availability Zone for a future DR cluster.
 
-See the section later in this guide *Adding a DR Cluster*.
-
-//TODO Add links to cross-references like this one above.
-
-//TODO Point to the troubleshooting section "The stack failed on the nested stack AWSVPCSTACK or CloudQStack"? (Similar question for the following descriptions.)
+See the link:#_8_multi_az_with_qumulo_dr[Multi-AZ with Qumulo DR] section of the guide.
 
 ==== CloudQStack Nested Stack
 
@@ -125,10 +123,6 @@ provisioning instance.
 * Tracks the provisioning instance ‘last-run-status’ in Parameter Store
 * Configures Termination Protection for the Stack and the EC2 Instances
 
-This instance automatically shuts down upon completion of its provisioning tasks. **Do not delete this EC2 instance. It will be used for stack updates.**
-
-//TODO Dave, During what task would people need the above warning? As is, it's buried in a nonactionable chunk of info.
-
 ===== CLOUDWATCHSTACK Nested Stack
 
 This stack creates resource groups, a CloudWatch dashboard, and a CloudWatch log group
@@ -156,12 +150,7 @@ permissions, and events are created for each Lambda function.
 
 === Where’s the UUID for the cluster?
 
-//TODO Dave, What's a UUID? When and why will people need to look it up? What will they do with it when they find it?
-
-The Provisioning instance grabs a copy of the UUID for the cluster after the first quorum is
-formed. Go to **Parameter Store** and filter on the top-level stack name. The following
-parameters are stored by the Provisioning instance. The UUID is last on the list. Select it to
-view the UUID.
+The Provisioning instance grabs a copy of the Universally Unique Identifier (UUID) for the cluster after the first quorum is formed. Knowing the UUID may be necessary for troubleshooting future stack updates. Go to **Parameter Store** and filter on the top-level stack name. The following parameters are stored by the Provisioning instance. The UUID is last on the list. Select it to view the UUID.
 
 [#additional35]
 .Parameters
@@ -169,14 +158,11 @@ image::../images/image35.png[Additional35]
 
 === Forgot the cluster admin password
 
-//TODO Dave, What are we accomplishing here? I've added step numbers, but the task is unclear, and the actions seem incomplete.
+The admin password entered when the cluster was originally provisioned is stored in AWS Secrets Manager. If you have forgotten the password it can be retrieved as follows.
 
-The admin password entered when the cluster was originally provisioned is stored in AWS Secrets Manager. 
-
-. [___?]
-. Choose *Secrets Manager*, and filter on the top-level stack name. 
-. Look for *ClusterSecrets* and then *Retrieve secret value*.
-. [___?] 
+. Open https://console.aws.amazon.com/secretsmanager[Secrets Manager] in the AWS Console
+. Choose *Secrets*, and filter on the top-level stack name. 
+. Look for *ClusterSecrets* and then select *Retrieve secret value*.
 
 If the admin password is changed postdeployment, it must be updated in Secrets Manager for stack updates to function correctly.
 

@@ -4,8 +4,6 @@ Deploying this Quick Start for a new virtual private cloud (VPC) with
 default parameters builds the following {partner-product-short-name} environment in the
 AWS Cloud.
 
-//TODO Dave, Please upload your revised .pptx file. 
-
 //TODO Marcia still to fine-tune the editing here and throughout.
 
 [#architecture1]
