@@ -1,4 +1,4 @@
-//TODO Dave, How quickly/often is this list likely to become outdated? We don't usually list Regions any more.
+//Dave, How quickly/often is this list likely to become outdated? We don't usually list Regions any more.
 
 //Marcia, this is here because we're deploying a Marketplace listing that isn't available in all Regions. I don't have any problem with removing the section.
 

@@ -34,4 +34,4 @@
 // :git_repo_url: https://example.com/
 // Uncomment the following attribute if you are deploying AWS Control Tower. 
 // :control_tower
-:custom_supported_regions:
+//:custom_supported_regions:

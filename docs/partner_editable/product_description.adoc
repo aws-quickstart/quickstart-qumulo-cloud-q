@@ -2,9 +2,8 @@
 // Briefly describe the software. Use consistent and clear branding. 
 // Include the benefits of using the software on AWS, and provide details on usage scenarios.
 
-Qumulo Cloud Q is an automatically-provisioned multi-nude cluster of Qumulo file storage nodes.
+This Quick Start builds an automatically provisioned cluster of Qumulo file storage nodes in the AWS Cloud. Any subsequent configuration of the file data platform is outside the scope of this document.
 
-//TODO Dave, What to say about Qumulo Cloud Q (this QS's name)vs. "Qumulo for AWS"?
-//TODO Dave, Mention unstructured data?
-//TODO Dave, Mention Terraform?
-//TODO Dave, Mention "cluster"?
+//TODO Dave, Isn't some of this doc addressing "subsequent configuration," though?
+
+For more information, see the https://care.qumulo.com/hc/en-us/categories/115000637447-KNOWLEDGE-BASE[Qumulo knowledge base^].
