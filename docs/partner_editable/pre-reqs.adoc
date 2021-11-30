@@ -61,13 +61,15 @@ The architecture referenced herein expects a NAT gateway in the VPC. It is possi
 * A security group applied to each VPC Interface Endpoint
 * A Gateway VPC Endpoint for S3 access
 * The code for the Quick Start must be downloaded from GitHub and placed in your own S3 bucket
-* If software upgrades are to be performed by the template then Qumulo Core software must be placed in the /upgrade folder within the bucket in Qumulo Trends format
+* If software upgrades are to be performed by the template, Qumulo Core software must be placed in the `/upgrade` folder within the bucket in Qumulo Trends format.
 
-===== 1. VPC Interface Endpoints (for VPCs with no Internet access)
+===== 1. VPC Interface Endpoints (for VPCs with no internet access)
 
-. Open the https://console.aws.amazon.com/vpc[VPC Console] and select *Endpoints*
-. Select *Create endpoint*
-. Create each of the following endpoints in your VPC. It is recommended to leave the policy for each endpoint as Full Access.
+//TODO Dave, What is the task we're doing? Rephrase accordingly. (Do the same for each numbered section throughout.)
+
+. Open the https://console.aws.amazon.com/vpc[VPC Console^] and select *Endpoints*.
+. Choose *Create endpoint*.
+. Create the following endpoints in your VPC. Keep the policy for each endpoint as *Full Access*.
 .. ec2
 .. events
 .. kms
@@ -84,24 +86,30 @@ The architecture referenced herein expects a NAT gateway in the VPC. It is possi
 
 ===== 2. VPC Interface Endpoints Security Group rules (for VPCs with no Internet access)
 
-The VPC endpoints created in the previous step are all associated with a security group. To allow traffic from the provisioning node and the Qumulo cluster, the security group applied to the VPC interface endpoints must have the following Security Groups added as Inbound Rule Sources:
+The VPC endpoints created in the previous step are all associated with a security group. To allow traffic from the provisioning node and the Qumulo cluster, the security group applied to the VPC interface endpoints must have the following security groups added as inbound-rule sources (replacing the information in brackets):
 
-* [stack name]-PROVISIONINGSTACK-[aws 12 digit code]-ProvisionerSG-[aws 12 digit code]
-* [stack name]-QSTACK-[aws 12 digit code]-QumuloSecurityGroup-[aws 12 digit code]
+* `<stack name>-PROVISIONINGSTACK-<aws 12 digit code>-ProvisionerSG-<aws 12 digit code>`
+* `<stack name>-QSTACK-<aws 12 digit code>-QumuloSecurityGroup-<aws 12 digit code>`
 
-. Open the https://console.aws.amazon.com/vpc[VPC Console] and select *Endpoints*
-. Select one of your newly-created endpoints and open the *Security Groups* tab
-. Click on the associated security group
-. From the security group section select *Edit inbound rules*
-. Add inbound rules allowing all traffic from the provisioning stack and the Q stack listed above
+. Open the https://console.aws.amazon.com/vpc[VPC Console] and select *Endpoints*.
+. Select one of your newly-created endpoints and open the *Security Groups* tab.
+. Select the associated security group.
+. From the *Security Group* section, select *Edit inbound rules*.
+. Add inbound rules allowing all traffic from the provisioning stack and the Q stack listed earlier.
 
-===== 3. Automated Qumulo Core upgrades during deployment (for VPCs with no Internet access)
+===== 3. Automated Qumulo Core upgrades during deployment (for VPCs with no internet access)
 
-If you enter a newer software version than the Qumulo Core AMI was released with, the provisioning instance will expect to find the code via the Internet, or in this case from the S3 bucket.  Since the provisioning instance will not be able to reach the public Internet, it will look for code in the template’s S3 bucket at the following prefix: [your prefix]/upgrade/. Typically this is quickstart-qumulo-cloud-q-main/upgrade/. All quarterly released images between the AMI ID release version to, and including, the requested version must be present in the bucket. For example, if the AMI was released with 4.0.6 and the desired version is 4.2.3, then 4.1.0.1, 4.2.0, and 4.2.3 versions must be in the bucket. If the software images are not present in the S3 bucket the Provisioning instance will not shutdown, nor will it progress with provisioning activities. To see the quarterly release cadence just cat the file [your prefix/cfn-init/upgrade-order.txt. Place the image(s) in the bucket and restart the provisioning instance if this occurs. The image(s) must be in the Qumulo Trends format: qumulo_upgrade_cloud_x.y.z.qimg. If you have downloaded Qumulo .img files from Box.com just rename them to the Qumulo Trends format and place them in your S3 bucket.
+If you enter a newer software version than the Qumulo Core AMI was released with, the provisioning instance expects to find the code via the internet, or, in this case, from the S3 bucket. Since the provisioning instance will not be able to reach the public internet, it looks for code in the template's S3 bucket at the following prefix: `<your prefix>/upgrade/`. Typically this is `quickstart-qumulo-cloud-q-main/upgrade/`. All quarterly released images between the AMI ID release version to, and including, the requested version must be present in the bucket. For example, if the AMI was released with 4.0.6 and the desired version is 4.2.3, then 4.1.0.1, 4.2.0, and 4.2.3 versions must be in the bucket. If the software images are not present in the S3 bucket the Provisioning instance will not shutdown, nor will it progress with provisioning activities. 
 
-. To deploy automated Qumulo Core upgrades during a deployment into a VPC with no Internet access you must have deployed from your own S3 bucket. You can access the bucket from the https://console.aws.amazon.com/S3[S3 Console] or via CLI.
-. Ensure the contents of the Quick Start are located in a directory in your S3 bucket.
-. Upload the required images to the /upgrade/ directory under the S3 location from which you will be performing the deployment.
+To see the quarterly release cadence just cat the file `<your prefix>/cfn-init/upgrade-order.txt`. Place the images in the bucket, and restart the provisioning instance if this occurs. The images must be in the Qumulo Trends format: `qumulo_upgrade_cloud_x.y.z.qimg`. If you have downloaded Qumulo .img files from Box.com, rename them to the Qumulo Trends format, and place them in your S3 bucket.
+
+//TODO Dave, what is "just cat" in the paragraph above?
+
+//TODO Dave, what does "if this occurs" refer to?
+
+. To deploy automated Qumulo Core upgrades during a deployment into a VPC with no internet access you must have deployed from your own S3 bucket. You can access the bucket from the https://console.aws.amazon.com/S3[S3 Console^] or via CLI.
+. Verify that the contents of the Quick Start are located in a directory in your S3 bucket.
+. Upload the required images to the `/upgrade/` directory under the S3 location from which you will be performing the deployment.
 
 ==== Allowing Qumulo public access for customers with AWS Direct Connect
 
