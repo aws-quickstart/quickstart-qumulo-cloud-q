@@ -7,10 +7,10 @@
 |Elastic IP addresses (optional for public management) |1
 |Security groups |2
 |IAM roles |4
-|Qumulo EC2 instances (m5.2xlarge, m5.4xlarge, m5.8xlarge, m5.12xlarge, m5.16xlarge, m5.24xlarge, c5n.4xlarge, c5n.9xlarge, or c5n.18xlarge) |4 to 20
-|Provisioner EC2 instance (m5.large) |1
+|Qumulo EC2 instances |4 to 20
+|Provisioner EC2 instance |1
 |Lambda functions |2
-|EBS volumes (gp2, st1, or sc1; 2.34 TiB to 6.25 PiB) | qty? ____
+|EBS volumes | qty? ____
 |===
 
 //TODO Dave, How many EBS volumes?
