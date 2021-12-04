@@ -2,8 +2,4 @@
 // Briefly describe the software. Use consistent and clear branding. 
 // Include the benefits of using the software on AWS, and provide details on usage scenarios.
 
-This Quick Start builds an automatically provisioned cluster of Qumulo file storage nodes in the AWS Cloud. Any subsequent configuration of the file data platform is outside the scope of this document.
-
-//TODO Dave, Isn't some of this doc addressing "subsequent configuration," though?
-
-For more information, see the https://care.qumulo.com/hc/en-us/categories/115000637447-KNOWLEDGE-BASE[Qumulo knowledge base^].
+This Quick Start automatically provisions a cluster of Qumulo file-storage nodes in the AWS Cloud. For more information, see the https://care.qumulo.com/hc/en-us/categories/115000637447-KNOWLEDGE-BASE[Qumulo knowledge base^].

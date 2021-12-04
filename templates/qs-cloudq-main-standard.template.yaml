@@ -22,7 +22,7 @@ AWSTemplateFormatVersion: "2010-09-09"
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 # SOFTWARE.
 
-Description: This is the main template to spin up a Basic Qumulo Cluster in an existing VPC with minimal options.  It calls cloudq.cft.yaml to instantiate the infrastructure. (qs-1s6n2i6a8)
+Description: This is the main template to spin up a basic Qumulo cluster in an existing VPC with minimal options. It calls cloudq.cft.yaml to instantiate the infrastructure. (qs-1s6n2i6a8)
 
 Metadata:
   cfn-lint:

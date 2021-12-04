@@ -1,5 +1,3 @@
-// Add any tips or answers to anticipated questions.
-
 == FAQ
 
 *Q.* I encountered a *CREATE_FAILED* error when I launched the Quick Start.
@@ -20,40 +18,37 @@ For more information, see https://docs.aws.amazon.com/AWSCloudFormation/latest/U
 
 == Troubleshooting
 
+//TODO Dave, Please tighten up the Troubleshooting section however you can, per our conversation, making sure that all headings are stated as problem statements. Keep only those screenshots that add value.
+
 === Find the UUID for the cluster
 
-//TODO Dave, Please revise this heading (and all headings under Troubleshooting) as problem statements.
+You may need to know your cluster's universally unique identifier (UUID) for troubleshooting. The provisioning instance stores a copy of the UUID in Parameter Store. To find the UUID, follow these steps: 
 
-The provisioning instance grabs a copy of the universally unique identifier (UUID) for the cluster after the first quorum is formed. Knowing the UUID may be necessary for troubleshooting future stack updates. Go to *Parameter Store* and filter on the top-level stack name. The following parameters are stored by the provisioning instance. The UUID is last on the list. Select it to view the UUID.
+. Open https://console.aws.amazon.com/systems-manager/parameters/[Parameter Store in the AWS Systems Manager console^].
+. Select the top-level stack name.  
+. Select the UUID parameter (last on the list). The UUID appears.
 
-[#additional35]
-.Parameters
-image::../images/image35.png[Additional35]
+//TODO Dave, which of the following procedures require a UUID? It seems odd that we never mention it again.
 
-=== Retrieve the cluster admin password
+=== I don't remember the cluster administrator password
 
-//TODO Dave, Please revise this heading (and all headings under Troubleshooting) as problem statements.
-
-If you have forgotten the password, retrieve it from AWS Secrets Manager as follows:
+You can retrieve the cluster administrator password from AWS Secrets Manager as follows:
 
 . Open https://console.aws.amazon.com/secretsmanager[Secrets Manager^] in the AWS Console.
 . Choose *Secrets*, and filter on the top-level stack name. 
 . Look for *ClusterSecrets* and then choose *Retrieve secret value*.
 
-If the administrator password is changed after the Quick Start is deployed, update it in Secrets Manager so that stack updates will work correctly.
+=== The stack failed when provisioning the nested stack AWSVPCSTACK or CloudQStack
 
-//TODO Dave, The previous sentence doesn't belong in this section. Where does it go? What problem does it solve? And what are the steps?
-
-=== The stack failed on the nested stack AWSVPCSTACK or CloudQStack
-
+View your nested stacks...
 If the S3 bucket, key name prefix, or object URL are incorrect when deploying from your own S3 bucket, delete the stack and relaunch the template with the correct S3 parameters. Do NOT use the S3 URL. Use the object URL for
 the template. Otherwise, the stack fails. If deploying from the AWS Quick Start bucket, do not change the bucket's name, prefix, or Region.
 
-//TODO Dave, How do we know if the S3 bucket, key name prefix, or object URL are incorrect?
+//TODO Dave, Please rewrite the above chunk for clarity as we discussed. How do we know if the S3 bucket, key name prefix, or object URL are incorrect? What are the action steps? etc.
 
-=== The stack failed when provisioning the QSTACK
+=== The stack failed when provisioning the nested stack QSTACK
 
-These are the four most common causes:
+These are the most common causes:
 
 * An AWS Marketplace offer has not been accepted that matches the *Qumulo AWS Marketplace Offering Accepted* parameter entered in the template.
 * The EBS volumes configuration doesn't match the requirements for the *Qumulo AMI ID* entered when using the specified-AMI-ID option.
@@ -62,50 +57,38 @@ These are the four most common causes:
 
 Take the following actions:
 
-Review the AMI ID and marketplace subscriptions. Check the EBS volume configuration selected in the template. If the cluster failed to place, choose a different Availability Zone to deploy the cluster in to find more available resources by selecting a different private subnet ID within the VPC. Adjust Service Quotas if necessary. Delete the failed stack and relaunch the template after rectifying the problem.
+Review the AMI ID and Marketplace subscriptions. Check the EBS volume configuration selected in the template. If the cluster failed to place, choose a different Availability Zone to deploy the cluster in to find more available resources by selecting a different private subnet ID within the VPC. Adjust service quotas if necessary. Delete the failed stack and relaunch the template after rectifying the problem.
 
-//TODO Dave, Please write out the above actions as either steps or bullets, depending on whether they need to be done in sequence.
-
-=== The stack update failed and rolled back
-
-No harm is done. No Qumulo cluster parameters for the QSTACK, except the number of EC2 instances, can be changed. The number of instances can’t be decreased.
-
-//TODO Dave, Please rephrase the above to avoid negative statements ("no" and "can't"). Clarify what has happened, any impact it might have, and any actions we might take.
+//TODO Dave, Please write out the above actions as either steps or subbullets, depending on whether they need to be done in sequence.
 
 === The cluster didn’t form quorum
 
-If the quorum has not been formed, the UI appears as shown in the following screenshot.
-
-[#additional36]
-.UI for a cluster that hasn't formed quorum
-image::../images/image36.png[Additional36]
-
-These are the four most common causes:
+You know that the cluster quorum didn't form if you're prompted to agree to the end user agreement when you open the Qumulo console instead of being prompted for your user name and password. These are the most common causes:
 
 * The software version specified in the template doesn’t exist.
 * The software version specified in the template is older than the AMI software version.
 * The VPC doesn't have public internet access.
 * The VPC doesn’t have public internet access and the upgrade image(s) were not placed in the `/upgrade`` folder in the S3 bucket. See *The Provisioning instance didn't shut down*.
 
-//TODO Dave, Please make cross-links to section headings.
-
-DO NOT form quorum manually because the provisioning instance will not
-be able to complete secondary provisioning of the cluster and AWS infrastructure.
+//TODO Cross-link to that section heading.
 
 Take the following actions:
 
 Check for typos by reviewing the parameters entered in the template in the CloudFormation
-console. Confirm that the software version specified for the cluster is equal to or newer than the version the Marketplace offer lists. Rectify and restart the provisioning instance or delete the stack and redeploy.
+console. Confirm that the software version specified for the cluster is equal to or newer than the version that the Marketplace offer lists. Rectify and restart the provisioning instance or delete the stack and redeploy.
+
+DO not form quorum manually because the provisioning instance will not
+be able to complete secondary provisioning of the cluster and AWS infrastructure.
 
 //TODO Dave, Please write out the above actions as either steps or bullets, depending on whether they need to be done in sequence.
 
 === The provisioning instance didn't shut down
 
-In most use cases the provisioning instance shuts down within five minutes of the stack completing deployment. If the provisioning instance hasn't shut down after 15 minutes, there's likely an issue. Each software upgrade takes ~4 minutes. The instances are upgraded in parallel, so instance count has a minimal impact on execution time. If you have an AMI ID with an older software version, it may have to do multiple upgrades to get the cluster on the desired version. See the *AWS Parameter Store last-run-status* section below.
+//TODO Dave, How might we streamline this big section with all its subsections? 
 
-//TODO Dave, please create a cross-ref here.
+In most use cases the provisioning instance shuts down within five minutes of the stack completing deployment. If the provisioning instance hasn't shut down after 15 minutes, there's likely an issue. Each software upgrade takes ~4 minutes. The instances are upgraded in parallel, so instance count has a minimal impact on execution time. If you have an AMI ID with an older software version, it may have to do multiple upgrades to get the cluster on the desired version. See the *AWS Parameter Store last-run-status* section.
 
-//TODO Dave, In the previous paragraph, separate the description from the actions.
+//TODO cross-link
 
 ==== Common causes
 
@@ -123,16 +106,13 @@ Take the following actions:
 . Update the administrative password.
 . Restart the provisioning instance. See the sections that follow on restarting the provisioning instance, monitoring its status in the Parameter Store, and downloading logs.
 
-//TODO Dave, Please give cross-links to the specific sections.
+//TODO cross-link to the specific sections.
 
 //TODO Dave, Please expand on each step above. How do we "clean up the CMK"? How do we "correct the VPC infrastructure"?
 
 //TODO Dave, I've numbered the above as steps, but do we do these things in sequence? If not, clarify when you'd do each thing.
 
-
 ==== Review the AWS Parameter Store last-run status
-
-//TODO Dave, Please revise this heading (and all headings under Troubleshooting) as problem statements.
 
 If the provisioning instance doesn't automatically shut down, review the AWS Systems Manager Parameter Store *last-run-status* parameter to see where it stopped. As shown in the following screenshot, the parameter history shows the major blocks in the code where the provisioning instance executes. In this example, `QCluster1` was built for the first time as noted by the *Forming first quorum and configuring cluster* update to the last-run-status parameter. Two software upgrades were also performed per the Qumulo quarterly cadence to reach the 4.2.0 software release.
 
@@ -143,15 +123,11 @@ image::../images/image37.png[Additional37]
 
 ==== Restart the provisioning instance
 
-//TODO Dave, Please revise this heading (and all headings under Troubleshooting) as problem statements.
-
 The provisioning instance is designed to restart with every stack update. Further, it may be manually stopped from the AWS Console, if it doesn’t automatically stop, and then you can restart it manually. This may be helpful, for example, if the software wasn't placed in the S3 bucket when deploying without internet access, or a CMK policy wasn't cleaned up prior to deployment, or intended internet connectivity wasn’t functioning as expected and has been rectified.
 
 //TODO Dave, In the previous paragraph, separate the description from the actions, and give enough detail to complete the actions.
 
 ==== Download the provisioning-instance log
-
-//TODO Dave, Please revise all Troubleshooting headings as problem statements.
 
 If none of the preceding troubleshooting steps rectify your problem, you may find the
 provisioning-instance log helpful. To retrieve the log follow these steps:
@@ -169,9 +145,7 @@ resolution.
 
 ==== The provisioning-instance flowchart
 
-//TODO Dave, Please revise this Troubleshooting heading as a problem statement. 
-
-//TODO Dave, Clarify why this flowchart is in this section, how we get to the full flowchart, and what we do with this info.
+//TODO Dave, What we do with this info? It's not clear to me why it's in the doc.
 
 The provisioning instance executes the code in user data every boot cycle. The abbreviated flowchart, a
 logic diagram, below shows the major branches and AWS SSM Parameter Store values for
