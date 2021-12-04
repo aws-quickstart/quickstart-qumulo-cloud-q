@@ -1,50 +1,16 @@
 // Edit this placeholder text to accurately describe your architecture.
 
-This Quick Start provides three deployment options:
+This Quick Start provides two deployment options:
 
-* *Deploy {partner-product-short-name} into a new VPC*. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateway, security groups, and other infrastructure components. It then deploys {partner-product-short-name} into this new VPC with all the parameters of the advanced template.
-* *Deploy {partner-product-short-name} into an existing VPC - Standard*. This option provisions {partner-product-short-name} in your existing AWS infrastructure with a minimal set of parameters.
-* *Deploy {partner-product-short-name} into an existing VPC - Advanced*. This option provisions {partner-product-short-name} in your existing AWS infrastructure with all advanced parameters configurable.
+* *Deploy {partner-product-short-name} into a new VPC*. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateway, security groups, and other infrastructure components. It then deploys {partner-product-short-name} into the new VPC. By default, this option deploys a Route 53 private hosted zone to resolve IP addresses.
+* *Deploy {partner-product-short-name} into an existing VPC*. This option provisions {partner-product-short-name} in your existing AWS infrastructure. If your VPC already has a means of DNS resolution—for example, if you use Active Directory—you will not need to deploy a Route 53 private hosted zone.
 
-The Quick Start provides separate templates for these options. It also lets you configure Classless Inter-Domain Routing (CIDR) blocks, instance types, and {partner-product-short-name} settings, as discussed later in this guide.
+The Quick Start provides separate templates for these options. It also lets you configure Classless Inter-Domain Routing (CIDR) blocks, instance types, and {partner-product-short-name} settings.
 
-==== Choose the template that matches the deployment requirements
-The table below compares the deployment, customization, and optional parameters between the three templates.
+If you're interested in deploying into an existing VPC using an advanced template that has a larger set of parameters, see ____.
 
-|===
+//TODO Add link from Dack.
 
-// space for headers
-||Existing VPC - Standard |Existing VPC - Advanced |New VPC
-|Deploy from Quick Start Bucket |✓ |✓ |✓
-|Deploy from your own Bucket | |✓ |✓ 
-|Deploy Any Qumulo Marketplace Offering |✓ |✓ |✓ 
-|Deploy with a Qumulo Custom AMI-ID | |✓ |✓ 
-|Deploy in a Local Zone | |✓ |✓ 
-|Deploy on Outpost | |✓ | 
-|Deploy in a VPC with no Internet Access | |✓ | 
-|Customize Qumulo Admin Password |✓ |✓ |✓ 
-|Customize Qumulo EC2 Instance Type |✓ |✓ |✓ 
-|Customize Qumulo EC2 Instance Count |✓ |✓ |✓ 
-|Customize Termination Protection |✓ |✓ |✓ 
-|Customize Qumulo Name | |✓ |✓ 
-|Customize Qumulo Software Version | |✓ |✓ 
-|Customize Qumulo Sidecar deployment | |✓ |✓ 
-|Customize Qumulo # of Floating IPs | |✓ |✓ 
-|Optional: Add SNS Topics for Instance an Volume recovery | |✓ |✓ 
-|Optional: Add Route 53 PHZ DNS for Floating IPs | |✓ |✓ 
-|Optional: Add CIDRs to Qumulo Security Group | |✓ |✓ 
-|Optional: Add Qumulo Public Management | |✓ |✓ 
-|Optional: Add Qumulo Public Replication Port | |✓ |✓ 
-|Optional: Enable CloudWatch Audit Log Messages | |✓ |✓ 
-|Optional: Apply CMK for EBS Encryption | |✓ |✓ 
-|Optional: Set IAM Permissions Boundary | |✓ |✓ 
-|Optional: Specify Environment type | |✓ |✓ 
-|===
+For a comprehensive discussion of DNS options in AWS, see this Qumulo whitepaper: https://qumulo.com/resources/qumulo-dns-options-in-aws/[DNS options in AWS to enable IP Failover and Client Distribution^].
 
-//TODO Dave, Does it help customers to group the rows this way (deploy, customize, and optional groupings)? Seems like we'd group all the standard parameters at the top.
-
-// Marcia, I think it makes sense, but if you disagree I'm happy to re-order the list.
-
-//TODO Dave, Shouldn't we say "Optional" for every row that's not in the existing-standard template?
-
-// Marcia, almost everything in the list is optional. For instance, "Deploy from Quick Start Bucket" and "Deploy from your own Bucket" are both optional since they are mutually exclusive. Also, the things like "Customize Qumulo EC2 instance type" and "Customize Qumulo EC2 Instance Count" are optional since customers can simply accept the default values. The items marked "optional" in the table are things that the customer can choose to deploy but that aren't deployed by default.
+//TODO Dave, please review my edited description of the `DomainName` parameter in the templates. The existing-VPC standard template doesn't have a description for this parameter, so I put the whole description in the new-VPC template ... but people using that template should never leave the value blank, right? That seems to be the default, which contradicts what we say above. I'm sure that I don't have that parameter descriptions accurate yet in all three templates.

@@ -17,22 +17,16 @@ As shown in <<architecture1>>, the Quick Start sets up the following:
 ** A managed network address translation (NAT) gateway to allow outbound internet access for resources in the private subnet.
 
 * In the private subnet:
-** A cluster of Amazon Elastic Compute Cloud (Amazon EC2) instances for Qumulo Core.
-** A cluster of Qumulo EC2 instances.
-*** 4 to 20 nodes.
-*** 1 TB to 6 PB of usable capacity.
-** Multiple Amazon Elastic Block Store (Amazon EBS) volumes connected to the Qumulo cluster.
-*** 28 unique EBS volume configurations (disk configs) are available.
-*** All flash (solid state drive, or SSD) and hybrid (SSD + hard disk drive, or HDD) disk configs are available.
+** A cluster of Amazon Elastic Compute Cloud (Amazon EC2) instances, or nodes, that run the Qumulo Core software.
+** Amazon Elastic Block Store (Amazon EBS) volumes, which store the files in the Qumulo cluster.
 ** A provisioner EC2 instance, which automatically shuts down after provisioning the Qumulo cluster and automatically restarts during stack updates.
-** (Optional) An Amazon Route 53 hosted zone. With this option, which is available when you use Route 53 to resolve all DNS for the VPC, you can provision a Route 53 hosted zone to configure DNS A records for the cluster.
-* (Optional) A Network Load Balancer (with an elastic IP address) to distribute traffic to ____.
-//TODO Dave, Please complete the above bullet. (Note: I moved that icon out of the subnet in the diagram.)
+** (Optional) An Amazon Route 53 hosted zone to configure DNS A records for the cluster.
+* (Optional) A Network Load Balancer to distribute traffic to between the nodes in the Qumulo cluster.
 * AWS Key Management Service (AWS KMS) to store a private key.
 * AWS Secrets Manager to store credentials.
 * AWS Identity and Access Management (IAM) to manage roles.
 * Amazon CloudWatch to log metrics for the Qumulo cluster.
 * Amazon Simple Notification Service (Amazon SNS) to send alerts for EBS volume anomalies.
-* AWS Lambda to collect metrics for the Qumulo cluster and monitor EBS-volume health.
+* AWS Lambda to collect metrics for the Qumulo cluster and monitor EBS volume health. (Qumulo calls Lambda functions "Sidecar" functions.)
 
-[.small]#* The templates that deploy the Quick Start into an existing VPC skip the components marked by an asterisk and prompt you for your existing VPC configuration.#
+[.small]#* The template that deploys the Quick Start into an existing VPC skips the components marked by an asterisk and prompts you for your existing VPC configuration.#
