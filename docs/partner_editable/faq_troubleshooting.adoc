@@ -98,7 +98,7 @@ The provisioning instance is designed to restart with every stack update. Furthe
 If none of the preceding troubleshooting steps rectify your problem, you may find the
 provisioning-instance log helpful. To retrieve the log follow these steps:
 
-. Go to the AWS Console *EC2 Instances* page.
+. Go to the AWS Console https://us-east-1.console.aws.amazon.com/ec2/v2/[EC2 Instances] page.
 . *Check the box* beside the provisioning instance.
 . Choose *Actions* in the upper-right corner.
 . Choose *Monitor & troubleshoot*.
