@@ -10,7 +10,5 @@
 |Qumulo EC2 instances |4 to 20
 |Provisioner EC2 instance |1
 |Lambda functions |2
-|EBS volumes | qty? ____
+|EBS volumes |Varies depending on the disk configuration
 |===
-
-//TODO Dave, How many EBS volumes?

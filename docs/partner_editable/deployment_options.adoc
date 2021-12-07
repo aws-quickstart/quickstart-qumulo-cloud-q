@@ -14,3 +14,5 @@ If you're interested in deploying into an existing VPC using an advanced templat
 For a comprehensive discussion of DNS options in AWS, see this Qumulo whitepaper: https://qumulo.com/resources/qumulo-dns-options-in-aws/[DNS options in AWS to enable IP Failover and Client Distribution^].
 
 //TODO Dave, please review my edited description of the `DomainName` parameter in the templates. The existing-VPC standard template doesn't have a description for this parameter, so I put the whole description in the new-VPC template ... but people using that template should never leave the value blank, right? That seems to be the default, which contradicts what we say above. I'm sure that I don't have that parameter descriptions accurate yet in all three templates.
+
+//Marcia, I've updated the new VPC template description.

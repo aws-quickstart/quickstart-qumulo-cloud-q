@@ -314,7 +314,7 @@ Parameters:
     Default: "NO"
 
   DomainName:
-    Description: "(Optional) Enter a fully qualified domain name to create a private Route 53 private hosted zone to resolve IP addresses. You may use the .local suffix, e.g. qumulo.companyname.local. If your VPC already has a means of DNS resolution, you do not need to create a Route 53 private hosted zone. In this case, keep this value blank."
+    Description: "(Optional) Enter a fully qualified domain name to create a private Route 53 private hosted zone to resolve IP addresses. You may use the .local suffix, e.g. qumulo.companyname.local. If you intend to deploy a different means of DNS resolution in your VPC, you do not need to create a Route 53 private hosted zone. In this case, keep this value blank."
     AllowedPattern: '^$|^([a-zA-Z0-9-]+\..+)$'
     MaxLength: '255'
     Type: String
