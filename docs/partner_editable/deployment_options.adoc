@@ -2,16 +2,29 @@
 
 This Quick Start provides two deployment options:
 
-* *Deploy {partner-product-short-name} into a new VPC*. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateway, security groups, and other infrastructure components. It then deploys {partner-product-short-name} into the new VPC. By default, this option deploys a Route 53 private hosted zone to resolve IP addresses.
-* *Deploy {partner-product-short-name} into an existing VPC*. This option provisions {partner-product-short-name} in your existing AWS infrastructure. If your VPC already has a means of DNS resolution—for example, if you use Active Directory—you will not need to deploy a Route 53 private hosted zone.
+* *Deploy {partner-product-short-name} into a new VPC with advanced parameters*. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateway, security groups, and other infrastructure components. It then deploys {partner-product-short-name} into the new VPC and exposes all parameter options for full flexibility.
+* *Deploy {partner-product-short-name} into an existing VPC with advanced parameters*. This option provisions {partner-product-short-name} in your existing AWS infrastructure and exposes all parameter options for full flexibility.
+* *Deploy {partner-product-short-name} into an existing VPC with standard parameters*. This option provisions {partner-product-short-name} in your existing AWS infrastructure with the minimal set of required parameters.
 
 The Quick Start provides separate templates for these options. It also lets you configure Classless Inter-Domain Routing (CIDR) blocks, instance types, and {partner-product-short-name} settings.
 
-If you're interested in deploying into an existing VPC using an advanced template that has a larger set of parameters, see ____.
+* Additional Information
 
-//TODO Add link from Dack.
+For more detailed planning and design information see the following documents:
 
-For a comprehensive discussion of DNS options in AWS, see this Qumulo whitepaper: https://qumulo.com/resources/qumulo-dns-options-in-aws/[DNS options in AWS to enable IP Failover and Client Distribution^].
+** https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/template-comparision.pdf[Template Comparison]: Understand the different parameters and options provided by these templates.
+
+** https://qumulo.com/resources/qumulo-dns-options-in-aws/[DNS options in AWS to enable IP Failover and Client Distribution^]: A comprehensive discussion of DNS options in AWS.
+
+** https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/supported-regions.pdf[Supported Regions]: Detailed information on Supported Regions, EC2 Instance Types, and EBS Volume Types.
+
+** https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/deploying-without-inet.pdf[Deploying without Internet Access]: How to deploy in a VPC that has no Internet access.
+
+** https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/deploying-with-custom-iam-role.pdf[Deploying with a Custom IAM Role]: How to deploy with a Custom IAM Role and the policy requirements.
+
+** https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/resources-ebs-quota-planning.pdf[Supported Resources & EBS Service Quota Planning]: Detailed Service Quota planning for EBS.
+
+** https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/qumulo-sizing-performance.pdf[Qumulo Sizing & Performance on AWS]: Gain a deeper understanding of Qumulo cluster performance and scalability on AWS.
 
 //TODO Dave, please review my edited description of the `DomainName` parameter in the templates. The existing-VPC standard template doesn't have a description for this parameter, so I put the whole description in the new-VPC template ... but people using that template should never leave the value blank, right? That seems to be the default, which contradicts what we say above. I'm sure that I don't have that parameter descriptions accurate yet in all three templates.
 

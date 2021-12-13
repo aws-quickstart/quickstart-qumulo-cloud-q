@@ -1,14 +1,26 @@
 == Test the deployment
 
-Follow these steps to verify that the cluster formed quorum, that the number of nodes in the cluster matches what you specified, and that your data is protected.
+=== Verify the Cluster Instances are Running
+
+In the **AWS EC2 Console** filter on the stack name, clear the running instance filter, and verify
+the number of instances for the cluster is as expected. Four in this example.
+
+=== Verify the Provisioning Instance has Stopped
+
+CloudFormation has completed the instantiation of all resources, but this does not mean all
+resources are fully initialized and running. Specifically, the Provisioning instance will still be
+initializing. Given all the tasks the Provisioning instance has to accomplish it will require at least 
+4 minutes AFTER stack completion to finish all tasks. It may require more time if multiple quarterly
+software ugprades are executed. When it is finished it will automatically shutdown. You will see it listed with the cluster EC2 instances in the EC2 console. If the
+provisioning instance has not stopped after 15 minutes, jump to the troubleshooting section.
+
+=== Verify Cluster quorum formation and data protection
+Follow these steps to verify that the cluster formed quorum, that the number of nodes in the cluster matches expectations, and that your data is protected.
 
 . Open the https://console.aws.amazon.com/cloudformation/[CloudFormation^] console, and select the top-level stack name. 
 . Choose *Outputs*. A list of URLs appears.
 . Copy the appropriate URL from the *Value* column, and paste it into your browser as follows: 
 +
-* If you deployed Route 53, copy the URL for the private addresses, resolved by Route 53. 
-* If you did not deploy Route 53, copy the URL for the first node's primary IP address. 
-* If you chose public management, copy the URL to the Elastic IP (public static) address. 
 * If connecting via the public internet, copy the *QumuloPublicIP* URL, and open a page from your local machine. 
 * If connecting from within your VPC, copy the *QumuloPrivateIP* URL, and paste it into the browser of an EC2 instance running Chrome.
 
@@ -20,37 +32,40 @@ image::../images/image19.png[Additional19]
 +
 If you are not prompted for a user name and password and see the End User Agreement screen instead, the cluster failed to form quorum. See the troubleshooting section link:#_the_cluster_didnt_form_quorum[The cluster didn't form quorum].
 
-. Choose *More details*. Verify that the number of nodes listed matches the number you specified, that each node has a green checkmark in the *Status* column, and that the term *Data Protected* in the middle of the screen has a shield icon next to it [or...?], as shown in <<additional20>>.
+. Choose *More details*. Verify that the number of nodes listed matches the number expected (4 or more), that each node has a green checkmark in the *Status* column, and that the term *Data Protected* in the middle of the screen has a shield icon next to it showing protection for 1 node and 2 drives, as shown in <<additional20>>.
 +
 [#additional20]
 .Qumulo dashboard details
 image::../images/image20.png[Additional20]
 
-//TODO Dack: In step 3 above, the five bullets are not mutually exclusive. For example, what if we did not deploy Route 53 (bullet 2) AND we're connecting from within our VPC (bullet 5)? How can we make it clearer exactly which URL people copy and exactly where they paste it in each scenario? 
-
-//TODO Dack: In the last step, for data protection, is the shield icon the thing we look for? If not, specifically what should we verify?
-
-//TODO Dack: Also in the last step, what should we do if something isn't right on this screen (number of nodes, green checkmarks, or data protection)?
-
 == Postdeployment steps
 
-=== (Optional) Set up Multi-AZ for disaster recovery and business continuity
+=== (Optional) Set up Disaster Recovery - Qumulo Recover Q
 
-For disaster recovery and business continuity, you can use Qumulo DR to deploy one or more clusters in other Availability Zones or AWS Regions. For more information, see ____.
+For disaster recovery and business continuity, one or more Qumulo Recover Q clusters can be deployed in other Availability Zones or AWS Regions.  See the following:
 
-//TODO Add link from Dack.
+* https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/deploy-recover-q.pdf[Deploy a Recover Q Cluster using this Quick Start]
+* https://qumulo.com/solution/recover-q/[Qumulo Recover Q]
 
-//TODO Dack, what is Qumulo DR? I see Qumulo Recover Q on your website (https://qumulo.com/solution/recover-q/) ... is that maybe what we want to refer to?
+=== (Optional) Copy data into your cluster from an S3 bucket - Qumulo SHIFT
 
-=== (Optional) Copy data into your cluster from an S3 bucket
+Qumulo clusters support copying data to and from an Amazon S3 bucket using Qumulo SHIFT for Amazon S3. After your cluster is up and running, you may populate data on it by copying data from a chosen S3 bucket. To create a SHIFT job, log in to the Qumulo UI, choose *Cluster*, *Copy to/from S3*, and fill in the parameters. This feature requires Qumulo Core version 4.3.0 or newer.
 
-Qumulo Core supports copying data to and from an Amazon S3 bucket using Qumulo Shift for Amazon S3. After your cluster is up and running, you may populate data on it by copying data from a chosen S3 bucket. To create a Shift job, log in to the Qumulo console, choose *Cluster*, *Copy to/from S3*, and fill in the parameters. 
-
-For more information on the Qumulo Shift feature set, UI, and CLI, see the following:
+For more information on the Qumulo SHIFT feature set, UI, and CLI, see the following:
 
 * https://github.com/Qumulo/docs/blob/gh-pages/shift-from-s3.md[Qumulo SHIFT - Copy from S3^]
-* https://care.qumulo.com/hc/en-us/articles/360053162273-Qumulo-Shift-for-Amazon-S3[Qumulo SHIFT - Copy to S3^]
+* https://github.com/Qumulo/docs/blob/gh-pages/shift-to-s3.md[Qumulo SHIFT - Copy to S3^]
 
-//TODO Dack, That first link's link text says "Copy from S3," but I don't see that phrase on that page. What should the link text say?
+=== Additional Information
+See the following documents for information on how to use the stack to maintain the cluster through its life cycle and view metrics in CloudWatch.
 
-//TODO Dack, The second link goes to a page that says, "This content has moved." Where do you want to point instead?
+* https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/stack-updates.pdf[Stack Updates]: CloudFormation Stack Update options and examples like - how to add node(s) to the cluster, upgrade the sidecar, etc.
+
+* https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/stack-deletion.pdf[Deleting the Stack]: Deleting the Stack, KMS CMK Policy cleanup, and termination protection. 
+
+* https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/cloudwatch-dashboard.pdf[CloudWatch Dashboard]: How to view the CloudWatch Dashboard and Resource Groups that are created for the Qumulo cluster. 
+
+* https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/provisioning-instance-functions.pdf[Provisioning Instance Functions]: Learn more about the functions of the Provisioning Instance. 
+
+* https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/updating-to-advanced.pdf[Updating to the Advanced Template]: How to update to the Advanced Template if you originally deployed with the Standard Template. 
+
