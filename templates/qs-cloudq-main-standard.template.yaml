@@ -234,9 +234,9 @@ Resources:
     Type: "AWS::CloudFormation::Stack"
     Properties:
       Parameters:
-        QSS3BucketName: "dackss3-dev"
+        QSS3BucketName: "aws-quickstart"
         QSS3KeyPrefix: "quickstart-qumulo-cloud-q/"
-        QSS3BucketRegion: "us-west-2"
+        QSS3BucketRegion: !Ref AWS::Region
         KeyPair: !Ref KeyPair
         EnvType: "dev"
         VPCId: !Ref VPCId
@@ -273,7 +273,7 @@ Resources:
         SideCarPassword: !Ref QClusterAdminPwd
         SideCarVersion: !Ref SideCarVersion
         SideCarSNSTopic: ""
-      TemplateURL: !Sub "https://dackss3-dev.s3.${AWS::Region}.${AWS::URLSuffix}/quickstart-qumulo-cloud-q/templates/cfn/cloudq.cft.yaml"
+      TemplateURL: !Sub "https://aws-quickstart-${AWS::Region}.s3.${AWS::Region}.${AWS::URLSuffix}/quickstart-qumulo-cloud-q/templates/cfn/cloudq.cft.yaml"
 
 Outputs:
 

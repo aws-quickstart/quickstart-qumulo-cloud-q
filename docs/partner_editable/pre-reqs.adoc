@@ -20,13 +20,14 @@ If you use https://aws.amazon.com/directconnect/[AWS Direct Connect^] to connect
 |Documentation |Description
 
 // Space needed to maintain table headers
-|https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/template-comparision.pdf[Template comparison^]| Details on the parameters and options provided by this Quick Start's templates.
+|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/template-comparison.pdf[Template Comparison^]| Details on the parameters and options provided by this Quick Start's templates.
 |https://qumulo.com/resources/qumulo-dns-options-in-aws/[DNS options in AWS to enable IP failover and client distribution^] | Details on the DNS options in AWS.
-|https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/supported-regions.pdf[Supported AWS Regions^] | Details on supported AWS Regions, EC2 instance types, and EBS volume types.
-|https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/deploying-without-inet.pdf[Deploying without internet access^] | Details on deploying this Quick Start into a VPC that has no internet access.
-|https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/deploying-with-custom-iam-role.pdf[Deploying with a custom IAM role^] | Details on deploying this Quick Start with a custom IAM role, including policy requirements.
-|https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/resources-ebs-quota-planning.pdf[Supported resources & EBS service quota planning^] | Details on service-quota planning for EBS.
-|https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/qumulo-sizing-performance.pdf[Qumulo sizing & performance on AWS^] | Details on Qumulo cluster performance and scalability on AWS.
+|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/supported-regions.pdf[Supported AWS Regions^] | Details on supported AWS Regions, EC2 instance types, and EBS volume types.
+|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/deploying-without-inet.pdf[Deploying in an AWS VPC with no Internet access^] | Details on deploying this Quick Start into a VPC that has no internet access.
+|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/deploying-with-custom-iam-role.pdf[Deploying with an AWS Custom IAM role^] | Details on deploying this Quick Start with a custom IAM role, including policy requirements.
+|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/resources-ebs-quota-planning.pdf[AWS resources & EBS Service Quota planning^] | Details on service-quota planning for EBS.
+|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/qumulo-sizing-performance.pdf[Qumulo sizing & performance on AWS^] | Details on Qumulo cluster performance and scalability on AWS.
 |===
 
 //TODO Before we publish, (1) confirm that these PDFs are available. (2) Match this link text to the PDF titles.
+//Marcia, I tested all links and matched the names

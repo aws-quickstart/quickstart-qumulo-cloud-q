@@ -26,10 +26,11 @@ To find the UUID, follow these steps:
 
 . Open the https://console.aws.amazon.com/systems-manager/parameters/[Systems Manager console^].
 . Choose *Parameter Store*.
-. Choose the top-level stack name. 
-. Choose the UUID parameter (last on the list).
+. Select the Name */qumulo/<my stack name...>/uuid*
+. The value associated with the name is the UUID for the cluster
 
 //TODO Dack, On my screen, I don't see a way to choose a stack name in Step 2. Is there a step missing?
+//Marcia, fixed
 
 === I don't remember the cluster administrator password
 
@@ -74,6 +75,7 @@ To determine and remedy the cause of the failure, follow these steps:
 //TODO Dave, A couple of years ago, AWS stopped using the term "service limits" in favor of "service quotas." What would it take to update this error message accordingly?
 
 //TODO Dack, Please confirm that the edited table above is accurate in this form.
+//Correct
 
 === The cluster didn't form quorum
 
@@ -85,17 +87,17 @@ You know that the cluster didn't form quorum if, when you open the Qumulo softwa
 
 // Space needed to maintain table headers
 |The software version specified in the template doesn't exist or is older than the AMI software version.| Ensure that the software version specified for the cluster is equal to or newer than the version that the Marketplace offer lists.
-|The VPC doesn't have public internet access, and the upgrade images were not placed in the `upgrade` folder in the S3 bucket.| See the troubleshooting section link:#_the_provisioner_instance_is_still_running[The provisioner instance is still running].
-|x?| Fix any typos you entered in the CloudFormation template parameter values.
-|x?| Rectify and restart the provisioner instance.
-|x?| Delete the stack and redeploy.
+|The VPC doesn't have public internet access.| Either add a NAT Gateway to your existing VPC per this Quick Start's reference architecture, or if intentionally deploying without Internet access see: https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/deploying-without-inet.pdf[Deploying in an AWS VPC with no Internet access^].
 |===
 
 //TODO Dack, Please update the above table for accuracy in this format.
+//Marcia, I fixed it.  I realize you don't want to talk about complications in this doc, but lack of Internet access is a VERY common problem with existing VPCs.  As such all I ask is that we keep this simple failure reason and point back to the supplemental doc.
 
 //TODO Dack, How do we "rectify and restart" the provisioner instance.
+//Marcia, I resolved that.
 
 //TODO Dack, Will everyone know how to delete the stack and redeploy?
+//Removed language.  
 
 WARNING: Do not form quorum manually, or the provisioner instance won't be able to complete the secondary provisioning of the cluster and AWS infrastructure.
 
@@ -108,13 +110,9 @@ The provisioner instance usually stops running within five minutes of the stack 
 |Common causes of the provisioner instance continuing to run |Actions
 
 // Space needed to maintain table headers
-|The VPC doesn't have access to the public internet, or DNS resolution is not functioning. Without access to public infrastructure, the provisioner instance can't talk to AWS services (such as Secrets Manager, AWS KMS, and Systems Manager) and can't download the desired version of Qumulo Core software. | Review the public and private subnets, their route tables, and the NAT gateway. Make any needed corrections. Then stop and restart the provisioner instance as follows: open the https://console.aws.amazon.com/ec2/v2/[EC2 console^], choose the provisioner instance, and start the instance (whether it's running or has stopped).
-|One or more VPC endpoints are missing. | x?
-|The VPC interface endpoints security group is not correct. | x?
-|The desired Qumulo Core software version was not placed in the S3 bucket or upgrade folder when deploying without internet access. |Stop and restart the provisioner instance as follows: open the https://console.aws.amazon.com/ec2/v2/[EC2 console^], choose the provisioner instance, and start the instance (whether it's running or has stopped).
-|A customer managed key was provisioned, and the policy couldn't be modified for the key because the policy didn't have valid SIDs before the template was launched.| Stop and restart the provisioner instance as follows: open the https://console.aws.amazon.com/ec2/v2/[EC2 console^], choose the provisioner instance, and start the instance (whether it's running or has stopped).
-|A stack update was executed to add cluster instances. The stack update succeeded, but the instances were not added to the cluster. The cluster's administrator password was probably changed after deployment. | Open the https://console.aws.amazon.com/secretsmanager[Secrets Manager console^], and choose the top-level stack name. Under *ClusterSecrets*, choose *Retrieve secret value*, *Edit*. Update the administrator password, and save the secret. Then stop and restart the provisioner instance as follows: open the https://console.aws.amazon.com/ec2/v2/[EC2 console^], choose the provisioner instance, and start the instance (whether it's running or has stopped). 
-|The VPC doesn't have access to the public internet, and this was planned. | Confirm that there are no network ACLs blocking traffic. Also review the AWS Systems Manager Parameter Store `last-run-status` to see where it stopped. As shown in <<additional37>>, the *History* tab shows the major blocks in the code where the provisioner instance executes. In this example, `QCluster1` was built for the first time, as noted by the `Forming first quorum and configuring cluster` update. This example also shows that two software upgrades were performed to reach the 4.2.0 release.
+|The VPC doesn't have access to the public internet. Without access to public infrastructure, the provisioner instance can't talk to AWS services (such as Secrets Manager, AWS KMS, and Systems Manager) and can't download the desired version of Qumulo Core software. | Review the public and private subnets, their route tables, and the NAT gateway. Make any needed corrections. Then reboot the provisioner instance as follows: open the https://console.aws.amazon.com/ec2/v2/[EC2 console^], select the provisioner instance, *Instance state*, *Reboot Instance*.  If deploying without Internet access see: https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/deploying-without-inet.pdf[Deploying in an AWS VPC with no Internet access^]
+|A customer managed key ID was entered in the 'VolumesEncyrptionKey' paramater, and the key policy could not be modified because the key policy didn't have valid Statement Identifiers (SIDs) before the template was launched.| Go to AWS KMS and correct the key policy for the key you specified.  Then reboot the provisioner instance as follows: open the https://console.aws.amazon.com/ec2/v2/[EC2 console^], select the provisioner instance, *Instance state*, *Reboot Instance*. To learn more on KMS key policies and cleanup see https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/stack-deletion.pdf[Deleting the CloudFormation Stack^].
+|A stack update was executed to add cluster instances. The stack update succeeded, but the instances were not added to the cluster. The cluster's administrator password was probably changed after deployment. | Open the https://console.aws.amazon.com/secretsmanager[Secrets Manager console^], and choose the top-level stack name. Under *ClusterSecrets*, choose *Retrieve secret value*, *Edit*. Update the administrator password, and save the secret. Then reboot the provisioner instance as follows: open the https://console.aws.amazon.com/ec2/v2/[EC2 console^], select the provisioner instance, *Instance state*, *Reboot Instance*. 
 |===
 //TODO Dack, Spell out SID and ACL above.
 //TODO Dack, How do we stop the provisioner instance before restarting it?
@@ -122,17 +120,18 @@ The provisioner instance usually stops running within five minutes of the stack 
 //TODO Dack, Will everyone know how to "confirm that there are no network ACLs blocking traffic"?
 //TODO Dack, Update the above table. It's unusable right now. Things need to be clarified, made logical, moved around, filled in, etc. 
 //TODO Dack, Remove troubleshooting info that's irrelevant to the deployment options in this Quick Start. For example, this doc no longer talks about deploying without internet access, so we shouldn't troubleshoot those issues in this doc.
+//Marcia, I simplified everything so hopefully this is more acceptable.  I can't teach people how to use AWS in a Quick Start.  I also can't make it so rudimentary as to not give a legitamate user some guidance, so I'm walking the line.
+
+=== My problem is not described in this guide
+
+If the earlier troubleshooting steps don't rectify your problem, you may review the AWS Parameter Store history shown in the figure below which will often indicate where the provisioning instance is failing.  This can be found in Paramater Store with the name */qumulo/<my stack name...>/last-run-status*.
 
 [#additional37]
 .Parameter Store history
 [link=images/image37.png]
 image::../images/image37.png[Additional37]
 
-=== My problem is not described in this guide
-
-If the earlier troubleshooting steps don't rectify your problem, download the
-provisioning-instance log. This log often shows an error that points you to the resolution. You can review the log in the console or download it to collaborate with Qumulo
-to resolve the problem. 
+Finally, you may review the provisioning-instance log which often shows an error that points you to the resolution. You can review the log in the console or download it to collaborate with https://qumulo.com/get-started/qumulo-care/[Qumulo Care^].
 
 //TODO Dack, How do people reach out to "collaborate with Qumulo"?
 

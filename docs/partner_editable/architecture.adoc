@@ -14,7 +14,9 @@ As shown in <<architecture1>>, the Quick Start sets up the following:
 * A VPC configured with public and private subnets, according to AWS best practices, to provide you with your own virtual network on AWS.*
 * (Optional) A Network Load Balancer to manage connections to the Qumulo cluster.
 
-* In the public subnet, a managed network address translation (NAT) gateway to allow outbound internet access for resources in the private subnet.
+* In the public subnet:
+** A managed network address translation (NAT) gateway to allow outbound internet access for resources in the private subnet.
+** (Optional) A Network Load Balancer for public management connectivity to the Qumulo cluster.
 
 * In the private subnet:
 ** A cluster of Amazon Elastic Compute Cloud (Amazon EC2) instances that run the Qumulo Core software. (Qumulo refers to instances as nodes.)
@@ -34,3 +36,4 @@ As shown in <<architecture1>>, the Quick Start sets up the following:
 [.small]#* The template that deploys the Quick Start into an existing VPC skips the components marked by an asterisk and prompts you for your existing VPC configuration.#
 
 //TODO Dack, I moved the NLB icon from where it was (half in and half out of the public subnet) to where it normally goes, and I've used our standard label. Anything incorrect here?
+//Marcia, that is incorrect.  The NLB we deploy for public management connectivity is not being used to load balance between AZs.  It is simply connected to all the nodes in the cluster so regardless of any node state a customer can get to the Qumulo UI.  My drawing was correct as was my text.  I've put them back in place.
