@@ -29,4 +29,4 @@ If you use https://aws.amazon.com/directconnect/[AWS Direct Connect^] to connect
 |https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/qumulo-sizing-performance.pdf[Qumulo sizing & performance on AWS^] | Details on Qumulo cluster performance and scalability on AWS.
 |===
 
-//TODO Before we launch... (1) Confirm that these PDFs are available. (2) Match this link text to the PDF titles.
+//TODO Before we publish, (1) confirm that these PDFs are available. (2) Match this link text to the PDF titles.
