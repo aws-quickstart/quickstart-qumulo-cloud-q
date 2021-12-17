@@ -1,27 +1,28 @@
 == Test the deployment
 
-=== Verify the Cluster Instances are Running
+=== Check the EC2 instances
 
-In the **AWS EC2 Console** filter on the stack name, clear the running instance filter, and verify
-the number of instances for the cluster is as expected. Four in this example.
+Follow these steps to confirm that all the cluster instances are running and that the provisioner instance has stopped running.
 
-=== Verify the Provisioning Instance has Stopped
+. Open the https://console.aws.amazon.com/ec2/v2/[EC2 console^].
+. Choose the stack name.
+. Clear the *running instance* filter.
+. Verify that all the cluster instances are running.
+. Verify that the provisioner instance (`...Qumulo Provisioning Node`) has stopped running. If it's still running, wait. It takes up to 15 minutes after stack creation for this instance to finish initializing. If it hasn't stopped running after 15 minutes, see the troubleshooting section link:#_the_provisioner_instance_is_still_running[The provisioner instance is still running].
 
-CloudFormation has completed the instantiation of all resources, but this does not mean all
-resources are fully initialized and running. Specifically, the Provisioning instance will still be
-initializing. Given all the tasks the Provisioning instance has to accomplish it will require at least 
-4 minutes AFTER stack completion to finish all tasks. It may require more time if multiple quarterly
-software ugprades are executed. When it is finished it will automatically shutdown. You will see it listed with the cluster EC2 instances in the EC2 console. If the
-provisioning instance has not stopped after 15 minutes, jump to the troubleshooting section.
+//TODO Dack, What's the exact UI label for the running instance filter in Step 2?
 
-=== Verify Cluster quorum formation and data protection
-Follow these steps to verify that the cluster formed quorum, that the number of nodes in the cluster matches expectations, and that your data is protected.
+//TODO Dack, Please confirm the accuracy of my changes in this section.
 
-. Open the https://console.aws.amazon.com/cloudformation/[CloudFormation^] console, and select the top-level stack name. 
+=== Check cluster quorum formation and data protection
+Follow these steps to confirm that the cluster formed quorum, that you have the expected number of instances in the cluster, and that your data is protected.
+
+. Open the https://console.aws.amazon.com/cloudformation/[CloudFormation console^].
+. Choose the top-level stack name. 
 . Choose *Outputs*. A list of URLs appears.
 . Copy the appropriate URL from the *Value* column, and paste it into your browser as follows: 
 +
-* If connecting via the public internet, copy the *QumuloPublicIP* URL, and open a page from your local machine. 
+* If connecting by the public internet, copy the *QumuloPublicIP* URL, and open a page from your local machine. 
 * If connecting from within your VPC, copy the *QumuloPrivateIP* URL, and paste it into the browser of an EC2 instance running Chrome.
 
 . Log in to the Qumulo console using the user name and administrator password you provided during deployment. When you see the Qumulo dashboard, shown in <<additional19>>, you know that your cluster formed quorum. 
@@ -30,9 +31,12 @@ Follow these steps to verify that the cluster formed quorum, that the number of 
 .Qumulo dashboard
 image::../images/image19.png[Additional19]
 +
-If you are not prompted for a user name and password and see the End User Agreement screen instead, the cluster failed to form quorum. See the troubleshooting section link:#_the_cluster_didnt_form_quorum[The cluster didn't form quorum].
+If, instead of being prompted for a user name and password, you see the End User Agreement screen, the cluster failed to form quorum. See the troubleshooting section link:#_the_cluster_didnt_form_quorum[The cluster didn't form quorum].
 
-. Choose *More details*. Verify that the number of nodes listed matches the number expected (4 or more), that each node has a green checkmark in the *Status* column, and that the term *Data Protected* in the middle of the screen has a shield icon next to it showing protection for 1 node and 2 drives, as shown in <<additional20>>.
+. Choose *More details*. Verify the following, as shown in <<additional20>>.
+.. The number of instances (nodes) listed matches the number you expect.
+.. Each instance has a green checkmark in the *Status* column.
+.. This message appears: "Data is protected from 2 drive failures or 1 node failure at a time. The cluster is in balance."
 +
 [#additional20]
 .Qumulo dashboard details
@@ -40,32 +44,38 @@ image::../images/image20.png[Additional20]
 
 == Postdeployment steps
 
-=== (Optional) Set up Disaster Recovery - Qumulo Recover Q
+=== (Optional) Set up disaster recovery - Qumulo Recover Q
 
-For disaster recovery and business continuity, one or more Qumulo Recover Q clusters can be deployed in other Availability Zones or AWS Regions.  See the following:
+For disaster recovery and business continuity, you can deploy one or more https://qumulo.com/solution/recover-q/[Qumulo Recover Q^] clusters in other Availability Zones or AWS Regions. For more information, see https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/deploy-recover-q.pdf[Deploy a Recover Q Cluster using this Quick Start^].
 
-* https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/deploy-recover-q.pdf[Deploy a Recover Q Cluster using this Quick Start]
-* https://qumulo.com/solution/recover-q/[Qumulo Recover Q]
+//TODO Before we publish, (1) make sure that this PDF link works and (2) match the link text to the PDF title. 
 
-=== (Optional) Copy data into your cluster from an S3 bucket - Qumulo SHIFT
+=== (Optional) Copy data into your cluster from an S3 bucket
 
-Qumulo clusters support copying data to and from an Amazon S3 bucket using Qumulo SHIFT for Amazon S3. After your cluster is up and running, you may populate data on it by copying data from a chosen S3 bucket. To create a SHIFT job, log in to the Qumulo UI, choose *Cluster*, *Copy to/from S3*, and fill in the parameters. This feature requires Qumulo Core version 4.3.0 or newer.
+If you're using Qumulo Core version 4.3.0 or newer, you can populate data on your Qumulo cluster by copying data from an Amazon S3 bucket using https://qumulo.com/wp-content/uploads/2020/06/ShiftForAWS_DataSheet.pdf[Qumulo Shift for Amazon S3^]. To create a Shift job, follow these steps:
 
-For more information on the Qumulo SHIFT feature set, UI, and CLI, see the following:
+. Log in to the Qumulo console.
+. Choose *Cluster*, *Copy to/from S3*.
+. Fill in the parameters. 
 
-* https://github.com/Qumulo/docs/blob/gh-pages/shift-from-s3.md[Qumulo SHIFT - Copy from S3^]
-* https://github.com/Qumulo/docs/blob/gh-pages/shift-to-s3.md[Qumulo SHIFT - Copy to S3^]
+For more information on the Qumulo Shift feature set, user interface, and command-line interface, see the following:
 
-=== Additional Information
-See the following documents for information on how to use the stack to maintain the cluster through its life cycle and view metrics in CloudWatch.
+* https://github.com/Qumulo/docs/blob/gh-pages/shift-from-s3.md[Qumulo Shift—Copy from S3^]
+* https://github.com/Qumulo/docs/blob/gh-pages/shift-to-s3.md[Qumulo Shift—Copy to S3^]
 
-* https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/stack-updates.pdf[Stack Updates]: CloudFormation Stack Update options and examples like - how to add node(s) to the cluster, upgrade the sidecar, etc.
+=== Additional information
+To learn how to use the stack to maintain the Qumulo cluster through its life cycle and view metrics in CloudWatch, see the following:
 
-* https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/stack-deletion.pdf[Deleting the Stack]: Deleting the Stack, KMS CMK Policy cleanup, and termination protection. 
+[cols="1,2"]
+|===
+|Documentation |Description
 
-* https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/cloudwatch-dashboard.pdf[CloudWatch Dashboard]: How to view the CloudWatch Dashboard and Resource Groups that are created for the Qumulo cluster. 
+// Space needed to maintain table headers
+|https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/stack-updates.pdf[Stack updates^]| Details on CloudFormation stack update options and examples, including adding instances (nodes) to the cluster and upgrading the Qumulo Sidecar.
+|https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/stack-deletion.pdf[Deleting the stack^]| Details on termination protection and on cleaning up an AWS KMS customer managed key policy. 
+|https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/cloudwatch-dashboard.pdf[CloudWatch dashboard^]| Details on viewing the CloudWatch dashboard and resource groups that are created for the Qumulo cluster.
+|https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/provisioning-instance-functions.pdf[Provisioning-instance functions^]| Details on the functions of the provisioner instance.
+|https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/updating-to-advanced.pdf[Updating to the advanced template^]| Details on updating to the advanced parameters if you originally deployed the {partner-product-name} Quick Start using the template with standard parameters.
+|===
 
-* https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/provisioning-instance-functions.pdf[Provisioning Instance Functions]: Learn more about the functions of the Provisioning Instance. 
-
-* https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/updating-to-advanced.pdf[Updating to the Advanced Template]: How to update to the Advanced Template if you originally deployed with the Standard Template. 
-
+//TODO Before we launch... (1) Confirm that these PDFs are available. (2) Match this link text to the PDF titles.

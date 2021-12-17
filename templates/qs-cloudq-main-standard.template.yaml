@@ -32,7 +32,7 @@ Metadata:
         - W9901
   QuickStartDocumentation:
     EntrypointName: 'Parameters for deploying into an existing VPC with standard parameters'
-    Order: '2'
+    Order: '3'
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
