@@ -48,7 +48,7 @@ image::../images/image20.png[Additional20]
 
 For disaster recovery and business continuity, you can deploy one or more https://qumulo.com/solution/recover-q/[Qumulo Recover Q^] clusters in other Availability Zones or AWS Regions. For more information, see https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/deploy-recover-q.pdf[Deploy a Recover Q Cluster using this Quick Start^].
 
-//TODO Before we publish, (1) make sure that this PDF link works and (2) match the link text to the PDF title. 
+//TODO Before we publish, (1) confirm that this PDF link works and (2) match the link text to the PDF title. 
 
 === (Optional) Copy data into your cluster from an S3 bucket
 
@@ -78,4 +78,4 @@ To learn how to use the stack to maintain the Qumulo cluster through its life cy
 |https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/updating-to-advanced.pdf[Updating to the advanced template^]| Details on updating to the advanced parameters if you originally deployed the {partner-product-name} Quick Start using the template with standard parameters.
 |===
 
-//TODO Before we launch... (1) Confirm that these PDFs are available. (2) Match this link text to the PDF titles.
+//TODO Before we publish, (1) confirm that these PDFs are available. (2) Match this link text to the PDF titles.

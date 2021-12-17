@@ -18,8 +18,6 @@ For more information, see https://docs.aws.amazon.com/AWSCloudFormation/latest/U
 
 == Troubleshooting
 
-//TODO Marcia to make sure that all headings are stated as problem statements (in first person?).
-
 === I need to find the UUID for the cluster
 
 You may need to know your cluster's universally unique identifier (UUID) for troubleshooting. The provisioner instance stores a copy of the UUID in Parameter Store, which is a capability of AWS Systems Manager. 
@@ -31,7 +29,7 @@ To find the UUID, follow these steps:
 . Choose the top-level stack name. 
 . Choose the UUID parameter (last on the list).
 
-//TODO On my screen, I don't see a way to choose a stack name in Step 2.
+//TODO Dack, On my screen, I don't see a way to choose a stack name in Step 2. Is there a step missing?
 
 === I don't remember the cluster administrator password
 
