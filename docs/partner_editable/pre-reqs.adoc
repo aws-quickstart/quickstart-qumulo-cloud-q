@@ -1,14 +1,32 @@
 ==== Allow Qumulo public access if you use AWS Direct Connect
 
-If you use https://aws.amazon.com/directconnect/[AWS Direct Connect^] to connect between an on-premises environment and your AWS VPC, and if you restrict public access to specific URLs with a corporate firewall, ensure that your firewall allows access to the following Qumulo public URLs. While these URLs' public IP addresses are static, they may occasionally change. So, where possible, allow access to the URL. Otherwise, if you must, allow access to the IP address resolved.
+If you use https://aws.amazon.com/directconnect/[AWS Direct Connect^] to connect between an on-premises environment and your AWS VPC, and if you restrict public access to specific URLs with a corporate firewall, ensure that your firewall allows access to the following Qumulo public URLs. Since these URLs' public IP addresses may occasionally change, allow access to the URL if you can. If you can't, allow access to the IP address resolved.
 
 [cols="1,3"]
 |===
 |URL |Description
 
 // Space needed to maintain table headers
-|https://trends.qumulo.com | Pulls code for software upgrades during provisioning. Customers may also use this URL for historical statistics for their cluster.
+|https://trends.qumulo.com | Pulls code for software upgrades during provisioning. You can use this URL for statistics for your cluster.
 |https://missionq.qumulo.com | Delivers statistics to Qumulo's remote monitoring service, which is included in your Qumulo subscription.
 |https://ep1.qumulo.com | (Disabled by default) The cluster uses this URL if you enable remote VPN support for Qumulo Customer Success.
-|https://monitor.qumulo.com |Also uses remote VPN support to deliver logs when collaborating with Qumulo Customer Success.
+|https://monitor.qumulo.com |Uses remote VPN support to deliver logs for collaborating with Qumulo Customer Success.
 |===
+
+==== Additional planning and design information
+
+[cols="1,1"]
+|===
+|Documentation |Description
+
+// Space needed to maintain table headers
+|https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/template-comparision.pdf[Template comparison^]| Details on the parameters and options provided by this Quick Start's templates.
+|https://qumulo.com/resources/qumulo-dns-options-in-aws/[DNS options in AWS to enable IP failover and client distribution^] | Details on the DNS options in AWS.
+|https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/supported-regions.pdf[Supported AWS Regions^] | Details on supported AWS Regions, EC2 instance types, and EBS volume types.
+|https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/deploying-without-inet.pdf[Deploying without internet access^] | Details on deploying this Quick Start into a VPC that has no internet access.
+|https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/deploying-with-custom-iam-role.pdf[Deploying with a custom IAM role^] | Details on deploying this Quick Start with a custom IAM role, including policy requirements.
+|https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/resources-ebs-quota-planning.pdf[Supported resources & EBS service quota planning^] | Details on service-quota planning for EBS.
+|https://github.com/qumulo/aws-quickstart-qumulo-cloud-q/supplemental-docs/qumulo-sizing-performance.pdf[Qumulo sizing & performance on AWS^] | Details on Qumulo cluster performance and scalability on AWS.
+|===
+
+//TODO Before we launch... (1) Confirm that these PDFs are available. (2) Match this link text to the PDF titles.

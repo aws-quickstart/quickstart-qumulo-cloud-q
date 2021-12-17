@@ -2,8 +2,4 @@
 // Identify your target audience and explain how/why they would use this Quick Start.
 //Avoid borrowing text from third-party websites (copying text from AWS service documentation is fine). Also, avoid marketing-speak, focusing instead on the technical aspect.
 
-This guide provides instructions for deploying {partner-product-name} Quick Start reference architecture in the AWS Cloud. 
-
-Qumulo is a scalable, multiprotocol file data platform—a platform that you use to manage unstructured data across billions of files. This Quick Start uses Qumulo https://qumulo.com/products/cloud-q/[Cloud Q^] to create a Qumulo cluster in a single namespace on AWS. 
-
-//TODO Marcia still needs to copyedit throughout, incl. adding crosslinks & fixing step #s.
+This guide provides instructions for deploying {partner-product-name} Quick Start reference architecture in the AWS Cloud.
