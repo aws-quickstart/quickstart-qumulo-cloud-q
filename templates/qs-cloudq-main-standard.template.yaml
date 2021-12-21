@@ -22,7 +22,7 @@ AWSTemplateFormatVersion: "2010-09-09"
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 # SOFTWARE.
 
-Description: This is the main template to spin up a Basic Qumulo Cluster in an existing VPC with minimal options.  It calls cloudq.cft.yaml to instantiate the infrastructure. (qs-1s6n2i6a8)
+Description: This is the main template to spin up a basic Qumulo cluster in an existing VPC with minimal options. It calls cloudq.cft.yaml to instantiate the infrastructure. (qs-1s6n2i6a8)
 
 Metadata:
   cfn-lint:
@@ -32,7 +32,7 @@ Metadata:
         - W9901
   QuickStartDocumentation:
     EntrypointName: 'Parameters for deploying into an existing VPC with standard parameters'
-    Order: '2'
+    Order: '3'
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
@@ -234,9 +234,9 @@ Resources:
     Type: "AWS::CloudFormation::Stack"
     Properties:
       Parameters:
-        QSS3BucketName: "dackss3-dev"
+        QSS3BucketName: "aws-quickstart"
         QSS3KeyPrefix: "quickstart-qumulo-cloud-q/"
-        QSS3BucketRegion: "us-west-2"
+        QSS3BucketRegion: !Ref AWS::Region
         KeyPair: !Ref KeyPair
         EnvType: "dev"
         VPCId: !Ref VPCId
@@ -273,7 +273,7 @@ Resources:
         SideCarPassword: !Ref QClusterAdminPwd
         SideCarVersion: !Ref SideCarVersion
         SideCarSNSTopic: ""
-      TemplateURL: !Sub "https://dackss3-dev.s3.${AWS::Region}.${AWS::URLSuffix}/quickstart-qumulo-cloud-q/templates/cfn/cloudq.cft.yaml"
+      TemplateURL: !Sub "https://aws-quickstart-${AWS::Region}.s3.${AWS::Region}.${AWS::URLSuffix}/quickstart-qumulo-cloud-q/templates/cfn/cloudq.cft.yaml"
 
 Outputs:
 

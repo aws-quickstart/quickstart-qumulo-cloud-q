@@ -22,7 +22,7 @@ AWSTemplateFormatVersion: "2010-09-09"
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 # SOFTWARE.
 
-Description: This is the main template to spin up a Standard Qumulo Cluster with all options available in an existing VPC.  It calls cloudq.cft.yaml to instantiate the infrastructure. (qs-1s6n2i6af)
+Description: This is the main template to spin up a standard Qumulo cluster with all options available in an existing VPC. It calls cloudq.cft.yaml to instantiate the infrastructure. (qs-1s6n2i6af)
 
 Metadata:
   cfn-lint:
@@ -35,7 +35,7 @@ Metadata:
         - E9904 #Unknown exception while processing rule E9904
   QuickStartDocumentation:
     EntrypointName: 'Parameters for deploying into an existing VPC with advanced parameters'
-    Order: '3'
+    Order: '2'
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
@@ -250,7 +250,7 @@ Parameters:
     Description: AWS Private Subnet in the VPC.
 
   DomainName:
-    Description: "IF blank, R53 config will be skipped. If populated a Private R53 DNS Fully Qualified Domain Name will be created.  The .local suffix is one way to private DNS query resolution for the Qumulo cluster: e.g. qumulo.companyname.local"
+    Description: "(Optional) Enter a fully qualified domain name to create a private Route 53 private hosted zone to resolve IP addresses. You may use the .local suffix, e.g. qumulo.companyname.local. If your VPC already has a means of DNS resolution and you do not need to create a Route 53 private hosted zone, keep this value blank."
     AllowedPattern: '^$|^([a-zA-Z0-9-]+\..+)$'
     MaxLength: '255'
     Type: String

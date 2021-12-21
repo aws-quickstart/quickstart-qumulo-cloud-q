@@ -22,7 +22,7 @@ AWSTemplateFormatVersion: "2010-09-09"
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 # SOFTWARE.
 
-Description: This is the main template to spin up a Standard Qumulo Cluster with all options available and create a new VPC.  It calls aws-vpc.cft.yaml and cloudq.yaml to instantiate the infrastructure. (qs-1s6n2i6a8)
+Description: This is the main template to spin up a standard Qumulo cluster with all options available and create a new VPC. It calls aws-vpc.cft.yaml and cloudq.yaml to instantiate the infrastructure. (qs-1s6n2i6a8)
 
 Metadata:
   cfn-lint:
@@ -301,7 +301,7 @@ Parameters:
     AllowedValues:
       - "YES"
       - "NO"
-    Description: Select YES to provision an Elastic IP Address (public static) attached to a Network Loadbalancer listening only on port 443 for Qumulo Managment.  Not supported in Local Zones or Outpost.
+    Description: Select YES to provision an Elastic IP Address (public static) attached to a Network Load Balancer listening only on port 443 for Qumulo Management. Not supported in Local Zones or Outpost.
     Type: String
     Default: "NO"
 
@@ -314,7 +314,7 @@ Parameters:
     Default: "NO"
 
   DomainName:
-    Description: "IF blank, R53 config will be skipped. If populated a Private R53 DNS Fully Qualified Domain Name will be created.  The .local suffix is one way to private DNS query resolution for the Qumulo cluster: e.g. qumulo.companyname.local"
+    Description: "(Optional) To create a private Route 53 private hosted zone to resolve IP addresses, enter a fully qualified domain name. You may use the .local suffix, e.g. qumulo.companyname.local. If you intend to deploy a different means of DNS resolution in your VPC, you do not need to create a Route 53 private hosted zone. In this case, keep this value blank."
     AllowedPattern: '^$|^([a-zA-Z0-9-]+\..+)$'
     MaxLength: '255'
     Type: String
@@ -358,7 +358,7 @@ Parameters:
     Default: Select for Custom Offering OR Expanding Cluster
 
   QDiskConfig:
-    Description: "Choose the EBS Volume configuration and type for the Qumulo EC2 instances: AF= SSD, Hybrid st1= SSD+HDD st1, Hybrid sc1= SSD+HDD sc1. NOTE: This must match the EBS capacity and type of the Customizable Private Offer."
+    Description: "Choose the EBS volume configuration and type for the Qumulo EC2 instances: AF= SSD, Hybrid st1= SSD+HDD st1, Hybrid sc1= SSD+HDD sc1. NOTE: This must match the EBS capacity and type of the Customizable Private Offer."
     AllowedValues:
       - Select for Custom Offering
       - 600GiB-AF

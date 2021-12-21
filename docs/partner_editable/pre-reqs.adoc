@@ -1,123 +1,30 @@
-// If no preparation is required, remove all content from here
+==== Allow Qumulo public access if you use AWS Direct Connect
 
-//TODO Dave, This "pre-reqs.adoc" file is packed with implied task information that's not clear. Let's review together.
+If you use https://aws.amazon.com/directconnect/[AWS Direct Connect^] to connect between an on-premises environment and your AWS VPC, and if you restrict public access to specific URLs with a corporate firewall, ensure that your firewall allows access to the following Qumulo public URLs. Since these URLs' public IP addresses may occasionally change, allow access to the URL if you can. If you can't, allow access to the IP address resolved.
 
-==== Deploying with a custom IAM role
+[cols="1,3"]
+|===
+|URL |Description
 
-If you don't have the AWS recommended _AdministratorAccess_ managed policy then the following AWS services are required in a custom IAM role or IAM user to deploy this template:
+// Space needed to maintain table headers
+|https://trends.qumulo.com | Pulls code for software upgrades during provisioning. You can use this URL for statistics for your cluster.
+|https://missionq.qumulo.com | Delivers statistics to Qumulo's remote monitoring service, which is included in your Qumulo subscription.
+|https://ep1.qumulo.com | (Disabled by default) The cluster uses this URL if you enable remote VPN support for Qumulo Customer Success.
+|https://monitor.qumulo.com |Uses remote VPN support to deliver logs for collaborating with Qumulo Customer Success.
+|===
 
-//TODO Dave, How do people find out if they have the recommended managed policy?
+==== Additional planning and design information
 
-//Marcia, I'm adding steps below the list
+[cols="1,1"]
+|===
+|Documentation |Description
 
-//TODO Dave, Some of these items aren't services, as we call them above. What are all these?
-
-//Marcia, they are called "services" within the IAM console
-
-* application-autoscaling:
-* applicationinsights:
-* autoscaling:
-* cloudformation:
-* cloudtrail:
-* cloudwatch:
-* compute-optimizer:
-* ec2:
-* elasticloadbalancing:
-* events:
-* health:
-* iam:
-* kms:
-* lambda:
-* logs:
-* resource-groups:
-* route53:
-* s3:
-* secretsmanager:
-* sns:
-* ssm:
-* sqs:
-* tag:
-
-. Navigate to the https://console.aws.amazon.com/iamv2[IAM management console] and select *Roles*
-. Either select the custom role you would like to use or create a new role
-. For each policy attached to the role, either use "Policy summary" to view an overview of the policy permissions or "JSON" to view the JSON version of the policy
-. Ensure the role's policy or combined policies include access to all of the services listed above.
-
-==== Deploying without a Route 53 Private Hosted Zone
-
-Customers using Active Directory will often use DNS hosted by the domain controller or another DNS server. Reference this Qumulo whitepaper for DNS options in AWS for a comprehensive discussion of the topic: https://qumulo.com/resources/qumulo-dns-options-in-aws/[DNS options in AWS to enable IP Failover and Client Distribution^]
-
-If you are deploying into an environment without a DNS provider, provide a value for the *DomainName* parameter when deploying the template. Otherwise leave the parameter value blank to skip the creation of the Route 53 Private Hosted Zone.
-
-==== Deploying in a VPC with no Internet access
-
-//TODO Dave, For whom does this section apply? What are the steps within this task? When do people do them?
-
-//Marcia, this is for customers deploying into a VPC with no Internet access. The actual action items are in the numbered subsections. I've re-worded them into actionable step-by-step instructions.
-
-The architecture referenced herein expects a NAT gateway in the VPC. It is possible to deploy this Quick Start in an existing VPC without Internet access. To support deployments without public internet access the following VPC and S3 bucket requirements must be met:
-
-* VPC Interface Endpoints to support AWS services
-* A security group applied to each VPC Interface Endpoint
-* A Gateway VPC Endpoint for S3 access
-* The code for the Quick Start must be downloaded from GitHub and placed in your own S3 bucket
-* If software upgrades are to be performed by the template, Qumulo Core software must be placed in the `/upgrade` folder within the bucket in Qumulo Trends format.
-
-===== 1. VPC Interface Endpoints (for VPCs with no internet access)
-
-//TODO Dave, What is the task we're doing? Rephrase accordingly. (Do the same for each numbered section throughout.)
-
-. Open the https://console.aws.amazon.com/vpc[VPC Console^] and select *Endpoints*.
-. Choose *Create endpoint*.
-. Create the following endpoints in your VPC. Keep the policy for each endpoint as *Full Access*.
-.. ec2
-.. events
-.. kms
-.. lambda 
-.. logs 
-.. monitoring 
-.. profile 
-.. s3 (gateway endpoint)
-.. secretsmanager
-.. sns
-.. ssm
-.. sts
-.. sqs
-
-===== 2. VPC Interface Endpoints Security Group rules (for VPCs with no Internet access)
-
-The VPC endpoints created in the previous step are all associated with a security group. To allow traffic from the provisioning node and the Qumulo cluster, the security group applied to the VPC interface endpoints must have the following security groups added as inbound-rule sources (replacing the information in brackets):
-
-* `<stack name>-PROVISIONINGSTACK-<aws 12 digit code>-ProvisionerSG-<aws 12 digit code>`
-* `<stack name>-QSTACK-<aws 12 digit code>-QumuloSecurityGroup-<aws 12 digit code>`
-
-. Open the https://console.aws.amazon.com/vpc[VPC Console] and select *Endpoints*.
-. Select one of your newly-created endpoints and open the *Security Groups* tab.
-. Select the associated security group.
-. From the *Security Group* section, select *Edit inbound rules*.
-. Add inbound rules allowing all traffic from the provisioning stack and the Q stack listed earlier.
-
-===== 3. Automated Qumulo Core upgrades during deployment (for VPCs with no internet access)
-
-If you enter a newer software version than the Qumulo Core AMI was released with, the provisioning instance expects to find the code via the internet, or, in this case, from the S3 bucket. Since the provisioning instance will not be able to reach the public internet, it looks for code in the template's S3 bucket at the following prefix: `<your prefix>/upgrade/`. Typically this is `quickstart-qumulo-cloud-q-main/upgrade/`. All quarterly released images between the AMI ID release version to, and including, the requested version must be present in the bucket. For example, if the AMI was released with 4.0.6 and the desired version is 4.2.3, then 4.1.0.1, 4.2.0, and 4.2.3 versions must be in the bucket. If the software images are not present in the S3 bucket the Provisioning instance will not shutdown, nor will it progress with provisioning activities. 
-
-To see the quarterly release cadence just cat the file `<your prefix>/cfn-init/upgrade-order.txt`. Place the images in the bucket, and restart the provisioning instance if this occurs. The images must be in the Qumulo Trends format: `qumulo_upgrade_cloud_x.y.z.qimg`. If you have downloaded Qumulo .img files from Box.com, rename them to the Qumulo Trends format, and place them in your S3 bucket.
-
-//TODO Dave, what is "just cat" in the paragraph above?
-
-//TODO Dave, what does "if this occurs" refer to?
-
-. To deploy automated Qumulo Core upgrades during a deployment into a VPC with no internet access you must have deployed from your own S3 bucket. You can access the bucket from the https://console.aws.amazon.com/S3[S3 Console^] or via CLI.
-. Verify that the contents of the Quick Start are located in a directory in your S3 bucket.
-. Upload the required images to the `/upgrade/` directory under the S3 location from which you will be performing the deployment.
-
-==== Allowing Qumulo public access for customers with AWS Direct Connect
-
-//Marcia, the steps required to allow access to these URLs will vary based on the firewall in use.
-
-Customers with Direct Connect may choose to restrict public access to specific URLs with a corporate firewall.  Below is a list of the Qumulo public URLs and their purpose.  The Public IP addresses of these URLs are highly static, but may occasionally change. Allow access to the URL if you can, or allow access to the IP Address resolved if you must.
-
-* https://trends.qumulo.com This URL is used to pull code for software upgrades during provisioning and may also be leveraged by customers for historical statistics for their cluster.
-* https://missionq.qumulo.com This URL is used by the cluster to deliver statistics to Qumulo's remote monitoring service which is included free of charge in your Qumulo subscription.
-* https://ep1.qumulo.com This URL is used by the cluster if you enable remote VPN support for Qumulo Customer Success.  This is disabled by default.
-* https://monitor.qumulo.com This URL also leverages remote VPN support to deliver logs when collaborating with Qumulo Customer Success.
+// Space needed to maintain table headers
+|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/template-comparison.pdf[Cloud Q Quick Start: Template Comparison^]| Details on the parameters and options provided by this Quick Start's templates.
+|https://qumulo.com/resources/qumulo-dns-options-in-aws/[DNS options in AWS to enable IP failover and client distribution^] | Details on the DNS options in AWS.
+|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/supported-regions.pdf[Cloud Q Quick Start: Supported AWS Regions^] | Details on supported AWS Regions for this Quick Start.
+|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/deploying-without-inet.pdf[Cloud Q Quick Start: Deploying in an AWS VPC with no internet access^] | Details on deploying this Quick Start into a VPC that has no internet access.
+|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/deploying-with-custom-iam-role.pdf[Cloud Q Quick Start: Deploying with an AWS Custom IAM role^] | Details on deploying this Quick Start with a custom IAM role, including policy requirements.
+|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/resources-ebs-quota-planning.pdf[Cloud Q Quick Start: AWS resources & EBS Service Quota planning^] | Details on service-quota planning for EBS, including EC2 instance types and EBS volume types.
+|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/qumulo-sizing-performance.pdf[Cloud Q Quick Start: Qumulo sizing & performance on AWS^] | Details on Qumulo cluster performance and scalability on AWS.
+|===

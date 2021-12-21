@@ -3,17 +3,20 @@
 . Sign in to your AWS account at https://aws.amazon.com with an IAM user or role that has the necessary permissions. For details, see link:#_planning_the_deployment[Planning the deployment] earlier in this guide.
 . Make sure that your AWS account is configured correctly, as discussed in the link:#_technical_requirements[Technical requirements] section.
 
-=== Subscribe to a Qumulo Marketplace offer
+=== Subscribe to a Qumulo Marketplace AMI
 
-A Qumulo subscription for the chosen configuration and deployment region is required.
+. Go to the https://aws.amazon.com/marketplace[AWS Marketplace^].
 
-1. Go to https://aws.amazon.com/marketplace and type Qumulo in the search bar. Select one of the available offerings with a designated usable capacity. NOTE: If you have a private offer you will receive an email with a link to accept the private offer. The Customizable File Storage Node configuration in the Marketplace requires a private offer unless you choose to accept it with 320TiB per EC2 instance.
-2. Click **Continue to Subscribe** in the upper right corner. The subscription will take a couple of minutes to process.
-3. At this point the Marketplace process is complete when using any of the Cloud Q Quick Start templates. Close the Marketplace tab. Do not deploy from Marketplace.
+. In the search bar, enter `Qumulo`. 
+
+. Choose the offering with the appropriate capacity for your configuration and deployment Region.
+
+. Choose *Continue to Subscribe* on the upper right. The subscription processes within a few minutes.
+
+. If you have a private offer, accept the offer by clicking the link you receive in an email. For example, the https://aws.amazon.com/marketplace/pp/prodview-jp4qun3yw5hn4[Qumulo Customizable File Storage Node^] offering (unless you choose 320 TiB per EC2 instance) requires a private offer.
 
 === Launch the Quick Start
-// Adapt the following warning to your Quick Start.
-WARNING: If you’re deploying {partner-product-short-name} into an existing VPC, make sure that your VPC has both a private and public subnet.  This Quick Start doesn’t support https://docs.aws.amazon.com/vpc/latest/userguide/vpc-sharing.html[shared subnets^]. These subnets require https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html[NAT gateways^] in their route tables to allow the instances to download packages and software without exposing them to the Internet. Also make sure that the domain name option in the DHCP options is configured as explained in http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html[DHCP options sets^]. You provide your VPC settings when you launch the Quick Start.
+WARNING: If you're deploying {partner-product-short-name} into an existing VPC, ensure that your VPC has both a private and public subnet. This Quick Start doesn't support https://docs.aws.amazon.com/vpc/latest/userguide/vpc-sharing.html[shared subnets^]. These subnets require https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html[NAT gateways^] in their route tables to allow the instances to download packages and software without exposing them to the internet. Also ensure that the domain name option in the Dynamic Host Configuration Protocol (DHCP) options is configured as explained in http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html[DHCP options sets^]. You provide your VPC settings when you launch the Quick Start.
 
 Each deployment takes about {deployment_time} to complete.
 
@@ -21,16 +24,16 @@ Each deployment takes about {deployment_time} to complete.
 +
 [cols="3,1"]
 |===
-^|https://fwd.aws/395mW?[Deploy into a new VPC^]
+^|https://fwd.aws/395mW?[Deploy into a new VPC with advanced parameters^]
 ^|https://fwd.aws/mA9Nj?[View template^]
-
-^|https://fwd.aws/6bQmK?[Deploy into an existing VPC with standard parameters^]
-^|https://fwd.aws/yEYgV?[View template^]
 
 ^|https://fwd.aws/REjKv?[Deploy into an existing VPC with advanced parameters^]
 ^|https://fwd.aws/8PwWN?[View template^]
+
+^|https://fwd.aws/6bQmK?[Deploy into an existing VPC with standard parameters^]
+^|https://fwd.aws/yEYgV?[View template^]
 |===
 
-. Check the AWS Region that’s displayed in the upper-right corner of the navigation bar, and change it if necessary. This Region is where you build the network infrastructure. The template is launched in the {default_deployment_region} Region by default. For other choices, see link:#_supported_regions[Supported Regions] earlier in this guide.
+. Check the AWS Region that's displayed in the upper-right corner of the navigation bar, and change it if necessary. This Region is where you build the network infrastructure. The template is launched in the {default_deployment_region} Region by default. For more information, see link:#_supported_aws_regions[Supported AWS Regions] earlier in this guide.
 . On the *Create stack* page, keep the default setting for the template URL, and then choose *Next*.
-. On the *Specify stack details* page, change the stack name if needed. Review the parameters for the template. Provide values for the parameters that require input. For all other parameters, review the default settings and customize them as necessary. For details on each parameter, see the link:#_parameter_reference[Parameter reference] section of this guide. When you finish reviewing and customizing the parameters, choose *Next*.
+. On the *Specify stack details* page, change the stack name if needed. Review the parameters for the template. Provide values for the parameters that require input. For all other parameters, review the default settings and customize them as necessary. When you finish reviewing and customizing the parameters, choose *Next*.

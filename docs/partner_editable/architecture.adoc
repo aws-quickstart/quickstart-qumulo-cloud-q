@@ -6,33 +6,28 @@ AWS Cloud.
 
 [#architecture1]
 .Quick Start architecture for {partner-product-short-name} on AWS
-image::../images/qumulo-cloud-q-architecture_diagram.png[Architecture]
+image::../images/qumulo-cloud-q-architecture_diagram.png[Architecture, 90%]
 
 As shown in <<architecture1>>, the Quick Start sets up the following:
 
-* A highly available architecture that spans two Availability Zones.*
+* Two Availability Zones: one for the Qumulo cluster and another that you could use for a https://qumulo.com/solution/recover-q/[disaster recovery Qumulo cluster^].*
 * A VPC configured with public and private subnets, according to AWS best practices, to provide you with your own virtual network on AWS.*
 
-* In the public subnet:
-** A managed network address translation (NAT) gateway to allow outbound internet access for resources in the private subnet.
+* In the public subnet, a managed network address translation (NAT) gateway to allow outbound internet access for resources in the private subnet.
 
 * In the private subnet:
-** A cluster of Amazon Elastic Compute Cloud (Amazon EC2) instances for Qumulo Core.
-** A cluster of Qumulo EC2 instances.
-*** 4 to 20 nodes.
-*** 1 TB to 6 PB of usable capacity.
-** Multiple Amazon Elastic Block Store (Amazon EBS) volumes connected to the Qumulo cluster.
-*** 28 unique EBS volume configurations (disk configs) are available.
-*** All flash (solid state drive, or SSD) and hybrid (SSD + hard disk drive, or HDD) disk configs are available.
-** A provisioner EC2 instance, which automatically shuts down after provisioning the Qumulo cluster and automatically restarts during stack updates.
-** (Optional) An Amazon Route 53 hosted zone. With this option, which is available when you use Route 53 to resolve all DNS for the VPC, you can provision a Route 53 hosted zone to configure DNS A records for the cluster.
-* (Optional) A Network Load Balancer (with an elastic IP address) to distribute traffic to ____.
-//TODO Dave, Please complete the above bullet. (Note: I moved that icon out of the subnet in the diagram.)
-* AWS Key Management Service (AWS KMS) to store a private key.
+** A cluster of Amazon Elastic Compute Cloud (Amazon EC2) instances that run the Qumulo Core software. (Qumulo refers to instances as nodes.)
+** Amazon Elastic Block Store (Amazon EBS) volumes, which store the files for the Qumulo cluster.
+** A provisioner EC2 instance (node), which automatically stops running after provisioning the Qumulo cluster. It automatically restarts during stack updates.
+** (Optional) An Amazon Route 53 hosted zone to configure DNS A records for the cluster.
+
+* AWS Key Management Service (AWS KMS) to use a customer managed key for encryption of EBS volumes.
 * AWS Secrets Manager to store credentials.
 * AWS Identity and Access Management (IAM) to manage roles.
-* Amazon CloudWatch to log metrics for the Qumulo cluster.
-* Amazon Simple Notification Service (Amazon SNS) to send alerts for EBS volume anomalies.
-* AWS Lambda to collect metrics for the Qumulo cluster and monitor EBS-volume health.
+* Amazon CloudWatch to log metrics for the Qumulo cluster and access a CloudWatch dashboard for the cluster.
+* Amazon Simple Notification Service (Amazon SNS) to send alerts for EBS volume anomalies and EC2-instance recovery events.
+* AWS Systems Manager for monitoring and storing the Qumulo cluster's provisioning state.
+* Amazon S3 for populating content on the Qumulo cluster.
+* AWS Lambda to collect metrics for the Qumulo cluster and monitor EBS volume health. (Qumulo refers to Lambda as Sidecar.)
 
-[.small]#* The templates that deploy the Quick Start into an existing VPC skip the components marked by an asterisk and prompt you for your existing VPC configuration.#
+[.small]#* The template that deploys the Quick Start into an existing VPC skips the components marked by an asterisk and prompts you for your existing VPC configuration.#
