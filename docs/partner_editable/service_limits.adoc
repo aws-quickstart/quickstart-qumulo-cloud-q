@@ -11,5 +11,3 @@
 |Lambda functions |2
 |EBS volumes |Depends on the disk configuration
 |===
-
-//TODO Dack, What do we mean by "public management"?
