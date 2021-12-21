@@ -10,12 +10,6 @@ Follow these steps to confirm that all the cluster instances are running and tha
 . Verify that all the cluster instances are running.
 . Verify that the provisioner instance (`...Qumulo Provisioning Node`) has stopped running. If it's still running, wait. It takes up to 15 minutes after stack creation for this instance to finish initializing. If it hasn't stopped running after 15 minutes, see the troubleshooting section link:#_the_provisioner_instance_is_still_running[The provisioner instance is still running].
 
-//TODO Dack, What's the exact UI label for the running instance filter in Step 2?
-//Marcia, corrected
-
-//TODO Dack, Please confirm the accuracy of my changes in this section.
-//Marcia, They look correct, I only changed 'Qumulo Console, to Qumulo UI.  We do not call our GUI a console because historically many people think that is a CLI.  I realize AWS calls their GUI a 'console'.
-
 === Check cluster quorum formation and data protection
 Follow these steps to confirm that the cluster formed quorum, that you have the expected number of instances in the cluster, and that your data is protected.
 
@@ -27,7 +21,7 @@ Follow these steps to confirm that the cluster formed quorum, that you have the 
 * If connecting by the public internet, copy the *QumuloPublicIP* URL, and open a page from your local machine. 
 * If connecting from within your VPC, copy the *QumuloPrivateIP* URL, and paste it into the browser of an EC2 instance running Chrome.
 
-. Log in to the Qumulo UI with the user name 'admin' and administrator password you provided during deployment. When you see the Qumulo dashboard, shown in <<additional19>>, you know that your cluster formed quorum. 
+. Log in to the Qumulo user interface with the user name 'admin' and administrator password you provided during deployment. When you see the Qumulo dashboard, shown in <<additional19>>, you know that your cluster formed quorum. 
 +
 [#additional19]
 .Qumulo dashboard
@@ -48,10 +42,7 @@ image::../images/image20.png[Additional20]
 
 === (Optional) Set up disaster recovery - Qumulo Recover Q
 
-For disaster recovery and business continuity, you can deploy one or more https://qumulo.com/solution/recover-q/[Qumulo Recover Q^] clusters in other Availability Zones or AWS Regions. For more information, see https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/deploy-recover-q.pdf[Deploy a Recover Q Cluster using this Quick Start^].
-
-//TODO Before we publish, (1) confirm that this PDF link works and (2) match the link text to the PDF title. 
-//Marcia, the links work and are named correctly
+For disaster recovery and business continuity, you can deploy one or more https://qumulo.com/solution/recover-q/[Qumulo Recover Q^] clusters in other Availability Zones or AWS Regions. For more information, see https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/deploy-recover-q.pdf[Cloud Q Quick Start: Deploy a Recover Q Cluster^].
 
 === (Optional) Copy data into your cluster from an S3 bucket
 
@@ -74,12 +65,9 @@ To learn how to use the stack to maintain the Qumulo cluster through its life cy
 |Documentation |Description
 
 // Space needed to maintain table headers
-|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/stack-updates.pdf[Supported CloudFormation Stack Updates^]| Details on CloudFormation stack update options and examples, including adding instances (nodes) to the cluster and upgrading the Qumulo Sidecar.
-|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/stack-deletion.pdf[Deleting the CloudFormation Stack^]| Details on termination protection and on cleaning up an AWS KMS customer managed key policy. 
-|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/cloudwatch-dashboard.pdf[Using the Custom CloudWatch Dashboard^]| Details on viewing the CloudWatch dashboard and resource groups that are created for the Qumulo cluster.
-|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/provisioning-instance-functions.pdf[Provisioning Instance Functions^]| Details on the functions of the provisioner instance.
-|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/updating-to-advanced.pdf[Updating to the Advanced Template^]| Details on updating to the advanced parameters if you originally deployed the {partner-product-name} Quick Start using the template with standard parameters.
+|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/stack-updates.pdf[Cloud Q Quick Start: Supported CloudFormation Stack Updates^]| Details on CloudFormation stack update options and examples, including adding instances (nodes) to the cluster and upgrading the Qumulo Sidecar.
+|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/stack-deletion.pdf[Cloud Q Quick Start: Deleting the CloudFormation Stack^]| Details on termination protection and on cleaning up an AWS KMS customer managed key policy. 
+|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/cloudwatch-dashboard.pdf[Cloud Q Quick Start: Using the Custom CloudWatch Dashboard^]| Details on viewing the CloudWatch dashboard and resource groups that are created for the Qumulo cluster.
+|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/provisioning-instance-functions.pdf[Cloud Q Quick Start: Provisioning Instance Functions^]| Details on the functions of the provisioner instance.
+|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/updating-to-advanced.pdf[Cloud Q Quick Start: Updating to the Advanced Template^]| Details on updating to the advanced parameters if you originally deployed the {partner-product-name} Quick Start using the template with standard parameters.
 |===
-
-//TODO Before we publish, (1) confirm that these PDFs are available. (2) Match this link text to the PDF titles. 
-//Marcia I updated all links so they are functional and tested all of them.  Also synchronized the names.
