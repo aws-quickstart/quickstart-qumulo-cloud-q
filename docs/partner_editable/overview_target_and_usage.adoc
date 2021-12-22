@@ -2,4 +2,4 @@
 // Identify your target audience and explain how/why they would use this Quick Start.
 //Avoid borrowing text from third-party websites (copying text from AWS service documentation is fine). Also, avoid marketing-speak, focusing instead on the technical aspect.
 
-This guide provides instructions for deploying {partner-product-name} Quick Start reference architecture in the AWS Cloud.
+This guide provides instructions for deploying the{partner-product-name} Quick Start reference architecture in the AWS Cloud.

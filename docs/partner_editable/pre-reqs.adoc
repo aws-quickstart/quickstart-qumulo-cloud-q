@@ -1,6 +1,6 @@
 ==== Allow Qumulo public access if you use AWS Direct Connect
 
-If you use https://aws.amazon.com/directconnect/[AWS Direct Connect^] to connect between an on-premises environment and your AWS VPC, and if you restrict public access to specific URLs with a corporate firewall, ensure that your firewall allows access to the following Qumulo public URLs. Since these URLs' public IP addresses may occasionally change, allow access to the URL if you can. If you can't, allow access to the IP address resolved.
+If you use https://aws.amazon.com/directconnect/[AWS Direct Connect^] to connect between an on-premises environment and your VPC on AWS, and if you restrict public access to specific URLs with a corporate firewall, ensure that your firewall allows access to the following Qumulo public URLs. Since these URLs' public IP addresses may occasionally change, allow access to the URL if you can. If you can't, allow access to the IP address resolved.
 
 [cols="1,3"]
 |===
@@ -23,8 +23,8 @@ If you use https://aws.amazon.com/directconnect/[AWS Direct Connect^] to connect
 |https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/template-comparison.pdf[Cloud Q Quick Start: Template Comparison^]| Details on the parameters and options provided by this Quick Start's templates.
 |https://qumulo.com/resources/qumulo-dns-options-in-aws/[DNS options in AWS to enable IP failover and client distribution^] | Details on the DNS options in AWS.
 |https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/supported-regions.pdf[Cloud Q Quick Start: Supported AWS Regions^] | Details on supported AWS Regions for this Quick Start.
-|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/deploying-without-inet.pdf[Cloud Q Quick Start: Deploying in an AWS VPC with no internet access^] | Details on deploying this Quick Start into a VPC that has no internet access.
+|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/deploying-without-inet.pdf[Cloud Q Quick Start: Deploying in a VPC on AWS with no internet access^] | Details on deploying this Quick Start into a VPC that has no internet access.
 |https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/deploying-with-custom-iam-role.pdf[Cloud Q Quick Start: Deploying with an AWS Custom IAM role^] | Details on deploying this Quick Start with a custom IAM role, including policy requirements.
-|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/resources-ebs-quota-planning.pdf[Cloud Q Quick Start: AWS resources & EBS Service Quota planning^] | Details on service-quota planning for EBS, including EC2 instance types and EBS volume types.
+|https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/resources-ebs-quota-planning.pdf[Cloud Q Quick Start: AWS resources & EBS Service Quota planning^] | Details on service-quota planning for Amazon EBS, including EC2 instance types and EBS volume types.
 |https://github.com/qumulo/aws-quickstart-cloud-q/blob/main/supplemental-docs/qumulo-sizing-performance.pdf[Cloud Q Quick Start: Qumulo sizing & performance on AWS^] | Details on Qumulo cluster performance and scalability on AWS.
 |===
