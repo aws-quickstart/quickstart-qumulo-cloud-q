@@ -6,7 +6,7 @@
 |Elastic IP addresses (optional for public management) |1
 |Security groups |2
 |IAM roles |4
-|Qumulo EC2 instances |4 to 20
+|Qumulo EC2 instances |4–20
 |Provisioner EC2 instance |1
 |Lambda functions |2
 |EBS volumes |Depends on the disk configuration

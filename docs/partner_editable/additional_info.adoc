@@ -52,13 +52,13 @@ If you're using Qumulo Core version 4.3.0 or newer, you can populate data on you
 . Choose *Cluster*, *Copy to/from S3*.
 . Fill in the parameters. 
 
-For more information on the Qumulo Shift feature set, user interface, and command-line interface, see the following:
+For more information on the Qumulo Shift feature set, user interface, and command line interface, see the following:
 
-* https://github.com/Qumulo/docs/blob/gh-pages/shift-from-s3.md[Qumulo Shift—Copy from S3^]
-* https://github.com/Qumulo/docs/blob/gh-pages/shift-to-s3.md[Qumulo Shift—Copy to S3^]
+* https://github.com/Qumulo/docs/blob/gh-pages/shift-from-s3.md[Qumulo Shift—Copy from Amazon S3^]
+* https://github.com/Qumulo/docs/blob/gh-pages/shift-to-s3.md[Qumulo Shift—Copy to Amazon S3^]
 
 === Additional information
-To learn how to use the stack to maintain the Qumulo cluster through its life cycle and view metrics in CloudWatch, see the following:
+To learn how to use the stack to maintain the Qumulo cluster through its lifecycle and view metrics in CloudWatch, see the following:
 
 [cols="1,2"]
 |===
