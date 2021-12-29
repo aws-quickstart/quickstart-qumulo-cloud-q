@@ -68,9 +68,9 @@ To determine and remedy the cause of the failure, follow these steps:
 |The message "Service limit exceeded" indicates that the QSTACK failed because https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html[AWS service quotas^] (formerly referred to as limits) were not planned.| Either delete resources to free available capacity or contact AWS Support and request an increase in service quotas.
 |===
 
-=== The cluster didn't form quorum
+=== Qumulo doesn't prompt me for user name and password
 
-You know that the cluster didn't form quorum if, when you open the Qumulo software, you're prompted to agree to the end user agreement instead of being prompted for your user name and password. 
+When you open the Qumulo software, if you see the End User Agreement screen instead of a prompt for your user name and password, the cluster didn't form quorum. 
 
 [cols="1,1"]
 |===

@@ -27,7 +27,7 @@ Follow these steps to confirm that the cluster formed quorum, that you have the 
 .Qumulo dashboard
 image::../images/image19.png[Additional19]
 +
-If, instead of being prompted for a user name and password, you see the End User Agreement screen, the cluster failed to form quorum. See the troubleshooting section link:#_the_cluster_didnt_form_quorum[The cluster didn't form quorum].
+If, instead of a prompt for user name and password, you see the End User Agreement screen, the cluster failed to form quorum. See the troubleshooting section link:#_qumulo_doesnt_prompt_me_for_user_name_and_password[Qumulo doesn't prompt me for user name and password].
 
 . Choose *More details*. Verify the following, as shown in <<additional20>>.
 .. The number of instances (nodes) listed matches the number you expect.
