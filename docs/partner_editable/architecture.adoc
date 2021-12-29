@@ -16,7 +16,7 @@ As shown in <<architecture1>>, the Quick Start sets up the following:
 * In the public subnet, a managed network address translation (NAT) gateway to allow outbound internet access for resources in the private subnet.
 
 * In the private subnet:
-** A cluster of Amazon Elastic Compute Cloud (Amazon EC2) instances that run the Qumulo Core software. (Qumulo refers to instances as nodes.)
+** A cluster of Amazon Elastic Compute Cloud (Amazon EC2) instances that run the Qumulo Core software. (Qumulo uses the term _node_ instead of _instance_.)
 ** Amazon Elastic Block Store (Amazon EBS) volumes, which store the files for the Qumulo cluster.
 ** A provisioner EC2 instance (node), which automatically stops running after provisioning the Qumulo cluster. It automatically restarts during stack updates.
 ** (Optional) An Amazon Route 53 hosted zone to configure DNS A records for the cluster.
