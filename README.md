@@ -1,7 +1,7 @@
 
-## quickstart-qumulo-cloud-q—Quick Start
+## Qumulo Cloud Q on the AWS Cloud—Quick Start
 
-For architectural details, step-by-step instructions, and customization options, see the [deployment guide](https://aws-quickstart.github.io/quickstart-qumulo-cloud-q/).
+For architectural details, step-by-step instructions, and customization options, see the [deployment guide](https://fwd.aws/EXedJ?).
 
 To post feedback, submit feature ideas, or report bugs, use the **Issues** section of this GitHub repo. 
 

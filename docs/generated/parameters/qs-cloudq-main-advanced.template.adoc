@@ -24,7 +24,7 @@
 (`QPublicMgmt`)|`NO`|Select YES to provision an Elastic IP Address (public static) attached to a Network Loadbalancer listening only on port 443 for Qumulo Managment.  Not supported in Local Zones or Outpost.|OPTIONAL: Enable Replication Port for Qumulo Public IP
 (`QPublicRepl`)|`NO`|Select YES to enable port 3712 for replication from on-prem Qumulo systems using the Elastic IP (public static) for Qumulo Managment.  Requires YES to Public Management above.|AWS Public Subnet ID
 (`PublicSubnetID`)|`**__Requires input__**`|An AWS subnet ID MUST be selected. It is only used if YES for Public Management was selected above.|OPTIONAL: FQDN for R53 Private Hosted Zone
-(`DomainName`)|`**__Blank string__**`|IF blank, R53 config will be skipped. If populated a Private R53 DNS Fully Qualified Domain Name will be created.  The .local suffix is one way to private DNS query resolution for the Qumulo cluster: e.g. qumulo.companyname.local|OPTIONAL: R53 Record Name for Qumulo RR DNS 
+(`DomainName`)|`**__Blank string__**`|(Optional) Enter a fully qualified domain name to create a private Route 53 private hosted zone to resolve IP addresses. You may use the .local suffix, e.g. qumulo.companyname.local. If your VPC already has a means of DNS resolution and you do not need to create a Route 53 private hosted zone, keep this value blank.|OPTIONAL: R53 Record Name for Qumulo RR DNS 
 (`QFloatRecordName`)|`**__Blank string__**`|ONLY APPLICABLE if a domain name was provided above.  Record Name for R53 Private Hosted Zone Qumulo Cluster floating IPs.  This will add a prefix to the example FQDN above: e.g. cluster1.qumulo.mycompanyname.local
 |===
 .Qumulo File Data Platform Configuration

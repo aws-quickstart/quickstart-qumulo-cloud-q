@@ -22,7 +22,7 @@ AWSTemplateFormatVersion: "2010-09-09"
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 # SOFTWARE.
 
-Description: This is the main template to spin up a Basic Qumulo Cluster in an existing VPC with minimal options.  It calls cloudq.cft.yaml to instantiate the infrastructure. (qs-1s6n2i6a8)
+Description: This is the main template to spin up a basic Qumulo cluster in an existing VPC with minimal options. It calls cloudq.cft.yaml to instantiate the infrastructure. (qs-1sj2laibp)
 
 Metadata:
   cfn-lint:
@@ -31,24 +31,24 @@ Metadata:
         - W9006
         - W9901
   QuickStartDocumentation:
-    EntrypointName: 'Parameters for deploying into a new VPC'
-    Order: '1'
+    EntrypointName: 'Parameters for deploying Qumulo Cloud Q into an existing VPC with standard parameters'
+    Order: '3'
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
-          default: AWS Template Configuration - Cloud Q Quick Start Existing VPC - Standard v3.7
+          default: Template configuration—Cloud Q Quick Start for existing VPC—standard parameters—v3.7
         Parameters:
           - KeyPair
 
       - Label: 
-          default: AWS Network Configuration
+          default: AWS network configuration
         Parameters:
           - VPCId
           - QSgCidr1        
           - PrivateSubnetID                   
 
       - Label:
-          default: Qumulo File Data Platform Configuration
+          default: Qumulo file data platform configuration
         Parameters:
           - QMarketPlaceType
           - QInstanceType
@@ -58,44 +58,44 @@ Metadata:
           - TermProtection
 
       - Label:
-          default: Qumulo EBS Monitoring/Replacement & CloudWatch Metrics Configuration
+          default: Qumulo EBS monitoring/replacement & CloudWatch metrics configuration
         Parameters:
           - SideCarVersion                    
 
     ParameterLabels:
       KeyPair:
-        default: "AWS Key-Pair Name"
+        default: "EC2 key pair"
       VPCId:
-        default: "AWS VPC ID"
+        default: "VPC ID"
       QSgCidr1:
-        default: "Qumulo Security Group CIDR"
+        default: "CIDR of the Qumulo security group"
       PrivateSubnetID:
-        default: "AWS VPC Private Subnet ID"
+        default: "Private subnet ID"
       QClusterAdminPwd:
-        default: "Qumulo Cluster Admin Password"
+        default: "Qumulo Cluster admininstrator password"
       QInstanceType:
-        default: "Qumulo EC2 Instance Type"
+        default: "Qumulo EC2 instance type"
       QNodeCount: 
-        default: "Total Number of Qumulo EC2 Instances"
+        default: "Number of Qumulo EC2 instances"
       QDiskConfig:
-        default: "EBS Volume Configuration per EC2 Instance"
+        default: "EBS volume configuration"
       QMarketPlaceType:
-        default: "Qumulo AWS Marketplace Offering Accepted"
+        default: "Type of Qumulo AWS Marketplace offering"
       TermProtection:
-        default: "Enable Termination Protection"  
+        default: "Termination protection"  
       SideCarVersion:
-        default: "Qumulo Sidecar Software Version "            
+        default: "Qumulo Sidecar software version "            
 
 Parameters:
 
   KeyPair:
-    Description: Name of an existing EC2 Key Pair to enable authentication to instances
+    Description: Name of the key pair to be used to connect to your EC2 instances.
     Type: AWS::EC2::KeyPair::KeyName
     Default: mykeypair
 
   VPCId:
     Type: AWS::EC2::VPC::Id
-    Description: AWS VPC ID.
+    Description: ID of the VPC that you're deploying this Quick Start into.
 
   QSgCidr1:
     AllowedPattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(3[0-2]|[1-2][0-9]|[0-9]))$"
@@ -105,7 +105,7 @@ Parameters:
 
   PrivateSubnetID:
     Type: AWS::EC2::Subnet::Id
-    Description: AWS Private Subnet in the VPC.
+    Description: ID of the private subnet.
 
   QInstanceType:
     Description: EC2 instance type for Qumulo nodes.
@@ -124,7 +124,7 @@ Parameters:
     Default: m5.2xlarge
 
   QNodeCount:
-    Description: "Total number of EC2 instances, or Qumulo Nodes, in the Qumulo Cluster: (4-10).  NOTE: This field may be used to add nodes with a CloudFormation Stack Update after initial provisioning."
+    Description: "Total number of EC2 instances, or nodes, in the Qumulo cluster (4-20). You can use this field to add nodes with a CloudFormation stack update after initial provisioning."
     AllowedValues:
       - Select for Custom Offering OR Expanding Cluster
       - "4"
@@ -148,7 +148,7 @@ Parameters:
     Default: Select for Custom Offering OR Expanding Cluster
 
   QDiskConfig:
-    Description: "Choose the EBS Volume configuration and type for the Qumulo EC2 instances: AF= SSD, Hybrid st1= SSD+HDD st1, Hybrid sc1= SSD+HDD sc1. NOTE: This must match the EBS capacity and type of the Customizable Private Offer."
+    Description: "Choose the EBS volume configuration and type for the Qumulo EC2 instances: AF= SSD, Hybrid st1= SSD+HDD st1, Hybrid sc1= SSD+HDD sc1. This must match the EBS capacity and type of the customizable private offer."
     AllowedValues:
       - Select for Custom Offering
       - 600GiB-AF
@@ -183,7 +183,7 @@ Parameters:
     Default: Select for Custom Offering
 
   QMarketPlaceType:
-    Description: Select the Qumulo Cluster usable capacity per the accpeted AWS Marketplace offering.  Customizable offerings typically leverage a Private Offer via AWS Marketplace and can be used to deploy 1TB to 6PB with this template.
+    Description: Choose the usable capacity of the AWS Marketplace Qumulo offering you accepted. Customizable offerings typically use a private offer from AWS Marketplace and can be used to deploy 1TB to 6PB with this template.
     AllowedValues:
       - 1TB-Usable-All-Flash
       - 12TB-Usable-Hybrid-st1
@@ -197,14 +197,14 @@ Parameters:
 
   QClusterAdminPwd:
     AllowedPattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&\\-_])[A-Za-z\\d@$!%*?&\\-_]{8,}$"
-    Description: "Minumum 8 characters and must include one each of: uppercase, lowercase, and a special character."
+    Description: "Minimum 8 characters. Must include one each of the following: uppercase letter, lowercase letter, and special character."
     MaxLength: 128
     MinLength: 8
     Type: String
     NoEcho: "true"
 
   TermProtection:
-    Description: Enable Termination Protection for EC2 instances and the CloudFormation stack
+    Description: Enable termination protection for EC2 instances and the CloudFormation stack.
     AllowedValues:
       - "YES"
       - "NO"
@@ -212,8 +212,8 @@ Parameters:
     Default: "YES"    
 
   SideCarVersion:
-    Description: "Keep default value for new deployments.  NOTE: This field may be used to upgrade the SideCar software version 
-                  with a CloudFormation Stack Update after upgrading the cluster via the Web UI or REST API."
+    Description: "Keep the default value for new deployments. You may use this field to upgrade the SideCar software version 
+                  with a CloudFormation stack update after upgrading the cluster using the web UI or REST API."
     MaxLength: 11
     MinLength: 5
     Type: String
@@ -226,7 +226,7 @@ Rules:
       - Assert: !Not [!Equals [!Ref QNodeCount, "Select for Custom Offering OR Expanding Cluster"]]
         AssertDescription: "A Custom Marketplace Offering requires the EC2 Instance Count to be selected. "
       - Assert: !Not [!Equals [!Ref QDiskConfig, "Select for Custom Offering"]]
-        AssertDescription: "A Custom Marketplace Offering requires the EBS Volume Configuration to be selected. "  
+        AssertDescription: "A Custom Marketplace Offering requires the EBS volume configuration to be selected."  
 
 Resources:
 
@@ -234,9 +234,9 @@ Resources:
     Type: "AWS::CloudFormation::Stack"
     Properties:
       Parameters:
-        QSS3BucketName: "dackss3-dev"
+        QSS3BucketName: "aws-quickstart"
         QSS3KeyPrefix: "quickstart-qumulo-cloud-q/"
-        QSS3BucketRegion: "us-west-2"
+        QSS3BucketRegion: !Ref AWS::Region
         KeyPair: !Ref KeyPair
         EnvType: "dev"
         VPCId: !Ref VPCId
@@ -273,7 +273,7 @@ Resources:
         SideCarPassword: !Ref QClusterAdminPwd
         SideCarVersion: !Ref SideCarVersion
         SideCarSNSTopic: ""
-      TemplateURL: !Sub "https://dackss3-dev.s3.${AWS::Region}.${AWS::URLSuffix}/quickstart-qumulo-cloud-q/templates/cfn/cloudq.cft.yaml"
+      TemplateURL: !Sub "https://aws-quickstart-${AWS::Region}.s3.${AWS::Region}.${AWS::URLSuffix}/quickstart-qumulo-cloud-q/templates/cfn/cloudq.cft.yaml"
 
 Outputs:
 
