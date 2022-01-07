@@ -1,1 +1,3 @@
-Qumulo is a scalable, multiprotocol file data platform—a platform that companies use to manage unstructured data across billions of files. This Quick Start uses Qumulo https://qumulo.com/products/cloud-q/[Cloud Q^] to automatically provision a cluster of Qumulo file-storage instances in a single namespace in the AWS Cloud. For more information, see the https://care.qumulo.com/hc/en-us/categories/115000637447-KNOWLEDGE-BASE[Qumulo knowledge base^].
+The Qumulo https://qumulo.com/products/cloud-q/[Cloud Q^] Quick Start provisions a 1-TB to 6-PB cluster of Qumulo file-storage nodes in the AWS Cloud. The Qumulo multiprotocol file data platform delivers enterprise scale and performance for compute-intensive workloads, accelerating the monetization of your unstructured data.
+
+For more information, see the https://care.qumulo.com/hc/en-us/categories/115000637447-KNOWLEDGE-BASE[Qumulo knowledge base^].
