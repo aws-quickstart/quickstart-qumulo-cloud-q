@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.15">
+<meta name="generator" content="Asciidoctor 2.0.16">
 <title>Qumulo Cloud Q on the AWS Cloud</title>
 <style>
 
@@ -933,7 +933,10 @@ Amazon may share user-deployment information with the AWS Partner that collabora
 <h2 id="_qumulo_cloud_q_on_aws">Qumulo Cloud Q on AWS</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Qumulo is a scalable, multiprotocol file data platform—a platform that companies use to manage unstructured data across billions of files. This Quick Start uses Qumulo <a href="https://qumulo.com/products/cloud-q/" target="_blank" rel="noopener">Cloud Q</a> to automatically provision a cluster of Qumulo file-storage instances in a single namespace in the AWS Cloud. For more information, see the <a href="https://care.qumulo.com/hc/en-us/categories/115000637447-KNOWLEDGE-BASE" target="_blank" rel="noopener">Qumulo knowledge base</a>.</p>
+<p>The Qumulo <a href="https://qumulo.com/products/cloud-q/" target="_blank" rel="noopener">Cloud Q</a> Quick Start provisions a 1-TB to 6-PB cluster of Qumulo file-storage nodes in the AWS Cloud. The Qumulo multiprotocol file data platform delivers enterprise scale and performance for compute-intensive workloads, accelerating the monetization of your unstructured data.</p>
+</div>
+<div class="paragraph">
+<p>For more information, see the <a href="https://care.qumulo.com/hc/en-us/categories/115000637447-KNOWLEDGE-BASE" target="_blank" rel="noopener">Qumulo knowledge base</a>.</p>
 </div>
 </div>
 </div>
@@ -968,7 +971,7 @@ After you deploy the Quick Start, create <a href="https://docs.aws.amazon.com/aw
 <h2 id="_software_licenses">Software licenses</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Before you deploy the Cloud Q Quick Start, subscribe to a Qumulo Amazon Machine Image (AMI) in the AWS Marketplace. Additional pricing, terms, and conditions may apply. See the <a href="#_subscribe_to_a_qumulo_marketplace_ami">Subscribe to a Qumulo Marketplace AMI</a> section in this guide.</p>
+<p>Before you deploy the Cloud Q Quick Start, subscribe to a Qumulo Amazon Machine Image (AMI) in the AWS Marketplace. See the <a href="#_subscribe_to_a_qumulo_marketplace_ami">Subscribe to a Qumulo Marketplace AMI</a> section in this guide.</p>
 </div>
 </div>
 </div>
@@ -1279,6 +1282,9 @@ Certain Regions are available on an opt-in basis. For more information, see <a h
 </div>
 <div class="sect2">
 <h3 id="_subscribe_to_a_qumulo_marketplace_ami">Subscribe to a Qumulo Marketplace AMI</h3>
+<div class="paragraph">
+<p>This Quick Start supports all Qumulo AWS Marketplace offerings. The 1-TB and 12-TB offerings are free for 30 days.</p>
+</div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -1342,7 +1348,7 @@ If you&#8217;re deploying Cloud Q into an existing VPC, ensure that your VPC has
 </table>
 </li>
 <li>
-<p>Check the AWS Region that&#8217;s displayed in the upper-right corner of the navigation bar, and change it if necessary. This Region is where you build the network infrastructure. The template is launched in the us-east-1 Region by default. For more information, see <a href="#_supported_aws_regions">Supported AWS Regions</a> earlier in this guide.</p>
+<p>Check the AWS Region that&#8217;s displayed in the upper-right corner of the navigation bar, and change it if necessary. This Region is where you build the network infrastructure. The template is launched in the us-east-1 Region by default. You can deploy this Quick Start in all AWS Regions except those in China. You can deploy it in AWS Local Zones and on AWS Outposts. For more information, see <a href="#_supported_aws_regions">Supported AWS Regions</a> earlier in this guide.</p>
 </li>
 <li>
 <p>On the <strong>Create stack</strong> page, keep the default setting for the template URL, and then choose <strong>Next</strong>.</p>
@@ -1869,8 +1875,15 @@ and to share your customizations with others.</p>
 </div>
 <p class="footer-text">
 <!-- We can use document attributes: -->
-<!-- Generated with Asciidoctor v2.0.15. -->
+<!-- Generated with Asciidoctor v2.0.16. -->
 <a href="https://aws.amazon.com/privacy/">Privacy</a> | <a href="https://aws.amazon.com/terms/">Site terms</a> | &copy; 2021, Amazon Web Services, Inc. or its affiliates and Qumulo. All rights reserved.
 </p>
 </body>
 </html>
+<!--
+repo commit:
+9d2206e7912c3eee055e218ced122dbc84db2935
+
+submodule config:
+ 78f3dcce35fb62253fbdc5db4f77a57894ed7c77 docs/boilerplate (heads/main)
+-->
