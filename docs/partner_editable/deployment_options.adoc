@@ -1,6 +1,4 @@
-// Edit this placeholder text to accurately describe your architecture.
-
-This Quick Start provides two deployment options:
+This Quick Start provides three deployment options:
 
 * *Deploy {partner-product-short-name} into a new VPC with advanced parameters*. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateway, security groups, and other infrastructure components. It then deploys {partner-product-short-name} into the new VPC, exposing all parameter options for full flexibility.
 * *Deploy {partner-product-short-name} into an existing VPC with advanced parameters*. This option provisions {partner-product-short-name} in your existing AWS infrastructure, exposing all parameter options for full flexibility.
