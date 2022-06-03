@@ -354,7 +354,7 @@ Resources:
           bkt_pfx="$s3bkt/$s3pfx"
           req_ver="${QClusterVersion}"
 
-          if [ $(curl -sI -w "%{http_code}\\n" "s3.$region.amazonaws.com" -o /dev/null --connect-timeout 3 --max-time 5) == "405" ]; then
+          if [ $(curl -sI -w "%{http_code}\\n" "s3.$region.amazonaws.com" -o /dev/null --connect-timeout 10 --retry 10 --retry-delay 5 --max-time 200) == "405" ]; then
             echo "S3 Reachable"
           else
             echo "S3 Unreachable, Inet access or VPC S3 gateway and VPC endpoints required."
@@ -364,11 +364,11 @@ Resources:
           if [[ -e "functions-v3.sh" ]]; then
             echo "functions-v3 exist"
           else
-            aws s3 cp s3://$bkt_pfx"templates/cfn-init/functions-v3.sh" ./functions-v3.sh --quiet
+            aws s3 cp s3://$bkt_pfx"templates/cfn-init/functions-v3.sh" ./functions-v3.sh
           fi
           source functions-v3.sh
 
-          if [ $(curl -sL -w "%{http_code}\\n" "trends.qumulo.com" -o /dev/null --connect-timeout 3 --max-time 5) == "200" ]; then
+          if [ $(curl -sL -w "%{http_code}\\n" "trends.qumulo.com" -o /dev/null --connect-timeout 10 --retry 10 --retry-delay 5 --max-time 200) == "200" ]; then
             ssmput "last-run-status" "$region" "$q_stackname" "BOOTED. Public Internet Reachable"
             no_inet="false"
           else
