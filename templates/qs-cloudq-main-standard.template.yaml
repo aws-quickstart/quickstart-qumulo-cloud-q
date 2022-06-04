@@ -36,7 +36,7 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
-          default: Template configuration—Cloud Q Quick Start for existing VPC—standard parameters—v3.7
+          default: Template configuration—Cloud Q Quick Start for existing VPC—standard parameters—v3.8
         Parameters:
           - KeyPair
 

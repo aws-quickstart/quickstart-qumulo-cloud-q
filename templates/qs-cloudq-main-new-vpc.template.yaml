@@ -36,7 +36,7 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
-          default: Template configuration—Cloud Q Quick Start for new VPC—v3.7
+          default: Template configuration—Cloud Q Quick Start for new VPC—v3.8
         Parameters:
           - QSS3BucketName
           - QSS3KeyPrefix
