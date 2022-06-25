@@ -41,7 +41,7 @@ Parameters:
   Region:
     Type: String
   FloatIPs: 
-    Type: String
+    Type: CommaDelimitedList
   NumNodes:
     Type: String
   NumIPs:
@@ -247,28 +247,28 @@ Resources:
       RecordSets:
         - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
           ResourceRecords: 
-            - !Select [0, !Split [", ", !Ref FloatIPs]]
+            - !Select [0, !Ref FloatIPs]
           SetIdentifier: "Qumulo FIP 1"
           Type: A
           TTL: "0"
           Weight: 0
         - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
           ResourceRecords: 
-            - !Select [1, !Split [", ", !Ref FloatIPs]]
+            - !Select [1, !Ref FloatIPs]
           SetIdentifier: "Qumulo FIP 2"
           Type: A
           TTL: "0"
           Weight: 0
         - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
           ResourceRecords: 
-            - !Select [2, !Split [", ", !Ref FloatIPs]]
+            - !Select [2, !Ref FloatIPs]
           SetIdentifier: "Qumulo FIP 3"
           Type: A
           TTL: "0"
           Weight: 0
         - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
           ResourceRecords: 
-            - !Select [3, !Split [", ", !Ref FloatIPs]]
+            - !Select [3, !Ref FloatIPs]
           SetIdentifier: "Qumulo FIP 4"
           Type: A
           TTL: "0"
@@ -277,7 +277,7 @@ Resources:
           - Provision5
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [4, !Split [", ", !Ref FloatIPs]]
+              - !Select [4, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 5"
             Type: A
             TTL: "0"
@@ -287,7 +287,7 @@ Resources:
           - Provision6
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [5, !Split [", ", !Ref FloatIPs]]
+              - !Select [5, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 6"
             Type: A
             TTL: "0"
@@ -297,7 +297,7 @@ Resources:
           - Provision7
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [6, !Split [", ", !Ref FloatIPs]]
+              - !Select [6, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 7"
             Type: A
             TTL: "0"
@@ -307,7 +307,7 @@ Resources:
           - Provision8
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [7, !Split [", ", !Ref FloatIPs]]
+              - !Select [7, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 8"
             Type: A
             TTL: "0"
@@ -317,7 +317,7 @@ Resources:
           - Provision9
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [8, !Split [", ", !Ref FloatIPs]]
+              - !Select [8, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 9"
             Type: A
             TTL: "0"
@@ -327,7 +327,7 @@ Resources:
           - Provision10
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [9, !Split [", ", !Ref FloatIPs]]
+              - !Select [9, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 10"
             Type: A
             TTL: "0"
@@ -337,7 +337,7 @@ Resources:
           - Provision11
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [10, !Split [", ", !Ref FloatIPs]]
+              - !Select [10, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 11"
             Type: A
             TTL: "0"
@@ -347,7 +347,7 @@ Resources:
           - Provision12
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [11, !Split [", ", !Ref FloatIPs]]
+              - !Select [11, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 12"
             Type: A
             TTL: "0"
@@ -357,7 +357,7 @@ Resources:
           - Provision13
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [12, !Split [", ", !Ref FloatIPs]]
+              - !Select [12, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 13"
             Type: A
             TTL: "0"
@@ -367,7 +367,7 @@ Resources:
           - Provision14
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [13, !Split [", ", !Ref FloatIPs]]
+              - !Select [13, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 14"
             Type: A
             TTL: "0"
@@ -377,7 +377,7 @@ Resources:
           - Provision15
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [14, !Split [", ", !Ref FloatIPs]]
+              - !Select [14, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 15"
             Type: A
             TTL: "0"
@@ -387,7 +387,7 @@ Resources:
           - Provision16
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [15, !Split [", ", !Ref FloatIPs]]
+              - !Select [15, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 16"
             Type: A
             TTL: "0"
@@ -397,7 +397,7 @@ Resources:
           - Provision17
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [16, !Split [", ", !Ref FloatIPs]]
+              - !Select [16, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 17"
             Type: A
             TTL: "0"
@@ -407,7 +407,7 @@ Resources:
           - Provision18
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [17, !Split [", ", !Ref FloatIPs]]
+              - !Select [17, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 18"
             Type: A
             TTL: "0"
@@ -417,7 +417,7 @@ Resources:
           - Provision19
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [18, !Split [", ", !Ref FloatIPs]]
+              - !Select [18, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 19"
             Type: A
             TTL: "0"
@@ -427,7 +427,7 @@ Resources:
           - Provision20
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [19, !Split [", ", !Ref FloatIPs]]
+              - !Select [19, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 20"
             Type: A
             TTL: "0"
@@ -437,7 +437,7 @@ Resources:
           - Provision21
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [20, !Split [", ", !Ref FloatIPs]]
+              - !Select [20, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 21"
             Type: A
             TTL: "0"
@@ -447,7 +447,7 @@ Resources:
           - Provision22
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [21, !Split [", ", !Ref FloatIPs]]
+              - !Select [21, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 22"
             Type: A
             TTL: "0"
@@ -457,7 +457,7 @@ Resources:
           - Provision23
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [22, !Split [", ", !Ref FloatIPs]]
+              - !Select [22, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 23"
             Type: A
             TTL: "0"
@@ -467,7 +467,7 @@ Resources:
           - Provision24
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [23, !Split [", ", !Ref FloatIPs]]
+              - !Select [23, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 24"
             Type: A
             TTL: "0"
@@ -477,7 +477,7 @@ Resources:
           - Provision25
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [24, !Split [", ", !Ref FloatIPs]]
+              - !Select [24, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 25"
             Type: A
             TTL: "0"
@@ -487,7 +487,7 @@ Resources:
           - Provision26
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [25, !Split [", ", !Ref FloatIPs]]
+              - !Select [25, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 26"
             Type: A
             TTL: "0"
@@ -497,7 +497,7 @@ Resources:
           - Provision27
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [26, !Split [", ", !Ref FloatIPs]]
+              - !Select [26, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 27"
             Type: A
             TTL: "0"
@@ -507,7 +507,7 @@ Resources:
           - Provision28
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [27, !Split [", ", !Ref FloatIPs]]
+              - !Select [27, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 28"
             Type: A
             TTL: "0"
@@ -517,7 +517,7 @@ Resources:
           - Provision29
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [28, !Split [", ", !Ref FloatIPs]]
+              - !Select [28, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 29"
             Type: A
             TTL: "0"
@@ -527,7 +527,7 @@ Resources:
           - Provision30
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [29, !Split [", ", !Ref FloatIPs]]
+              - !Select [29, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 30"
             Type: A
             TTL: "0"
@@ -537,7 +537,7 @@ Resources:
           - Provision31
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [30, !Split [", ", !Ref FloatIPs]]
+              - !Select [30, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 31"
             Type: A
             TTL: "0"
@@ -547,7 +547,7 @@ Resources:
           - Provision32
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [31, !Split [", ", !Ref FloatIPs]]
+              - !Select [31, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 32"
             Type: A
             TTL: "0"
@@ -557,7 +557,7 @@ Resources:
           - Provision33
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [32, !Split [", ", !Ref FloatIPs]]
+              - !Select [32, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 33"
             Type: A
             TTL: "0"
@@ -567,7 +567,7 @@ Resources:
           - Provision34
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [33, !Split [", ", !Ref FloatIPs]]
+              - !Select [33, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 34"
             Type: A
             TTL: "0"
@@ -577,7 +577,7 @@ Resources:
           - Provision35
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [34, !Split [", ", !Ref FloatIPs]]
+              - !Select [34, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 35"
             Type: A
             TTL: "0"
@@ -587,7 +587,7 @@ Resources:
           - Provision36
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [35, !Split [", ", !Ref FloatIPs]]
+              - !Select [35, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 36"
             Type: A
             TTL: "0"
@@ -597,7 +597,7 @@ Resources:
           - Provision37
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [36, !Split [", ", !Ref FloatIPs]]
+              - !Select [36, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 37"
             Type: A
             TTL: "0"
@@ -607,7 +607,7 @@ Resources:
           - Provision38
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [37, !Split [", ", !Ref FloatIPs]]
+              - !Select [37, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 38"
             Type: A
             TTL: "0"
@@ -617,7 +617,7 @@ Resources:
           - Provision39
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [38, !Split [", ", !Ref FloatIPs]]
+              - !Select [38, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 39"
             Type: A
             TTL: "0"
@@ -627,7 +627,7 @@ Resources:
           - Provision40
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [39, !Split [", ", !Ref FloatIPs]]
+              - !Select [39, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 40"
             Type: A
             TTL: "0"
@@ -637,7 +637,7 @@ Resources:
           - Provision41
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [40, !Split [", ", !Ref FloatIPs]]
+              - !Select [40, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 41"
             Type: A
             TTL: "0"
@@ -647,7 +647,7 @@ Resources:
           - Provision42
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [41, !Split [", ", !Ref FloatIPs]]
+              - !Select [41, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 42"
             Type: A
             TTL: "0"
@@ -657,7 +657,7 @@ Resources:
           - Provision43
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [42, !Split [", ", !Ref FloatIPs]]
+              - !Select [42, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 43"
             Type: A
             TTL: "0"
@@ -667,7 +667,7 @@ Resources:
           - Provision44
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [43, !Split [", ", !Ref FloatIPs]]
+              - !Select [43, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 44"
             Type: A
             TTL: "0"
@@ -677,7 +677,7 @@ Resources:
           - Provision45
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [44, !Split [", ", !Ref FloatIPs]]
+              - !Select [44, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 45"
             Type: A
             TTL: "0"
@@ -687,7 +687,7 @@ Resources:
           - Provision46
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [45, !Split [", ", !Ref FloatIPs]]
+              - !Select [45, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 46"
             Type: A
             TTL: "0"
@@ -697,7 +697,7 @@ Resources:
           - Provision47
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [46, !Split [", ", !Ref FloatIPs]]
+              - !Select [46, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 47"
             Type: A
             TTL: "0"
@@ -707,7 +707,7 @@ Resources:
           - Provision48
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [47, !Split [", ", !Ref FloatIPs]]
+              - !Select [47, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 48"
             Type: A
             TTL: "0"
@@ -717,7 +717,7 @@ Resources:
           - Provision49
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [48, !Split [", ", !Ref FloatIPs]]
+              - !Select [48, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 49"
             Type: A
             TTL: "0"
@@ -727,7 +727,7 @@ Resources:
           - Provision50
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [49, !Split [", ", !Ref FloatIPs]]
+              - !Select [49, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 50"
             Type: A
             TTL: "0"
@@ -737,7 +737,7 @@ Resources:
           - Provision51
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [50, !Split [", ", !Ref FloatIPs]]
+              - !Select [50, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 51"
             Type: A
             TTL: "0"
@@ -747,7 +747,7 @@ Resources:
           - Provision52
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [51, !Split [", ", !Ref FloatIPs]]
+              - !Select [51, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 52"
             Type: A
             TTL: "0"
@@ -757,7 +757,7 @@ Resources:
           - Provision53
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [52, !Split [", ", !Ref FloatIPs]]
+              - !Select [52, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 53"
             Type: A
             TTL: "0"
@@ -767,7 +767,7 @@ Resources:
           - Provision54
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [53, !Split [", ", !Ref FloatIPs]]
+              - !Select [53, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 54"
             Type: A
             TTL: "0"
@@ -777,7 +777,7 @@ Resources:
           - Provision55
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [54, !Split [", ", !Ref FloatIPs]]
+              - !Select [54, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 55"
             Type: A
             TTL: "0"
@@ -787,7 +787,7 @@ Resources:
           - Provision56
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [55, !Split [", ", !Ref FloatIPs]]
+              - !Select [55, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 56"
             Type: A
             TTL: "0"
@@ -797,7 +797,7 @@ Resources:
           - Provision57
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [56, !Split [", ", !Ref FloatIPs]]
+              - !Select [56, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 57"
             Type: A
             TTL: "0"
@@ -807,7 +807,7 @@ Resources:
           - Provision58
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [57, !Split [", ", !Ref FloatIPs]]
+              - !Select [57, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 58"
             Type: A
             TTL: "0"
@@ -817,7 +817,7 @@ Resources:
           - Provision59
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [58, !Split [", ", !Ref FloatIPs]]
+              - !Select [58, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 59"
             Type: A
             TTL: "0"
@@ -827,7 +827,7 @@ Resources:
           - Provision60
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [59, !Split [", ", !Ref FloatIPs]]
+              - !Select [59, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 60"
             Type: A
             TTL: "0"
@@ -837,7 +837,7 @@ Resources:
           - Provision61
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [60, !Split [", ", !Ref FloatIPs]]
+              - !Select [60, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 61"
             Type: A
             TTL: "0"
@@ -847,7 +847,7 @@ Resources:
           - Provision62
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [61, !Split [", ", !Ref FloatIPs]]
+              - !Select [61, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 62"
             Type: A
             TTL: "0"
@@ -857,7 +857,7 @@ Resources:
           - Provision63
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [62, !Split [", ", !Ref FloatIPs]]
+              - !Select [62, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 63"
             Type: A
             TTL: "0"
@@ -867,7 +867,7 @@ Resources:
           - Provision64
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [63, !Split [", ", !Ref FloatIPs]]
+              - !Select [63, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 64"
             Type: A
             TTL: "0"
@@ -877,7 +877,7 @@ Resources:
           - Provision65
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [64, !Split [", ", !Ref FloatIPs]]
+              - !Select [64, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 65"
             Type: A
             TTL: "0"
@@ -887,7 +887,7 @@ Resources:
           - Provision66
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [65, !Split [", ", !Ref FloatIPs]]
+              - !Select [65, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 66"
             Type: A
             TTL: "0"
@@ -897,7 +897,7 @@ Resources:
           - Provision67
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [66, !Split [", ", !Ref FloatIPs]]
+              - !Select [66, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 67"
             Type: A
             TTL: "0"
@@ -907,7 +907,7 @@ Resources:
           - Provision68
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [67, !Split [", ", !Ref FloatIPs]]
+              - !Select [67, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 68"
             Type: A
             TTL: "0"
@@ -917,7 +917,7 @@ Resources:
           - Provision69
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [68, !Split [", ", !Ref FloatIPs]]
+              - !Select [68, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 69"
             Type: A
             TTL: "0"
@@ -927,7 +927,7 @@ Resources:
           - Provision70
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [69, !Split [", ", !Ref FloatIPs]]
+              - !Select [69, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 70"
             Type: A
             TTL: "0"
@@ -937,7 +937,7 @@ Resources:
           - Provision71
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [70, !Split [", ", !Ref FloatIPs]]
+              - !Select [70, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 71"
             Type: A
             TTL: "0"
@@ -947,7 +947,7 @@ Resources:
           - Provision72
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [71, !Split [", ", !Ref FloatIPs]]
+              - !Select [71, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 72"
             Type: A
             TTL: "0"
@@ -957,7 +957,7 @@ Resources:
           - Provision73
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [72, !Split [", ", !Ref FloatIPs]]
+              - !Select [72, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 73"
             Type: A
             TTL: "0"
@@ -967,7 +967,7 @@ Resources:
           - Provision74
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [73, !Split [", ", !Ref FloatIPs]]
+              - !Select [73, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 74"
             Type: A
             TTL: "0"
@@ -977,7 +977,7 @@ Resources:
           - Provision75
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [74, !Split [", ", !Ref FloatIPs]]
+              - !Select [74, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 75"
             Type: A
             TTL: "0"
@@ -987,7 +987,7 @@ Resources:
           - Provision76
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [75, !Split [", ", !Ref FloatIPs]]
+              - !Select [75, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 76"
             Type: A
             TTL: "0"
@@ -997,7 +997,7 @@ Resources:
           - Provision77
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [76, !Split [", ", !Ref FloatIPs]]
+              - !Select [76, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 77"
             Type: A
             TTL: "0"
@@ -1007,7 +1007,7 @@ Resources:
           - Provision78
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [77, !Split [", ", !Ref FloatIPs]]
+              - !Select [77, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 78"
             Type: A
             TTL: "0"
@@ -1017,7 +1017,7 @@ Resources:
           - Provision79
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [78, !Split [", ", !Ref FloatIPs]]
+              - !Select [78, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 79"
             Type: A
             TTL: "0"
@@ -1027,7 +1027,7 @@ Resources:
           - Provision80
           - Name: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
             ResourceRecords: 
-              - !Select [79, !Split [", ", !Ref FloatIPs]]
+              - !Select [79, !Ref FloatIPs]
             SetIdentifier: "Qumulo FIP 80"
             Type: A
             TTL: "0"
@@ -1037,4 +1037,18 @@ Resources:
           
 Outputs:
   ClusterDNS:
-    Value: !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
+    Value: !Join
+      - ""
+      - - "https://"
+        - !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
+  ClusterNFS:
+    Value: !Join
+      - ""
+      - - !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
+        - ':/<NFS Export Name>'
+  ClusterSMB:
+    Value: !Join
+      - ""
+      - - '\\'
+        - !If [ProvRecordName, !Sub "${RecordName}.${FQDName}", !Ref FQDName]
+        - '\<SMB Share Name>'
