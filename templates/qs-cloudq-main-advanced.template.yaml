@@ -22,7 +22,7 @@ AWSTemplateFormatVersion: "2010-09-09"
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 # SOFTWARE.
 
-Description: This is the main template to spin up a standard Qumulo cluster with all options available in an existing VPC. It calls cloudq.cft.yaml to instantiate the infrastructure. (qs-1s6n2i6af)
+Description: This is the main template to spin up a Single-AZ Qumulo Cluster with all options available in an existing VPC.  It calls cloudq.cft.yaml to instantiate the infrastructure. (qs-1s6n2i6af)
 
 Metadata:
   cfn-lint:
@@ -34,12 +34,12 @@ Metadata:
         - E9903 #Unknown exception while processing rule E9903
         - E9904 #Unknown exception while processing rule E9904
   QuickStartDocumentation:
-    EntrypointName: 'Parameters for deploying Qumulo Cloud Q into an existing VPC with advanced parameters'
+    EntrypointName: 'Parameters for deploying into an existing VPC with advanced parameters - Single AZ'
     Order: '2'
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
-          default: Template configuration—Cloud Q Quick Start for existing VPC—advanced parameters—v3.8
+          default: AWS Template Configuration - Cloud Q Quick Start Existing VPC - Single AZ - Advanced v4.0
         Parameters:
           - QSS3BucketName
           - QSS3KeyPrefix
@@ -73,6 +73,9 @@ Metadata:
           - QInstanceType
           - QNodeCount
           - QDiskConfig
+          - QFlashType
+          - QFlashTput
+          - QFlashIops
           - QFloatingIP
           - QClusterVersion
           - QClusterName
@@ -135,6 +138,12 @@ Metadata:
         default: "Number of Qumulo EC2 instances"
       QDiskConfig:
         default: "EBS volume configuration"
+      QFlashType:
+        default: "EBS flash type"
+      QFlashTput:
+        default: "EBS gp3 throughput"
+      QFlashIops:
+        default: "EBS gp3 IOPS"                        
       QClusterVersion:
         default: "Qumulo Core software version"
       QAmiID:
@@ -328,6 +337,45 @@ Parameters:
     Type: String
     Default: Select for Custom Offering
 
+  QFlashType:
+    Description: "Choose the EBS flash type: gp2 or gp3.  Default is gp3."
+    AllowedValues:
+      - gp2
+      - gp3
+    Type: String
+    Default: gp3
+
+  QFlashTput:
+    Description: "Set the gp3 Throughput in MB/s: 125-1000.  Default 250 MB/s"
+    AllowedValues:
+      - 125
+      - 250
+      - 500
+      - 750
+      - 1000      
+    Type: String
+    Default: 250   
+
+  QFlashIops:
+    Description: "Set the gp3 IOPS: 3000-16000.  Default 3000 MB/s"
+    AllowedValues:
+      - 3000
+      - 4000
+      - 5000
+      - 6000
+      - 7000 
+      - 8000
+      - 9000
+      - 10000
+      - 11000
+      - 12000 
+      - 13000
+      - 14000
+      - 15000
+      - 16000                  
+    Type: String
+    Default: 3000 
+
   QAmiID:
     Description: "Used only for the specified AMI ID offering. Amazon Machine Image (AMI) ID is supplied by Qumulo."
     Type: String
@@ -371,7 +419,7 @@ Parameters:
     MaxLength: 11
     MinLength: 5
     Type: String
-    Default: "4.2.5"
+    Default: "5.1.2"
 
   QClusterAdminPwd:
     AllowedPattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&\\-_])[A-Za-z\\d@$!%*?&\\-_]{8,}$"
@@ -480,7 +528,7 @@ Parameters:
     MaxLength: 11
     MinLength: 5
     Type: String
-    Default: "4.2.5"
+    Default: "5.1.2"
 
   SideCarSNSTopic:
     Description: (Optional) Enter an SNS topic ARN to publish Sidecar (Lambda) errors and successful EBS disk replacements to.
@@ -630,45 +678,59 @@ Resources:
     Type: "AWS::CloudFormation::Stack"
     Properties:
       Parameters:
-        QSS3BucketName: !Ref QSS3BucketName
-        QSS3KeyPrefix: !Ref QSS3KeyPrefix
-        QSS3BucketRegion: !Ref QSS3BucketRegion
-        KeyPair: !Ref KeyPair
+        DomainName: !Ref DomainName
         EnvType: !Ref EnvType
-        VPCId: !Ref VPCId
+        KeyPair: !Ref KeyPair
+        NumberAZs: "1"            
+        PrivateSubnetIDs: !Ref PrivateSubnetID
+        PublicSubnetIDs: !Ref PublicSubnetID
+        QAmiID: !Ref QAmiID
+        QAmiVer: "5.1.0.1"        
+        QAuditLog: !Ref QAuditLog
+        QClusterAdminPwd: !Ref QClusterAdminPwd
+        QClusterLocalZone: !Ref QClusterLocalZone
+        QClusterName: !Ref QClusterName
+        QClusterVersion: !Ref QClusterVersion
+        QDiskConfig: !Ref QDiskConfig
+        QDr: !Ref QDr
+        QFlashIops: !Ref QFlashIops
+        QFlashTput: !Ref QFlashTput
+        QFlashType: !Ref QFlashType
+        QFloatRecordName: !Ref QFloatRecordName
+        QFloatingIP: !Ref QFloatingIP
+        QInstanceRecoveryTopic: !Ref QInstanceRecoveryTopic
+        QInstanceType: !Ref QInstanceType
+        QMarketPlaceType: !Ref QMarketPlaceType
+        QMaxNodesDown: "1"        
+        QModOverness: "NO"
+        QNlbDeregDelay: "60"
+        QNlbDeregTerm: "false"
+        QNlbPreserveIP: "true" 
+        QNlbPrivateSubnetIDs: ""        
+        QNlbSticky: "true"
+        QNlbXzone: "false"        
+        QNodeCount: !Ref QNodeCount
+        QPermissionsBoundary: !Ref QPermissionsBoundary        
+        QPublicMgmt: !Ref QPublicMgmt
+        QPublicRepl: !Ref QPublicRepl
+        QSS3BucketName: !Ref QSS3BucketName
+        QSS3BucketRegion: !Ref QSS3BucketRegion
+        QSS3KeyPrefix: !Ref QSS3KeyPrefix
         QSgCidr1: !Ref QSgCidr1
         QSgCidr2: !Ref QSgCidr2        
         QSgCidr3: !Ref QSgCidr3   
-        QSgCidr4: !Ref QSgCidr4          
-        PrivateSubnetID: !Ref PrivateSubnetID
-        QClusterLocalZone: !Ref QClusterLocalZone
-        SideCarPrivateSubnetID: !Ref SideCarPrivateSubnetID
-        QPublicMgmt: !Ref QPublicMgmt
-        QPublicRepl: !Ref QPublicRepl
-        PublicSubnetID: !Ref PublicSubnetID
-        DomainName: !Ref DomainName
-        QDr: !Ref QDr
-        QFloatRecordName: !Ref QFloatRecordName
-        QMarketPlaceType: !Ref QMarketPlaceType
-        QAmiID: !Ref QAmiID
-        QAmiVer: "4.2.0"        
-        QInstanceType: !Ref QInstanceType
-        QNodeCount: !Ref QNodeCount
-        QDiskConfig: !Ref QDiskConfig
-        QFloatingIP: !Ref QFloatingIP
-        QClusterVersion: !Ref QClusterVersion
-        QClusterName: !Ref QClusterName
-        QClusterAdminPwd: !Ref QClusterAdminPwd
-        VolumesEncryptionKey: !Ref VolumesEncryptionKey
-        QPermissionsBoundary: !Ref QPermissionsBoundary        
-        QInstanceRecoveryTopic: !Ref QInstanceRecoveryTopic
-        QAuditLog: !Ref QAuditLog
-        TermProtection: !Ref TermProtection
-        SideCarProv: !Ref SideCarProv
-        SideCarUsername: "SideCarUser"
+        QSgCidr4: !Ref QSgCidr4        
+        RequireIMDSv2: "YES" #Supported from 5.1.0.1 onward   
         SideCarPassword: !Ref QClusterAdminPwd
-        SideCarVersion: !Ref SideCarVersion
+        SideCarPrivateSubnetID: !Ref SideCarPrivateSubnetID
+        SideCarProv: !Ref SideCarProv
         SideCarSNSTopic: !Ref SideCarSNSTopic
+        SideCarUsername: "SideCarUser"
+        SideCarVersion: !Ref SideCarVersion
+        TermProtection: !Ref TermProtection
+        TopStackName: !Ref AWS::StackName
+        VPCId: !Ref VPCId
+        VolumesEncryptionKey: !Ref VolumesEncryptionKey
       TemplateURL:
         !Sub
           - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/cloudq.cft.yaml
@@ -680,18 +742,22 @@ Outputs:
   QumuloPrivateIP:
     Description: Private IP for Qumulo Cluster Management
     Value: !GetAtt CloudQStack.Outputs.QumuloPrivateIP
-  QumuloPublicIP:
+  QumuloNLBPublicURL:
     Condition: ProvMgmt
-    Description: Public IP for Qumulo Cluster Management and Replication
-    Value: !GetAtt CloudQStack.Outputs.QumuloPublicIP
-  QumuloPrivateDNSName:
+    Description: Public URL for Management NLB connected to Qumulo Cluster
+    Value: !GetAtt CloudQStack.Outputs.QumuloNLBPublicURL
+  QumuloPrivateNFS:
     Condition: ProvR53
-    Description: Private DNS Name for Qumulo Cluster
-    Value: !GetAtt CloudQStack.Outputs.QumuloPrivateDNSName
+    Description: Private NFS path for Qumulo Cluster
+    Value: !GetAtt CloudQStack.Outputs.QumuloPrivateNFS
+  QumuloPrivateSMB:
+    Condition: ProvR53
+    Description: Private SMB UNC path for Qumulo Cluster
+    Value: !GetAtt CloudQStack.Outputs.QumuloPrivateSMB         
+  QumuloPrivateURL:
+    Condition: ProvR53
+    Description: Private URL for Qumulo Cluster
+    Value: !GetAtt CloudQStack.Outputs.QumuloPrivateURL
   QumuloKnowledgeBase:
     Description: Qumulo Knowledge Base
     Value: !GetAtt CloudQStack.Outputs.QumuloKnowledgeBase
-    
-
-
-

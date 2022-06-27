@@ -31,12 +31,12 @@ Metadata:
         - W9006
         - W9901
   QuickStartDocumentation:
-    EntrypointName: 'Parameters for deploying Qumulo Cloud Q into an existing VPC with standard parameters'
-    Order: '3'
+    EntrypointName: 'Parameters for deploying into an existing VPC with standard parameters - Single AZ'
+    Order: '1'
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
-          default: Template configuration—Cloud Q Quick Start for existing VPC—standard parameters—v3.8
+          default: AWS Template Configuration - Cloud Q Quick Start for Existing VPC - Single AZ - Standard v4.0
         Parameters:
           - KeyPair
 
@@ -217,7 +217,7 @@ Parameters:
     MaxLength: 11
     MinLength: 5
     Type: String
-    Default: "4.2.5"
+    Default: "5.1.0.1"
 
 Rules:
   CustomRule:
@@ -234,46 +234,61 @@ Resources:
     Type: "AWS::CloudFormation::Stack"
     Properties:
       Parameters:
-        QSS3BucketName: "aws-quickstart"
-        QSS3KeyPrefix: "quickstart-qumulo-cloud-q/"
-        QSS3BucketRegion: !Ref AWS::Region
-        KeyPair: !Ref KeyPair
+        DomainName: ""
         EnvType: "dev"
-        VPCId: !Ref VPCId
+        KeyPair: !Ref KeyPair
+        NumberAZs: "1"                       
+        PrivateSubnetIDs: !Ref PrivateSubnetID
+        PublicSubnetIDs: ""
+        QAmiID: "Only for Specified AMI-ID Offering"
+        QAmiVer: "5.1.0.1"
+        QAuditLog: "NO"
+        QClusterAdminPwd: !Ref QClusterAdminPwd
+        QClusterLocalZone: "NO"
+        QClusterName: "Cloud-Q"
+        QClusterVersion: "5.1.0.1"
+        QDiskConfig: !Ref QDiskConfig
+        QDr: "NO"
+        QFlashIops: "3000"
+        QFlashTput: "250"
+        QFlashType: "gp3"       
+        QFloatRecordName: ""
+        QFloatingIP: "3"
+        QInstanceRecoveryTopic: ""
+        QInstanceType: !Ref QInstanceType
+        QMarketPlaceType: !Ref QMarketPlaceType
+        QMaxNodesDown: "1"        
+        QModOverness: "NO"        
+        QNodeCount: !Ref QNodeCount
+        QPermissionsBoundary: ""       
+        QPublicMgmt: "NO"
+        QPublicRepl: "NO"
+        QNlbPrivateSubnetIDs: ""
+        QNlbDeregDelay: "60"
+        QNlbDeregTerm: "false"
+        QNlbPreserveIP: "true" 
+        QNlbSticky: "true"
+        QNlbXzone: "false"
+        QSS3BucketName: "aws-quickstart"        
+        QSS3BucketRegion: !Ref AWS::Region        
+        QSS3KeyPrefix: "quickstart-qumulo-cloud-q/"        
         QSgCidr1: !Ref QSgCidr1
         QSgCidr2: ""       
         QSgCidr3: ""   
-        QSgCidr4: ""          
-        PrivateSubnetID: !Ref PrivateSubnetID
-        QClusterLocalZone: "NO"
-        SideCarPrivateSubnetID: !Ref PrivateSubnetID
-        QPublicMgmt: "NO"
-        QPublicRepl: "NO"
-        PublicSubnetID: !Ref PrivateSubnetID
-        DomainName: ""
-        QDr: "NO"
-        QFloatRecordName: ""
-        QMarketPlaceType: !Ref QMarketPlaceType
-        QAmiID: "Only for Specified AMI-ID Offering"
-        QAmiVer: "4.2.0"
-        QInstanceType: !Ref QInstanceType
-        QNodeCount: !Ref QNodeCount
-        QDiskConfig: !Ref QDiskConfig
-        QFloatingIP: "3"
-        QClusterVersion: "4.2.5"
-        QClusterName: "Cloud-Q"
-        QClusterAdminPwd: !Ref QClusterAdminPwd
-        VolumesEncryptionKey: ""
-        QPermissionsBoundary: ""       
-        QInstanceRecoveryTopic: ""
-        QAuditLog: "NO"
-        TermProtection: !Ref TermProtection
-        SideCarProv: "YES"
-        SideCarUsername: "SideCarUser"
+        QSgCidr4: ""   
+        RequireIMDSv2: "YES" #Supported from 5.1.0.1 onward      
         SideCarPassword: !Ref QClusterAdminPwd
-        SideCarVersion: !Ref SideCarVersion
+        SideCarPrivateSubnetID: ""
+        SideCarProv: "YES"
         SideCarSNSTopic: ""
+        SideCarUsername: "SideCarUser"
+        SideCarVersion: !Ref SideCarVersion
+        TermProtection: !Ref TermProtection
+        TopStackName: !Ref AWS::StackName        
+        VPCId: !Ref VPCId
+        VolumesEncryptionKey: ""
       TemplateURL: !Sub "https://aws-quickstart-${AWS::Region}.s3.${AWS::Region}.${AWS::URLSuffix}/quickstart-qumulo-cloud-q/templates/cfn/cloudq.cft.yaml"
+
 
 Outputs:
 
@@ -283,7 +298,3 @@ Outputs:
   QumuloKnowledgeBase:
     Description: Qumulo Knowledge Base
     Value: !GetAtt CloudQStack.Outputs.QumuloKnowledgeBase
-    
-
-
-
