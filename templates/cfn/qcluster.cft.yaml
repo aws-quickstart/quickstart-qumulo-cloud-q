@@ -22,8 +22,15 @@ AWSTemplateFormatVersion: "2010-09-09"
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 # SOFTWARE.
 
-Description: This template buiilds the Qumulo Cluster.  It calls subordinate CloudFormation templates to instantiate the infrastructure.
-
+Description: This template buiilds the Qumulo Cluster.  It calls subordinate CloudFormation templates to instantiate the infrastructure. (qs-1t69a3rgc)
+Metadata:
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W9002
+        - W9003
+        - W9004
+        - W9006
 Parameters:
 
   BucketName:

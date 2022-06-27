@@ -22,8 +22,17 @@ AWSTemplateFormatVersion: "2010-09-09"
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 # SOFTWARE.
 
-Description: This template creates a Qumulo node with any of the 28 supported disk configurations.
-
+Description: This template creates a Qumulo node with any of the 28 supported disk configurations. (qs-1t69bn234)
+Metadata:
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W2506
+        - W9001
+        - W9002
+        - W9003
+        - W9004
+        - W9006
 Parameters:
   QAmiID:
     Type: String

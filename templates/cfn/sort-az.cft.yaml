@@ -23,8 +23,16 @@ AWSTemplateFormatVersion: '2010-09-09'
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 # SOFTWARE.
 
-Description: Lookup AZs from Subnet IDs and Sort AZs by name returning correctly ordered Subnet IDs. Also validates if node failures need to change from 1 to 2.
-
+Description: Lookup AZs from Subnet IDs and Sort AZs by name returning correctly ordered Subnet IDs. Also validates if node failures need to change from 1 to 2. (qs-1t69bpbtl)
+Metadata:
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W9001
+        - W9002
+        - W9003
+        - W9004
+        - W9006
 Parameters:
   PrivateSubnetIdList:
     Type: CommaDelimitedList
@@ -63,6 +71,11 @@ Resources:
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - EIAMPolicyWildcardResource
     Properties:
       AssumeRolePolicyDocument:
         Version: '2012-10-17'

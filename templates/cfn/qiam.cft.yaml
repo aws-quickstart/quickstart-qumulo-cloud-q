@@ -53,6 +53,11 @@ Conditions:
 Resources:
   QumuloAccessRole:
     Type: "AWS::IAM::Role"
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - EIAMPolicyWildcardResource
     Properties:
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
@@ -77,6 +82,7 @@ Resources:
                   - "ec2:DescribeInstances"
                   - "ec2:AssignPrivateIpAddresses"
                   - "ec2:UnassignPrivateIpAddresses"
+                  - "ec2:DisassociateAddress"
                   - "logs:PutLogEvents"
                   - "logs:CreateLogStream"
                   - "kms:Decrypt"                  
