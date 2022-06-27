@@ -21,7 +21,16 @@ AWSTemplateFormatVersion: "2010-09-09"
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 # SOFTWARE.
-        
+
+Metadata:
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W9002
+        - W9003
+        - W9004
+        - W9006
+Description: (qs-1t699rd90)
 Parameters:
   QSgId:
     Type: String
