@@ -22,17 +22,18 @@ AWSTemplateFormatVersion: "2010-09-09"
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 # SOFTWARE.
 
-Description: This is the main template to spin up a Qumulo Cluster in an existing VPC.  It calls subordinate CloudFormation templates to instantiate the infrastructure. (qs-1s6n2i6af)
+Description: This is the main template to spin up a Qumulo Cluster with all WAF supporting infrastructure.  It calls subordinate CloudFormation templates to instantiate the infrastructure. (qs-1s6n2i6af)
 
 Metadata:
   cfn-lint:
     config:
       ignore_checks:
+        - W2001
+        - W9002
+        - W9003
+        - W9004
         - W9006
-        - W9901
-        - E9902 #Unknown exception while processing rule E9902
-        - E9903 #Unknown exception while processing rule E9903
-        - E9904 #Unknown exception while processing rule E9904
+        - E9010
  
 Parameters:
 
@@ -52,10 +53,14 @@ Parameters:
     Type: String
   QPublicRepl:
     Type: String
-  PublicSubnetID:
+  NumberAZs:
     Type: String
-  PrivateSubnetID:
+  PublicSubnetIDs:
     Type: String
+  PrivateSubnetIDs:
+    Type: CommaDelimitedList
+  QNlbPrivateSubnetIDs:
+    Type: CommaDelimitedList    
   DomainName:
     Type: String
   QDr:
@@ -64,13 +69,23 @@ Parameters:
     Type: String
   QNodeCount:
     Type: String
+  QMaxNodesDown:
+    Type: String
   QDiskConfig:
     Type: String
+  QFlashType:
+    Type: String
+  QFlashTput:
+    Type: String
+  QFlashIops:
+    Type: String    
   QAmiID:
     Type: String
   QAmiVer:
     Type: String
   QMarketPlaceType:
+    Type: String
+  QModOverness:
     Type: String
   QFloatingIP:
     Type: String
@@ -89,6 +104,16 @@ Parameters:
     Type: String
   QInstanceRecoveryTopic:
     Type: String
+  QNlbSticky:
+    Type: String
+  QNlbXzone:
+    Type: String
+  QNlbDeregDelay:
+    Type: String
+  QNlbDeregTerm:
+    Type: String
+  QNlbPreserveIP:
+    Type: String    
   QSgCidr1:
     Type: String
   QSgCidr2:
@@ -103,6 +128,11 @@ Parameters:
     Type: String
   QAuditLog:
     Type: String
+  RequireIMDSv2:
+    Type: String
+    AllowedValues:
+      - "YES"
+      - "NO"        
   SideCarPrivateSubnetID:
     Type: String
   SideCarProv:   
@@ -115,6 +145,8 @@ Parameters:
     Type: String
     NoEcho: "true"
   SideCarSNSTopic:
+    Type: String
+  TopStackName:
     Type: String
 
 Conditions:
@@ -138,10 +170,27 @@ Conditions:
 
   AddQSgCidr: !Or [Condition: ProvSg2, Condition: ProvSg3, Condition: ProvSg4]
 
-  ProvR53: !Not
+  ProvMultiAZ: !Not
+    - !Equals
+      - !Ref NumberAZs
+      - "1"
+
+  ProvFloatIP: !Not
+    - !Equals
+      - !Ref QFloatingIP
+      - "0"
+
+  ProvDNS: !Not
     - !Equals
       - !Ref DomainName
       - ""
+
+  ProvNLB: !Not
+    - !Equals 
+      - !Join [",", !Ref QNlbPrivateSubnetIDs]
+      - ""
+
+  ProvR53: !And [Condition: ProvDNS, !Not [Condition: ProvMultiAZ], !Not [Condition: ProvNLB], Condition: ProvFloatIP]
 
   ProvSideCar: !Equals
     - !Ref SideCarProv
@@ -219,17 +268,16 @@ Mappings:
       DiskConfig: SPECIFIED-AMI-ID-ERROR--NEED-TO-SELECT-DISK-CONFIG
       NodeCount: SPECIFIED-AMI-ID-ERROR--NEED-TO-SELECT-NODE-COUNT      
       ShortName: Custom 
-
+      
 Resources:
 
   SECRETSSTACK:
     Type: "AWS::CloudFormation::Stack"
     Properties:
       Parameters:
-        SideCarUsername: !If [ProvSideCar, !Ref SideCarUsername, ""]
-        SideCarPassword: !If [ProvSideCar, !Ref SideCarPassword, ""]
         ClusterAdminPwd: !Ref QClusterAdminPwd
-
+        SideCarPassword: !If [ProvSideCar, !Ref SideCarPassword, ""]
+        SideCarUsername: !If [ProvSideCar, !Ref SideCarUsername, ""]
       TemplateURL:
         !Sub
           - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/store-secrets.cft.yaml
@@ -267,33 +315,29 @@ Resources:
     Type: 'AWS::CloudFormation::Stack'
     Properties:
       Parameters:
-        ClusterName: !Ref QClusterName
-        ClusterAMI: !If [LookupAMI, !GetAtt QLOOKUPSTACK.Outputs.AmiId, !Ref QAmiID]
-        FloatingIPCount: !Ref QFloatingIP
-        IamInstanceProfile: !GetAtt QIAMSTACK.Outputs.QumuloIAMProfile
-        InstanceRecoveryTopic: !Ref QInstanceRecoveryTopic
-        InstanceType: !Ref QInstanceType
-        KeyName: !Ref KeyPair
-        SgCidr: !Ref QSgCidr1
-        SubnetId: !Ref PrivateSubnetID
+        BucketName: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+        BucketRegion: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+        KeyPair: !Ref KeyPair
+        KeyPrefix: !Ref QSS3KeyPrefix        
+        NumberAZs: !Ref NumberAZs
+        PrivateSubnetIDs: !Join [",", !Ref PrivateSubnetIDs]
+        QAmiID: !If [LookupAMI, !GetAtt QLOOKUPSTACK.Outputs.AmiId, !Ref QAmiID]
+        QClusterName: !Ref QClusterName
+        QDiskConfig: !If [Custom, !Ref QDiskConfig, !FindInMap [ConfigMap, !Ref QMarketPlaceType, DiskConfig]]
+        QFlashType: !Ref QFlashType
+        QFloatingIP: !Ref QFloatingIP
+        QInstanceIAMProfile: !GetAtt QIAMSTACK.Outputs.QumuloIAMProfile
+        QInstanceRecoveryTopic: !Ref QInstanceRecoveryTopic
+        QInstanceType: !Ref QInstanceType
+        QNodeCount: !If [CustomNC, !Ref QNodeCount, !FindInMap [ConfigMap, !Ref QMarketPlaceType, NodeCount]]
+        QSgCidr1: !Ref QSgCidr1
+        VPCId: !Ref VPCId
         VolumesEncryptionKey: !Ref VolumesEncryptionKey
-        VpcId: !Ref VPCId
-      TemplateURL: !If
-          - Custom
-          - !Sub
-            - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/cluster-configs/${QNodeCount}x${QDiskConfig}-SA.cft.json
-            - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
-              S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
-          - !Join
-            - ""
-            - - !Sub 
-                - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/cluster-configs/
-                - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
-                  S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
-              - !If [CustomNC, !Ref QNodeCount, !FindInMap [ConfigMap, !Ref QMarketPlaceType, NodeCount]]
-              - "x"
-              - !FindInMap [ConfigMap, !Ref QMarketPlaceType, DiskConfig]
-              - "-SA.cft.json"
+      TemplateURL: 
+        !Sub
+          - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/qcluster.cft.yaml
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       TimeoutInMinutes: 150
 
   QADDCIDRSTACK:
@@ -301,10 +345,10 @@ Resources:
     Condition: AddQSgCidr
     Properties:
       Parameters:
-        QSgId: !GetAtt QSTACK.Outputs.ClusterSGID        
         QSgCidr2: !Ref QSgCidr2        
         QSgCidr3: !Ref QSgCidr3   
         QSgCidr4: !Ref QSgCidr4     
+        QSgId: !GetAtt QSTACK.Outputs.ClusterSGID        
       TemplateURL:
         !Sub
           - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/qadd-sg-cidrs.cft.yaml
@@ -317,12 +361,12 @@ Resources:
     Condition: ProvSideCar
     Properties:
       Parameters:
-        SecurityGroup: !GetAtt QSTACK.Outputs.ClusterSGID
-        SNSTopic: !Ref SideCarSNSTopic
-        Subnet: !If [LocalAZ, !Ref SideCarPrivateSubnetID, !Ref PrivateSubnetID]
-        Username: !Ref SideCarUsername
-        Password: !Ref SideCarPassword
         Hosts: !GetAtt QSTACK.Outputs.ClusterPrivateIPs
+        Password: !Ref SideCarPassword
+        SNSTopic: !Ref SideCarSNSTopic
+        SecurityGroup: !GetAtt QSTACK.Outputs.ClusterSGID
+        Subnet: !If [LocalAZ, !Ref SideCarPrivateSubnetID, !Select [0, !Ref PrivateSubnetIDs]]
+        Username: !Ref SideCarUsername
       TemplateURL: !Sub "https://qumulo-sidecar-us-east-1.s3.amazonaws.com/${SideCarVersion}/sidecar_cft.json"
       TimeoutInMinutes: 150
 
@@ -330,31 +374,38 @@ Resources:
     Type: 'AWS::CloudFormation::Stack'
     Properties:
       Parameters:
-        SideCarProv: !Ref SideCarProv
-        TermProtection: !Ref TermProtection
-        SecretsManagedPolicy: !Sub "arn:${AWS::Partition}:iam::aws:policy/SecretsManagerReadWrite"
+        BucketName: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+        BucketRegion: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+        CMK: !Ref VolumesEncryptionKey
+        ClusterPwd: !GetAtt QSTACK.Outputs.TemporaryPassword
+        ClusterSecretsArn: !GetAtt SECRETSSTACK.Outputs.ClusterSecretsArn
+        FlashIops: !Ref QFlashIops
+        FlashTput: !Ref QFlashTput
+        FlashType: !Ref QFlashType
+        FloatIPs: !If [ProvFloatIP, !GetAtt QSTACK.Outputs.ClusterSecondaryPrivateIPs, ""]
+        InstanceIDs: !GetAtt QSTACK.Outputs.ClusterInstanceIDs
         KeyName: !Ref KeyPair
-        Region: !Ref AWS::Region
-        PrivateSubnetId: !Ref PrivateSubnetID
-        PrivateSubnetCidr: !Ref QSgCidr1
+        KeyPrefix: !Ref QSS3KeyPrefix
+        MaxNodesDown: !If [ProvMultiAZ, !Ref QMaxNodesDown, "1"]
+        ModOverness: !If [ProvMultiAZ, !Ref QModOverness, "NO"]
         Node1IP: !Select [0, !Split [", ", !GetAtt QSTACK.Outputs.ClusterPrivateIPs]]
         NodeIPs: !GetAtt QSTACK.Outputs.ClusterPrivateIPs
-        FloatIPs: !GetAtt QSTACK.Outputs.ClusterSecondaryPrivateIPs
-        InstanceIDs: !GetAtt QSTACK.Outputs.ClusterInstanceIDs
-        ClusterPwd: !GetAtt QSTACK.Outputs.TemporaryPassword
-        VPCID: !Ref VPCId
-        SideCarSecretsArn: !GetAtt SECRETSSTACK.Outputs.SideCarSecretsArn
-        ClusterSecretsArn: !GetAtt SECRETSSTACK.Outputs.ClusterSecretsArn
-        SoftwareSecretsArn: !GetAtt SECRETSSTACK.Outputs.SoftwareSecretsArn
-        CMK: !Ref VolumesEncryptionKey
-        StackName: !Ref AWS::StackName
-        QStackName: !GetAtt QSTACK.Outputs.AWSStackName
+        NumberAZs: !If [ProvMultiAZ, !Ref NumberAZs, "1"]
+        PrivateSubnetCidr: !Ref QSgCidr1
+        PrivateSubnetId: !Select [0, !Ref PrivateSubnetIDs]
         QClusterName: !Ref QClusterName  
         QClusterVersion: !Ref QClusterVersion
         QPermissionsBoundary: !Ref QPermissionsBoundary        
-        BucketName: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
-        BucketRegion: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
-        KeyPrefix: !Ref QSS3KeyPrefix
+        QStackName: !GetAtt QSTACK.Outputs.AWSStackName
+        Region: !Ref AWS::Region
+        RequireIMDSv2: !Ref RequireIMDSv2        
+        SecretsManagedPolicy: !Sub "arn:${AWS::Partition}:iam::aws:policy/SecretsManagerReadWrite"
+        SideCarProv: !Ref SideCarProv
+        SideCarSecretsArn: !GetAtt SECRETSSTACK.Outputs.SideCarSecretsArn
+        SoftwareSecretsArn: !GetAtt SECRETSSTACK.Outputs.SoftwareSecretsArn
+        TermProtection: !Ref TermProtection
+        TopStackName: !Ref TopStackName
+        VPCID: !Ref VPCId
       TemplateURL:
         !Sub
           - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/provisioning-node.cft.yaml
@@ -366,13 +417,13 @@ Resources:
     Type: 'AWS::CloudFormation::Stack'
     Properties:
       Parameters:
-        QClusterName: !Ref QClusterName        
-        QStackID: !GetAtt QSTACK.Outputs.AWSStackID
-        QStackName: !GetAtt QSTACK.Outputs.AWSStackName
-        TopStackName: !Ref AWS::StackName
         AllFlash: !Select [1, !Split ["-", !If [Custom, !Ref QDiskConfig, !FindInMap [ConfigMap, !Ref QMarketPlaceType, DiskConfig]]]]
         QAuditLog: !Ref QAuditLog
+        QClusterName: !Ref QClusterName        
+        QNodeNames: !GetAtt QSTACK.Outputs.ClusterNodeNames
+        QStackName: !GetAtt QSTACK.Outputs.AWSStackName
         Region: !Ref AWS::Region        
+        TopStackName: !Ref TopStackName
       TemplateURL:
         !Sub
           - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/cloud-watch.cft.yaml
@@ -385,14 +436,36 @@ Resources:
     Condition: ProvMgmt
     Properties:
       Parameters:
-        VPCID: !Ref VPCId
-        PublicSubnetID: !Ref PublicSubnetID
+        EnableReplication: !Ref QPublicRepl
         NodeIPs: !GetAtt QSTACK.Outputs.ClusterPrivateIPs
         NumNodes: !If [CustomNC, !Ref QNodeCount, !FindInMap [ConfigMap, !Ref QMarketPlaceType, NodeCount]]
-        EnableReplication: !Ref QPublicRepl
+        PublicSubnetIDs: !Ref PublicSubnetIDs
+        VPCID: !Ref VPCId
       TemplateURL:
         !Sub
           - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/mgmt-nlb.cft.yaml
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+      TimeoutInMinutes: 150   
+
+  QNLBSTACK:
+    Type: 'AWS::CloudFormation::Stack'
+    Condition: ProvNLB
+    Properties:
+      Parameters:
+        CrossZone: !Ref QNlbXzone
+        DeregDelay: !Ref QNlbDeregDelay
+        DeregTerm: !Ref QNlbDeregTerm
+        NodeIPs: !GetAtt QSTACK.Outputs.ClusterPrivateIPs
+        NumNodes: !If [CustomNC, !Ref QNodeCount, !FindInMap [ConfigMap, !Ref QMarketPlaceType, NodeCount]]
+        PreserveIP: !Ref QNlbPreserveIP
+        PrivateSubnetIDs: !Join [",", !Ref QNlbPrivateSubnetIDs]
+        ProxyProtoV2: "false"
+        Stickiness: !Ref QNlbSticky
+        VPCID: !Ref VPCId
+      TemplateURL:
+        !Sub
+          - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/qnlb.cft.yaml
           - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
             S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       TimeoutInMinutes: 150   
@@ -403,12 +476,12 @@ Resources:
     Properties:
       Parameters:
         FQDName: !Ref DomainName
-        VPCId: !Ref VPCId
-        Region: !Ref AWS::Region
         FloatIPs: !GetAtt QSTACK.Outputs.ClusterSecondaryPrivateIPs
-        NumNodes: !If [CustomNC, !Ref QNodeCount, !FindInMap [ConfigMap, !Ref QMarketPlaceType, NodeCount]]
         NumIPs: !Ref QFloatingIP
+        NumNodes: !If [CustomNC, !Ref QNodeCount, !FindInMap [ConfigMap, !Ref QMarketPlaceType, NodeCount]]
         RecordName: !Ref QFloatRecordName
+        Region: !Ref AWS::Region
+        VPCId: !Ref VPCId
       TemplateURL:
         !Sub
           - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/cfn/r53-private-zone.cft.yaml
@@ -419,26 +492,37 @@ Resources:
 Outputs:
 
   QumuloPrivateIP:
-    Description: Private IP for Qumulo Cluster Management
-    Value: !If
-      - ProvR53
-      - !Join
-        - ""
-        - - "https://"
-          - !GetAtt DNSSTACK.Outputs.ClusterDNS
-      - !GetAtt QSTACK.Outputs.LinkToManagement
-  QumuloPublicIP:
+    Description: Private IP for Qumulo Cluster Management - Node 1
+    Value: !GetAtt QSTACK.Outputs.LinkToManagement
+  QumuloNLBPublicURL:
     Condition: ProvMgmt
-    Description: Public IP for Qumulo Cluster Management and Replication
-    Value: !GetAtt MGMTNLBSTACK.Outputs.ManagementEIP
-  QumuloPrivateDNSName:
+    Description: Public URL for Management NLB connected to Qumulo Cluster
+    Value: !GetAtt MGMTNLBSTACK.Outputs.NLBDNS
+  QumuloPrivateNFS:
     Condition: ProvR53
-    Description: Private DNS Name for Qumulo Cluster
-    Value: !GetAtt DNSSTACK.Outputs.ClusterDNS
+    Description: Private NFS path for Qumulo Cluster
+    Value: !GetAtt DNSSTACK.Outputs.ClusterNFS
+  QumuloPrivateSMB:
+    Condition: ProvR53
+    Description: Private SMB UNC path for Qumulo Cluster
+    Value: !GetAtt DNSSTACK.Outputs.ClusterSMB       
+  QumuloPrivateURL:
+    Condition: ProvR53
+    Description: Private URL for Qumulo Cluster
+    Value: !GetAtt DNSSTACK.Outputs.ClusterDNS     
+  QumuloNLBPrivateNFS:
+    Condition: ProvNLB
+    Description: Private NFS path for Qumulo Cluster
+    Value: !GetAtt QNLBSTACK.Outputs.NLBNFS    
+  QumuloNLBPrivateSMB:
+    Condition: ProvNLB
+    Description: Private SMB UNC path for Qumulo Cluster
+    Value: !GetAtt QNLBSTACK.Outputs.NLBSMB         
+  QumuloNLBPrivateURL:
+    Condition: ProvNLB
+    Description: Private URL for NLB Connected to Qumulo Cluster
+    Value: !GetAtt QNLBSTACK.Outputs.NLBDNS       
   QumuloKnowledgeBase:
     Description: Qumulo Knowledge Base
     Value: !GetAtt QSTACK.Outputs.QumuloKnowledgeBase
     
-
-
-

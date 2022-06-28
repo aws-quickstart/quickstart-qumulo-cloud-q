@@ -36,8 +36,8 @@ Metadata:
 Parameters:
   QClusterName:
     Type: String  
-  QStackID:
-    Type: String
+  QNodeNames:
+    Type: CommaDelimitedList
   QStackName:
     Type: String 
   TopStackName:
@@ -66,12 +66,14 @@ Resources:
     Properties: 
       Name: !Sub "Qumulo-Cluster-EC2-${TopStackName}"
       ResourceQuery: 
-        Type: "CLOUDFORMATION_STACK_1_0" 
+        Type: "TAG_FILTERS_1_0" 
         Query: 
           ResourceTypeFilters:
             - "AWS::AllSupported" 
-          StackIdentifier: !Ref QStackID
-
+          TagFilters:
+            - Key: Name
+              Values: !Ref QNodeNames
+              
   ClusterRGSSD:
     Type: "AWS::ResourceGroups::Group" 
     Properties: 
@@ -107,7 +109,7 @@ Resources:
     Type: "AWS::Logs::LogGroup" 
     Condition: CreateLog
     Properties: 
-      LogGroupName: !Sub "/qumulo/${TopStackName}"
+      LogGroupName: !Sub "/qumulo/${QStackName}"
 
   ClusterDashboard:
     Type: "AWS::CloudWatch::Dashboard"
