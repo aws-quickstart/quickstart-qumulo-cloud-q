@@ -28,11 +28,12 @@ Metadata:
   cfn-lint:
     config:
       ignore_checks:
+        - W2001
+        - W9002
+        - W9003
+        - W9004
         - W9006
-        - W9901
-        - E9902 #Unknown exception while processing rule E9902
-        - E9903 #Unknown exception while processing rule E9903
-        - E9904 #Unknown exception while processing rule E9904
+        - E9010
  
 Parameters:
 
