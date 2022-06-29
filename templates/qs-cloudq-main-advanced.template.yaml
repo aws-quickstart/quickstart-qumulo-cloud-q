@@ -589,33 +589,6 @@ Rules:
         AssertDescription: "Deploy the Cluster in the Local Zone or Outpost subnet. Deploy the Sidecar Lambda functions in a subnet associated with a Region Availability Zone."
       - Assert: !Not [!Equals [ !Ref QPublicMgmt, "YES"]]
         AssertDescription: "Local Zones and Outpost do not support the Public Management option."
-      - Assert: !Not [!Equals [ !Ref QDr, "YES"]]
-        AssertDescription: "Local Zones and Outpost do not support Qumulo Disaster Recovery Hybrid-sc1 clusters."       
-
-  LocalZoneEBSMPRule:
-    RuleCondition: !And [!Not [!Or [!Equals [!Ref QMarketPlaceType, "Custom-1TB-6PB"], !Equals [!Ref QMarketPlaceType, "Specified-AMI-ID"]]], !Equals [!Ref QClusterLocalZone, "YES"]]
-    Assertions:
-      - Assert: !Contains
-        - - 1TB-Usable-All-Flash
-          - 103TB-Usable-All-Flash
-        - !Ref QMarketPlaceType
-        AssertDescription: "Local Zones and Outposts do not support st1 EBS volume types. Pick an All Flash configuration."
-
-  LocalZoneEBSCustomRule:
-    RuleCondition: !And [!Or [!Equals [!Ref QMarketPlaceType, "Custom-1TB-6PB"], !Equals [!Ref QMarketPlaceType, "Specified-AMI-ID"]], !Equals [!Ref QClusterLocalZone, "YES"]]
-    Assertions:
-      - Assert: !Contains
-        - - 600GiB-AF
-          - 1TB-AF
-          - 5TB-AF
-          - 8TiB-AF
-          - 13TiB-AF
-          - 20TiB-AF
-          - 30TB-AF
-          - 35TiB-AF
-          - 55TiB-AF
-        - !Ref QDiskConfig
-        AssertDescription: "Local Zones and Outposts do not support st1 or sc1 EBS volume types. Pick an All Flash configuration."
 
   SubnetsInVPCRule:
     Assertions:
