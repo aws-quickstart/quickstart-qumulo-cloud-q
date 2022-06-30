@@ -6,7 +6,7 @@ AWS Cloud.
 
 [#architecture1]
 .Quick Start architecture for {partner-product-short-name} on AWS
-image::../images/qumulo-cloud-q-architecture_diagram.png[Architecture, 90%]
+image::../images/qumulo-cloud-q-architecture-diagram.png[Architecture, 90%]
 
 As shown in <<architecture1>>, the Quick Start sets up the following:
 
