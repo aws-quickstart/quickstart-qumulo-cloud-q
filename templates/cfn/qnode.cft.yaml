@@ -72,6 +72,7 @@ Mappings:
       workingSlots: 6
       workingSize: 100
       workingSizeB: 107374182400
+      workingIOPS: 3000
       backingSlots: 0
       backingType: none
       backingSize: 0
@@ -81,6 +82,7 @@ Mappings:
       workingSlots: 8
       workingSize: 128
       workingSizeB: 137438953472
+      workingIOPS: 3000
       backingSlots: 0
       backingType: none
       backingSize: 0
@@ -90,6 +92,7 @@ Mappings:
       workingSlots: 10
       workingSize: 500
       workingSizeB: 536870912000
+      workingIOPS: 3000
       backingSlots: 0
       backingType: none
       backingSize: 0
@@ -99,6 +102,7 @@ Mappings:
       workingSlots: 16
       workingSize: 512
       workingSizeB: 549755813888
+      workingIOPS: 3000
       backingSlots: 0
       backingType: none
       backingSize: 0
@@ -108,6 +112,7 @@ Mappings:
       workingSlots: 25
       workingSize: 533
       workingSizeB: 572304392192
+      workingIOPS: 3000
       backingSlots: 0
       backingType: none
       backingSize: 0
@@ -117,6 +122,7 @@ Mappings:
       workingSlots: 25
       workingSize: 820
       workingSizeB: 880468295680
+      workingIOPS: 3000
       backingSlots: 0
       backingType: none
       backingSize: 0
@@ -126,6 +132,7 @@ Mappings:
       workingSlots: 8
       workingSize: 3750
       workingSizeB: 4026531840000
+      workingIOPS: 11250
       backingSlots: 0
       backingType: none
       backingSize: 0
@@ -135,6 +142,7 @@ Mappings:
       workingSlots: 25
       workingSize: 1434
       workingSizeB: 1539745775616
+      workingIOPS: 4302
       backingSlots: 0
       backingType: none
       backingSize: 0
@@ -144,6 +152,7 @@ Mappings:
       workingSlots: 25
       workingSize: 2253
       workingSizeB: 2419140329472
+      workingIOPS: 7659
       backingSlots: 0
       backingType: none
       backingSize: 0
@@ -153,6 +162,7 @@ Mappings:
       workingSlots: 5      
       workingSize: 100
       workingSizeB: 107374182400
+      workingIOPS: 3000
       backingSlots: 10      
       backingType: st1
       backingSize: 500
@@ -162,6 +172,7 @@ Mappings:
       workingSlots: 4
       workingSize: 150
       workingSizeB: 161061273600
+      workingIOPS: 3000
       backingSlots: 8
       backingType: st1
       backingSize: 1024
@@ -171,6 +182,7 @@ Mappings:
       workingSlots: 4
       workingSize: 175
       workingSizeB: 187904819200
+      workingIOPS: 3000
       backingSlots: 8
       backingType: st1
       backingSize: 1664
@@ -180,6 +192,7 @@ Mappings:
       workingSlots: 5
       workingSize: 160
       workingSizeB: 171798691840
+      workingIOPS: 3000
       backingSlots: 10
       backingType: st1
       backingSize: 2000
@@ -189,6 +202,7 @@ Mappings:
       workingSlots: 5
       workingSize: 350
       workingSizeB: 375809638400
+      workingIOPS: 3000
       backingSlots: 10
       backingType: st1
       backingSize: 3584
@@ -198,6 +212,7 @@ Mappings:
       workingSlots: 5
       workingSize: 550
       workingSizeB: 590558003200
+      workingIOPS: 3000
       backingSlots: 10
       backingType: st1
       backingSize: 5632
@@ -207,6 +222,7 @@ Mappings:
       workingSlots: 5
       workingSize: 900
       workingSizeB: 966367641600
+      workingIOPS: 3000
       backingSlots: 10
       backingType: st1
       backingSize: 9216
@@ -216,6 +232,7 @@ Mappings:
       workingSlots: 8
       workingSize: 1000
       workingSizeB: 1073741824000
+      workingIOPS: 3000
       backingSlots: 16
       backingType: st1
       backingSize: 10240
@@ -225,6 +242,7 @@ Mappings:
       workingSlots: 8
       workingSize: 1600
       workingSizeB: 1717986918400
+      workingIOPS: 4800
       backingSlots: 16
       backingType: st1
       backingSize: 16384
@@ -234,6 +252,7 @@ Mappings:
       workingSlots: 5
       workingSize: 2500
       workingSizeB: 2684354560000
+      workingIOPS: 7500
       backingSlots: 20
       backingType: st1
       backingSize: 16384
@@ -243,6 +262,7 @@ Mappings:
       workingSlots: 4
       workingSize: 150
       workingSizeB: 161061273600
+      workingIOPS: 3000
       backingSlots: 8
       backingType: sc1
       backingSize: 1024
@@ -252,6 +272,7 @@ Mappings:
       workingSlots: 4
       workingSize: 175
       workingSizeB: 187904819200
+      workingIOPS: 3000
       backingSlots: 8
       backingType: sc1
       backingSize: 1664
@@ -261,6 +282,7 @@ Mappings:
       workingSlots: 5
       workingSize: 160
       workingSizeB: 171798691840
+      workingIOPS: 3000
       backingSlots: 10
       backingType: sc1
       backingSize: 2000
@@ -270,6 +292,7 @@ Mappings:
       workingSlots: 5
       workingSize: 350
       workingSizeB: 375809638400
+      workingIOPS: 3000
       backingSlots: 10
       backingType: sc1
       backingSize: 3584
@@ -279,6 +302,7 @@ Mappings:
       workingSlots: 5
       workingSize: 550
       workingSizeB: 590558003200
+      workingIOPS: 3000
       backingSlots: 10
       backingType: sc1
       backingSize: 5632
@@ -288,6 +312,7 @@ Mappings:
       workingSlots: 5
       workingSize: 900
       workingSizeB: 966367641600
+      workingIOPS: 3000
       backingSlots: 10
       backingType: sc1
       backingSize: 9216
@@ -297,6 +322,7 @@ Mappings:
       workingSlots: 8
       workingSize: 1000
       workingSizeB: 1073741824000
+      workingIOPS: 3000
       backingSlots: 16
       backingType: sc1
       backingSize: 10240
@@ -306,6 +332,7 @@ Mappings:
       workingSlots: 8
       workingSize: 1600
       workingSizeB: 1717986918400
+      workingIOPS: 4800
       backingSlots: 16
       backingType: sc1
       backingSize: 16384
@@ -315,6 +342,7 @@ Mappings:
       workingSlots: 5
       workingSize: 2500
       workingSizeB: 2684354560000
+      workingIOPS: 7500
       backingSlots: 20
       backingType: sc1
       backingSize: 16384
@@ -401,7 +429,7 @@ Resources:
       EvaluationPeriods: 2
       MetricName: StatusCheckFailed_System
       Namespace: "AWS/EC2"
-      OKActions: !If [HasInstanceRecoveryTopic, !Ref QInstanceRecoveryTopic, !Ref AWS::NoValue]
+      OKActions: [!If [HasInstanceRecoveryTopic, !Ref QInstanceRecoveryTopic, !Ref AWS::NoValue]]
       Period: 60
       Statistic: Maximum
       Threshold: 1
@@ -962,6 +990,9 @@ Resources:
               - "}"
 
 Outputs:
+  FlashIOPS: 
+    Description: gp3 Flash IOPS
+    Value: !FindInMap [DiskMap, !Ref QDiskConfig, workingIOPS]
   NodeName:
     Description: Name tag for this node
     Value: !Sub "${QStackName} - QumuloNode${QNodeNumber}"  

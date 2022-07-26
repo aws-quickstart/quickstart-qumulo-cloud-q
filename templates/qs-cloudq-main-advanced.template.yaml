@@ -39,7 +39,7 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
-          default: AWS Template Configuration - Cloud Q Quick Start Existing VPC - Single AZ - Advanced v4.0
+          default: AWS Template Configuration - Cloud Q Quick Start Existing VPC - Single AZ - Advanced v4.2
         Parameters:
           - QSS3BucketName
           - QSS3KeyPrefix
@@ -346,19 +346,20 @@ Parameters:
     Default: gp3
 
   QFlashTput:
-    Description: "Set the gp3 Throughput in MB/s: 125-1000.  Default 250 MB/s"
+    Description: "Use Qumulo Default adjusts the throughput for the gp3 volume per Qumulo recommendations. Override the default only if you have consulted with Qumulo."
     AllowedValues:
-      - 125
+      - Use Qumulo Default
       - 250
       - 500
       - 750
       - 1000      
     Type: String
-    Default: 250   
+    Default: Use Qumulo Default
 
   QFlashIops:
-    Description: "Set the gp3 IOPS: 3000-16000.  Default 3000 MB/s"
+    Description: "Use Qumulo Default adjusts the IOPS for the gp3 volume per Qumulo recommendations. Override the default only if you have consulted with Qumulo."
     AllowedValues:
+      - Use Qumulo Default
       - 3000
       - 4000
       - 5000
@@ -374,7 +375,7 @@ Parameters:
       - 15000
       - 16000                  
     Type: String
-    Default: 3000 
+    Default: Use Qumulo Default
 
   QAmiID:
     Description: "Used only for the specified AMI ID offering. Amazon Machine Image (AMI) ID is supplied by Qumulo."
@@ -439,6 +440,14 @@ Parameters:
       - m5.12xlarge
       - m5.16xlarge
       - m5.24xlarge
+      - m6i.xlarge
+      - m6i.2xlarge
+      - m6i.4xlarge
+      - m6i.8xlarge
+      - m6i.12xlarge
+      - m6i.16xlarge
+      - m6i.24xlarge
+      - m6i.32xlarge      
       - c5n.4xlarge
       - c5n.9xlarge
       - c5n.18xlarge
@@ -589,33 +598,6 @@ Rules:
         AssertDescription: "Deploy the Cluster in the Local Zone or Outpost subnet. Deploy the Sidecar Lambda functions in a subnet associated with a Region Availability Zone."
       - Assert: !Not [!Equals [ !Ref QPublicMgmt, "YES"]]
         AssertDescription: "Local Zones and Outpost do not support the Public Management option."
-      - Assert: !Not [!Equals [ !Ref QDr, "YES"]]
-        AssertDescription: "Local Zones and Outpost do not support Qumulo Disaster Recovery Hybrid-sc1 clusters."       
-
-  LocalZoneEBSMPRule:
-    RuleCondition: !And [!Not [!Or [!Equals [!Ref QMarketPlaceType, "Custom-1TB-6PB"], !Equals [!Ref QMarketPlaceType, "Specified-AMI-ID"]]], !Equals [!Ref QClusterLocalZone, "YES"]]
-    Assertions:
-      - Assert: !Contains
-        - - 1TB-Usable-All-Flash
-          - 103TB-Usable-All-Flash
-        - !Ref QMarketPlaceType
-        AssertDescription: "Local Zones and Outposts do not support st1 EBS volume types. Pick an All Flash configuration."
-
-  LocalZoneEBSCustomRule:
-    RuleCondition: !And [!Or [!Equals [!Ref QMarketPlaceType, "Custom-1TB-6PB"], !Equals [!Ref QMarketPlaceType, "Specified-AMI-ID"]], !Equals [!Ref QClusterLocalZone, "YES"]]
-    Assertions:
-      - Assert: !Contains
-        - - 600GiB-AF
-          - 1TB-AF
-          - 5TB-AF
-          - 8TiB-AF
-          - 13TiB-AF
-          - 20TiB-AF
-          - 30TB-AF
-          - 35TiB-AF
-          - 55TiB-AF
-        - !Ref QDiskConfig
-        AssertDescription: "Local Zones and Outposts do not support st1 or sc1 EBS volume types. Pick an All Flash configuration."
 
   SubnetsInVPCRule:
     Assertions:
@@ -641,8 +623,8 @@ Rules:
   EnvTypeRule:
     RuleCondition: !Not [!Equals [!Ref EnvType, "dev"]]
     Assertions: 
-      - Assert: !Not [!Equals [!Ref QInstanceType, m5.xlarge]]
-        AssertDescription: "m5.xlarge instance types are not supported for production environments. Choose at least an m5.2xlarge or switch to a dev environment type."
+      - Assert: !Not [!Or [!Equals [!Ref QInstanceType, m5.xlarge], !Equals [!Ref QInstanceType, m6i.xlarge]]]
+        AssertDescription: "m5.xlarge or m6i.xlarge instance types are not supported for production environments. Choose at least a .2xlarge or switch to a dev environment type."
 
   DrEBSRule:
     RuleCondition: !Equals [!Ref QDr, "YES"]
@@ -657,8 +639,12 @@ Rules:
           - m5.2xlarge
           - m5.4xlarge
           - m5.8xlarge
+          - m6i.xlarge
+          - m6i.2xlarge
+          - m6i.4xlarge
+          - m6i.8xlarge          
         - !Ref QInstanceType
-        AssertDescription: "Disastery-recovery clusters support m5.2xlarge, m5.4xlarge, and m5.8xlarge instance types. Choose one of these EC2 instance types."
+        AssertDescription: "Disastery-recovery clusters support m5 or m6i .2xlarge, .4xlarge, and .8xlarge instance types. Choose one of these EC2 instance types."
       - Assert: !Contains 
         - - 8TiB-Hybrid-sc1
           - 13TiB-Hybrid-sc1

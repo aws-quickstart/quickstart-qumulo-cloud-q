@@ -1,5 +1,6 @@
 cd /root
 region="${Region}"
+s3_region="${BucketRegion}"
 stkname="${TopStackName}"
 q_stkname="${QStackName}"
 sc_secrets_arn="${SideCarSecretsArn}"
@@ -10,8 +11,8 @@ qqh="./qq --host ${Node1IP}"
 node_ips="${NodeIPs}"
 instance_ids="${InstanceIDs}"
 float_ips="${FloatIPs}"
-def_password=${ClusterPwd}
-cmk=${CMK}
+def_password="${ClusterPwd}"
+cmk="${CMK}"
 req_imdsv2="${RequireIMDSv2}"
 s3bkt="${BucketName}"
 s3pfx="${KeyPrefix}"
@@ -21,7 +22,7 @@ this_ec2=$(curl -H "X-aws-ec2-metadata-token: $token" -v http://169.254.169.254/
 sc_prov="NO"
 cmk_prov="NO"
 mod_FIPs="NO"
-bkt_pfx="$s3bkt/$s3pfx""templates/cfn-init/"
+bkt_pfx="$s3bkt/$s3pfx""scripts/"
 req_ver="${QClusterVersion}"
 nodes_down="${MaxNodesDown}"
 mod_overness="${ModOverness}"
@@ -30,7 +31,7 @@ f_tput="${FlashTput}"
 f_iops="${FlashIops}"                
 
 if [[ ! -e "functions-v6.sh" ]]; then
-  aws s3 cp s3://$bkt_pfx"functions-v6.sh" ./functions-v6.sh
+  aws s3 cp --region $s3_region s3://$bkt_pfx"functions-v6.sh" ./functions-v6.sh
 fi
 source functions-v6.sh
 
@@ -138,7 +139,7 @@ if [ $out_quorum -eq ${#nodeIPs[@]} ] && [ $in_quorum -eq 0 ]; then
 
   new_cluster="true"
 
-  aws s3 cp s3://$bkt_pfx"stack-policy.json" ./stack_policy.json
+  aws s3 cp --region $s3_region s3://$bkt_pfx"stack-policy.json" ./stack_policy.json
   setstackpolicy "$region" "$q_stkname" "./stack_policy.json"
 
   imdsv2 "$req_imdsv2" "$region" "$this_ec2"
@@ -218,7 +219,7 @@ elif [ $in_quorum -gt 3 ]; then
 fi
 
 if [ -n "$new_ver" ]; then
-  aws s3 cp s3://$bkt_pfx"upgrade-order.txt" ./order.txt --quiet
+  aws s3 cp --region $s3_region s3://$bkt_pfx"upgrade-order.txt" ./order.txt --quiet
   IFS=", " read -r -a order <<< $(cat ./order.txt)
 
   for ((n=0; n<${#order[@]}+1; n++)); do
@@ -244,12 +245,12 @@ if [ -n "$new_ver" ]; then
     if [ -e "$sw_file" ]; then
       echo "$sw_file already downloaded"
     elif [ "$no_inet" == "true" ]; then
-      aws s3api head-object --region ${BucketRegion} --bucket $s3bkt --key $s3pfx"upgrade/"$sw_file || no_file="true"
+      aws s3api head-object --region $s3_region --bucket $s3bkt --key $s3pfx"upgrade/"$sw_file || no_file="true"
       if [ "$no_file" == "true" ]; then
         ssmput "last-run-status" "$region" "$stkname" "Software upgrade required, no Internet or no object $f_path"
         exit
       else
-        aws s3 cp $f_path ./$sw_file --quiet
+        aws s3 cp --region $s3_region $f_path ./$sw_file --quiet
         ssmput "last-run-status" "$region" "$stkname" "Downloading $f_path"
       fi
     else
@@ -404,7 +405,7 @@ fi
 
 if [ "$cmk_prov" == "YES" ] && [ -n "$cmk" ]; then
   ssmput "last-run-status" "$region" "$stkname" "Applying CMK policy"
-  aws s3 cp s3://$bkt_pfx"cmk-policy-skeleton.json" ./add_policy.json
+  aws s3 cp --region $s3_region s3://$bkt_pfx"cmk-policy-skeleton.json" ./add_policy.json
   modcmkpolicy "$cmk" "$region" "$stkname" "QSIDECARSTACK" "CloudQStack" "DiskRecoveryLambda"
   ssmput "cmk-policy-modified" "$region" "$stkname" "YES"
 fi

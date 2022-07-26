@@ -365,7 +365,7 @@ Resources:
           exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
           #User data runs every boot cycle
 
-          if [ $(curl -sI -w "%{http_code}\\n" "s3.${Region}.amazonaws.com" -o /dev/null --connect-timeout 10 --retry 10 --retry-delay 5 --max-time 200) == "405" ]; then
+          if [ $(curl -sI -w "%{http_code}\\n" "s3.${BucketRegion}.amazonaws.com" -o /dev/null --connect-timeout 10 --retry 10 --retry-delay 5 --max-time 200) == "405" ]; then
             echo "S3 Reachable"
           else
             echo "S3 Unreachable"
@@ -374,7 +374,7 @@ Resources:
 
           cd /root
           if [[ ! -e "provision.sh" ]]; then
-            aws s3 cp s3://"${BucketName}/${KeyPrefix}templates/cfn-init/provision.sh" ./provision.sh
+            aws s3 cp --region ${BucketRegion} s3://"${BucketName}/${KeyPrefix}scripts/provision.sh" ./provision.sh
           fi
 
           sed "" provision.sh > provision-sub.sh
