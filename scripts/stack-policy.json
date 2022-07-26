@@ -4,7 +4,7 @@
       "Effect" : "Deny",
       "Action" : "Update:*",
       "Principal": "*",
-      "Resource" : "LogicalResourceId/QumuloNode*"
+      "Resource" : "LogicalResourceId/QumuloNode"
     },
     {
       "Effect" : "Allow",

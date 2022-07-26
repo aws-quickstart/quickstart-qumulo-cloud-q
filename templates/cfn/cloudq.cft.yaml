@@ -153,6 +153,16 @@ Conditions:
 
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
   
+  ProvFlashIops: !Not
+    - !Equals
+      - !Ref QFlashIops
+      - "Use Qumulo Default"
+
+  ProvFlashTput: !Not
+    - !Equals
+      - !Ref QFlashTput
+      - "Use Qumulo Default"
+
   ProvSg2: !Not
     - !Equals
       - !Ref QSgCidr2
@@ -379,8 +389,8 @@ Resources:
         CMK: !Ref VolumesEncryptionKey
         ClusterPwd: !GetAtt QSTACK.Outputs.TemporaryPassword
         ClusterSecretsArn: !GetAtt SECRETSSTACK.Outputs.ClusterSecretsArn
-        FlashIops: !Ref QFlashIops
-        FlashTput: !Ref QFlashTput
+        FlashIops: !If [ProvFlashIops, !Ref QFlashIops, !GetAtt QSTACK.Outputs.FlashIOPS]
+        FlashTput: !If [ProvFlashTput, !Ref QFlashTput, "250"]
         FlashType: !Ref QFlashType
         FloatIPs: !If [ProvFloatIP, !GetAtt QSTACK.Outputs.ClusterSecondaryPrivateIPs, ""]
         InstanceIDs: !GetAtt QSTACK.Outputs.ClusterInstanceIDs

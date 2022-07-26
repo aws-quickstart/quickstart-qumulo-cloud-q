@@ -36,7 +36,7 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
-          default: AWS Template Configuration - Cloud Q Quick Start for Existing VPC - Single AZ - Standard v4.0
+          default: AWS Template Configuration - Cloud Q Quick Start for Existing VPC - Single AZ - Standard v4.2
         Parameters:
           - KeyPair
 
@@ -117,6 +117,14 @@ Parameters:
       - m5.12xlarge
       - m5.16xlarge
       - m5.24xlarge
+      - m6i.xlarge
+      - m6i.2xlarge
+      - m6i.4xlarge
+      - m6i.8xlarge
+      - m6i.12xlarge
+      - m6i.16xlarge
+      - m6i.24xlarge
+      - m6i.32xlarge
       - c5n.4xlarge
       - c5n.9xlarge
       - c5n.18xlarge
@@ -249,8 +257,8 @@ Resources:
         QClusterVersion: "5.1.0.1"
         QDiskConfig: !Ref QDiskConfig
         QDr: "NO"
-        QFlashIops: "3000"
-        QFlashTput: "250"
+        QFlashIops: "Use Qumulo Default"
+        QFlashTput: "Use Qumulo Default"
         QFlashType: "gp3"       
         QFloatRecordName: ""
         QFloatingIP: "3"
