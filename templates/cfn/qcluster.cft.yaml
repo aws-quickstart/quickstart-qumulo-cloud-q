@@ -1102,7 +1102,11 @@ Outputs:
             - ", "
             - - !GetAtt NODESTACK24.Outputs.NodeSecondaryPrivateIPs
           - !Ref AWS::NoValue     
-                           
+
+  FlashIOPS:
+    Description: gp3 Flash IOPS
+    Value: !GetAtt NODESTACK1.Outputs.FlashIOPS
+    
   LinkToManagement:
     Description: Use to launch the Qumulo Admin Console for Node 1
     Value: !Join

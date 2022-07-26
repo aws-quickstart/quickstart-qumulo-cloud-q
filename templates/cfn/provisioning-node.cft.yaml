@@ -374,7 +374,7 @@ Resources:
 
           cd /root
           if [[ ! -e "provision.sh" ]]; then
-            aws s3 cp --region ${BucketRegion} s3://"${BucketName}/${KeyPrefix}templates/cfn-init/provision.sh" ./provision.sh
+            aws s3 cp --region ${BucketRegion} s3://"${BucketName}/${KeyPrefix}scripts/provision.sh" ./provision.sh
           fi
 
           sed "" provision.sh > provision-sub.sh
