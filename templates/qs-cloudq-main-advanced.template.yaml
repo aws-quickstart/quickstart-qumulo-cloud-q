@@ -39,7 +39,7 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
-          default: AWS Template Configuration - Cloud Q Quick Start Existing VPC - Single AZ - Advanced v4.2
+          default: AWS Template Configuration - Cloud Q Quick Start Existing VPC - Single AZ - Advanced v4.4
         Parameters:
           - QSS3BucketName
           - QSS3KeyPrefix
@@ -420,7 +420,7 @@ Parameters:
     MaxLength: 11
     MinLength: 5
     Type: String
-    Default: "5.1.2"
+    Default: "5.2.4"
 
   QClusterAdminPwd:
     AllowedPattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&\\-_])[A-Za-z\\d@$!%*?&\\-_]{8,}$"
@@ -537,7 +537,7 @@ Parameters:
     MaxLength: 11
     MinLength: 5
     Type: String
-    Default: "5.1.2"
+    Default: "5.2.4"
 
   SideCarSNSTopic:
     Description: (Optional) Enter an SNS topic ARN to publish Sidecar (Lambda) errors and successful EBS disk replacements to.
