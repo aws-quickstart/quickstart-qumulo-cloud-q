@@ -119,6 +119,10 @@ Conditions:
     - !Ref NumberAZs
     - "1"
 
+  StrictIMDSv2: !Equals
+    - !Ref RequireIMDSv2
+    - "YES"
+
 Resources:
   ProvisionerSG:
     Type: 'AWS::EC2::SecurityGroup'
@@ -312,6 +316,16 @@ Resources:
       Value: "null"
       Type: String
 
+  ProvisioningNodeLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: !Ref AWS::StackName
+      LaunchTemplateData:
+        MetadataOptions:
+          HttpEndpoint: enabled
+          HttpPutResponseHopLimit: 3
+          HttpTokens: !If [StrictIMDSv2, required, optional]
+
   ProvisioningNode:
     Type: 'AWS::EC2::Instance'
     Properties:
@@ -326,6 +340,9 @@ Resources:
       InstanceInitiatedShutdownBehavior: stop
       IamInstanceProfile: !Ref ProvisionerProfile
       KeyName: !Ref KeyName
+      LaunchTemplate: 
+        LaunchTemplateName: !Ref AWS::StackName
+        Version: 1        
       NetworkInterfaces:
         - AssociatePublicIpAddress: false
           DeleteOnTermination: true
@@ -397,7 +414,6 @@ Resources:
           sed -i.rep "s|\${!QClusterVersion}|${QClusterVersion}|g" provision-sub.sh
           sed -i.rep "s|\${!QStackName}|${QStackName}|g" provision-sub.sh
           sed -i.rep "s|\${!Region}|${Region}|g" provision-sub.sh
-          sed -i.rep "s|\${!RequireIMDSv2}|${RequireIMDSv2}|g" provision-sub.sh
           sed -i.rep "s|\${!SideCarProv}|${SideCarProv}|g" provision-sub.sh
           sed -i.rep "s|\${!SideCarSecretsArn}|${SideCarSecretsArn}|g" provision-sub.sh
           sed -i.rep "s|\${!SoftwareSecretsArn}|${SoftwareSecretsArn}|g" provision-sub.sh          

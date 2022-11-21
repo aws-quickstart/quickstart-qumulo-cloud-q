@@ -69,6 +69,8 @@ Parameters:
     Type: String    
   QSgCidr1:
     Type: String
+  RequireIMDSv2:
+    Type: String
 
 Conditions:
 
@@ -102,6 +104,10 @@ Conditions:
     - !Equals
       - !Ref QFloatingIP
       - "0"
+
+  StrictIMDSv2: !Equals
+    - !Ref RequireIMDSv2
+    - "YES"
 
 Mappings:
   AZforNode:
@@ -314,7 +320,17 @@ Resources:
     Type: AWS::EC2::PlacementGroup
     Properties:
       Strategy: !If [ProvMultiAZ, spread, cluster]
-      
+
+  QClusterLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: !Ref AWS::StackName
+      LaunchTemplateData:
+        MetadataOptions:
+          HttpEndpoint: enabled
+          HttpPutResponseHopLimit: 3
+          HttpTokens: !If [StrictIMDSv2, required, optional]
+
   NODESTACK1:
     Type: 'AWS::CloudFormation::Stack'
     Properties:

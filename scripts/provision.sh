@@ -15,7 +15,6 @@ instance_ids="${InstanceIDs}"
 float_ips="${FloatIPs}"
 def_password="${ClusterPwd}"
 cmk="${CMK}"
-req_imdsv2="${RequireIMDSv2}"
 s3bkt="${BucketName}"
 s3pfx="${KeyPrefix}"
 serverIP=$(hostname -I | xargs)
@@ -153,11 +152,6 @@ if [ $out_quorum -eq ${#nodeIPs[@]} ] && [ $in_quorum -eq 0 ]; then
   aws s3 cp --region $s3_region s3://$bkt_pfx"stack-policy.json" ./stack_policy.json
   setstackpolicy "$region" "$q_stkname" "./stack_policy.json"
 
-  imdsv2 "$req_imdsv2" "$region" "$this_ec2"
-  for m in "${!newIDs[@]}"; do
-    imdsv2 "$req_imdsv2" "$region" "${newIDs[m]}"
-  done
-
   chk=$(vercomp $req_ver "4.2.1"; echo $?)
   chk1=$(vercomp $req_ver "4.2.2"; echo $?)
   if [ $chk -eq 0 ] || [ $chk1 -eq 0 ]; then
@@ -198,7 +192,6 @@ elif [ $in_quorum -gt 3 ]; then
     if [[ ! "${oldIDs[@]}" =~ "${newIDs[m]}" ]]; then
       upgradeIDs+=(${newIDs[m]})
       ec2protect "$protection" "$region" "${newIDs[m]}"
-      imdsv2 "$req_imdsv2" "$region" "${newIDs[m]}"
     fi
   done
 
