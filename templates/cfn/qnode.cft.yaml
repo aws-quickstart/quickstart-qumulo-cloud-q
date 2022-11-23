@@ -447,6 +447,9 @@ Resources:
       ImageId: !Ref QAmiID
       InstanceType: !Ref QInstanceType
       KeyName: !Ref KeyPair
+      LaunchTemplate: 
+        LaunchTemplateName: !Ref QStackName
+        Version: 1      
       NetworkInterfaces:
         - DeviceIndex: '0'
           NetworkInterfaceId: !Ref QumuloEni

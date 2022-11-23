@@ -341,6 +341,7 @@ Resources:
         QInstanceType: !Ref QInstanceType
         QNodeCount: !If [CustomNC, !Ref QNodeCount, !FindInMap [ConfigMap, !Ref QMarketPlaceType, NodeCount]]
         QSgCidr1: !Ref QSgCidr1
+        RequireIMDSv2: !Ref RequireIMDSv2        
         VPCId: !Ref VPCId
         VolumesEncryptionKey: !Ref VolumesEncryptionKey
       TemplateURL: 

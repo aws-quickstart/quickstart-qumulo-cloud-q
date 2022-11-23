@@ -61,6 +61,8 @@ Metadata:
           - QPublicMgmt
           - QPublicRepl
           - PublicSubnetID
+          - QNlb
+          - QNlbPrivateSubnetIDs           
           - DomainName
           - QFloatRecordName
 
@@ -122,6 +124,10 @@ Metadata:
         default: "Qumulo public management"
       QPublicRepl: 
         default: "Qumulo public replication" 
+      QNlb:
+        default: "Deploy an AWS Network Load Balancer"     
+      QNlbPrivateSubnetIDs:
+        default: "AWS Private Subnet ID for the Network Load Balancer"           
       DomainName:
         default: "Domain name for a Route 53 hosted zone"
       QFloatingIP:
@@ -257,6 +263,18 @@ Parameters:
   PrivateSubnetID:
     Type: AWS::EC2::Subnet::Id
     Description: ID of the private subnet.
+
+  QNlbPrivateSubnetIDs:
+    Type: AWS::EC2::Subnet::Id
+    Description: A subnet ID must be selected. It is used only if YES was selected for QNlb.
+
+  QNlb:
+    AllowedValues:
+      - "YES"
+      - "NO"
+    Description: Choose YES to deploy an NLB. This will negate any Route53 PHZ options below and disable floating IPs on the cluster.
+    Type: String
+    Default: "NO"
 
   DomainName:
     Description: "(Optional) To create a Route 53 private hosted zone to resolve IP addresses, enter a fully qualified domain name (FQDN). You may use the .local suffix, e.g., qumulo.companyname.local. If your VPC already has a means of DNS resolution and you do not need to create a Route 53 hosted zone, keep this value blank."
@@ -548,7 +566,7 @@ Conditions:
 
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
   
-  ProvR53: !Not
+  R53: !Not
     - !Equals
       - !Ref DomainName
       - ""
@@ -563,7 +581,16 @@ Conditions:
       - !Ref QClusterLocalZone
       - "NO"
 
+  NLB: !Not
+    - !Equals
+      - !Ref QNlb
+      - "NO"
+
   ProvMgmt: !And [Condition: PubMgmt, !Not [Condition: LocalAZ]]
+
+  ProvNlb: !And [Condition: NLB, !Not [Condition: LocalAZ]]  
+
+  ProvR53: !And [Condition: R53, !Not [Condition: NLB]]
 
 Rules:
   CustomRule:
@@ -608,7 +635,7 @@ Rules:
         - !RefAll "AWS::EC2::VPC::Id"
         AssertDescription: "All subnets must be in the same VPC"
 
-  SubnetsInAZRule:
+  SubnetsInAZRuleMgmt:
     RuleCondition: !And [!Equals [!Ref QClusterLocalZone, "NO"], !Equals [ !Ref QPublicMgmt, "YES"]]
     Assertions:
       - Assert: !Equals 
@@ -619,6 +646,18 @@ Rules:
           - PublicSubnetID
           - AvailabilityZone
         AssertDescription: "All subnets must be in the same Availability Zone when selecting the Public Management Option"
+
+  SubnetsInAZRuleNlb:
+    RuleCondition: !And [!Equals [!Ref QClusterLocalZone, "NO"], !Equals [ !Ref QNlb, "YES"]]
+    Assertions:
+      - Assert: !Equals 
+        - !ValueOf
+          - PrivateSubnetID
+          - AvailabilityZone
+        - !ValueOf
+          - QNlbPrivateSubnetIDs
+          - AvailabilityZone     
+        AssertDescription: "All subnets must be in the same Availability Zone when selecting the Network Load Balancer Deployment Option"
 
   EnvTypeRule:
     RuleCondition: !Not [!Equals [!Ref EnvType, "dev"]]
@@ -664,7 +703,7 @@ Resources:
     Type: "AWS::CloudFormation::Stack"
     Properties:
       Parameters:
-        DomainName: !Ref DomainName
+        DomainName: !If [ProvNlb, "", !Ref DomainName]
         EnvType: !Ref EnvType
         KeyPair: !Ref KeyPair
         NumberAZs: "1"            
@@ -682,8 +721,8 @@ Resources:
         QFlashIops: !Ref QFlashIops
         QFlashTput: !Ref QFlashTput
         QFlashType: !Ref QFlashType
-        QFloatRecordName: !Ref QFloatRecordName
-        QFloatingIP: !Ref QFloatingIP
+        QFloatRecordName: !If [ProvNlb, "", !Ref QFloatRecordName]
+        QFloatingIP: !If [ProvNlb, "0", !Ref QFloatingIP]
         QInstanceRecoveryTopic: !Ref QInstanceRecoveryTopic
         QInstanceType: !Ref QInstanceType
         QMarketPlaceType: !Ref QMarketPlaceType
@@ -692,7 +731,7 @@ Resources:
         QNlbDeregDelay: "60"
         QNlbDeregTerm: "false"
         QNlbPreserveIP: "true" 
-        QNlbPrivateSubnetIDs: ""        
+        QNlbPrivateSubnetIDs: !If [ProvNlb, !Ref QNlbPrivateSubnetIDs, ""]       
         QNlbSticky: "true"
         QNlbXzone: "false"        
         QNodeCount: !Ref QNodeCount
@@ -732,7 +771,19 @@ Outputs:
     Condition: ProvMgmt
     Description: Public URL for Management NLB connected to Qumulo Cluster
     Value: !GetAtt CloudQStack.Outputs.QumuloNLBPublicURL
-  QumuloPrivateNFS:
+  QumuloNLBPrivateNFS:
+    Condition: ProvNlb
+    Description: Private NFS path to Qumulo Cluster
+    Value: !GetAtt CloudQStack.Outputs.QumuloNLBPrivateNFS  
+  QumuloNLBPrivateSMB:
+    Condition: ProvNlb
+    Description: Private SMB UNC path to Qumulo Cluster
+    Value: !GetAtt CloudQStack.Outputs.QumuloNLBPrivateSMB       
+  QumuloNLBPrivateURL:
+    Condition: ProvNlb  
+    Description: Private URL for NLB Connected to Qumulo Cluster
+    Value: !GetAtt CloudQStack.Outputs.QumuloNLBPrivateURL         
+  QumuloPrivateNFS:  
     Condition: ProvR53
     Description: Private NFS path for Qumulo Cluster
     Value: !GetAtt CloudQStack.Outputs.QumuloPrivateNFS
