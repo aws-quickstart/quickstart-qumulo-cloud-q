@@ -36,6 +36,10 @@ if [[ ! -e "functions-v6.sh" ]]; then
 fi
 source functions-v6.sh
 
+if [[ ! -e "stack-policy.json" ]]; then
+  aws s3 cp --region $s3_region s3://$bkt_pfx"stack-policy.json" ./stack_policy.json
+fi
+
 if [ $(chkurl "google.com"; echo $?) -eq 1 ]; then
   ssmput "last-run-status" "$region" "$stkname" "BOOTED. Internet UP."
 else
@@ -149,7 +153,6 @@ if [ $out_quorum -eq ${#nodeIPs[@]} ] && [ $in_quorum -eq 0 ]; then
 
   new_cluster="true"
 
-  aws s3 cp --region $s3_region s3://$bkt_pfx"stack-policy.json" ./stack_policy.json
   setstackpolicy "$region" "$q_stkname" "./stack_policy.json"
 
   chk=$(vercomp $req_ver "4.2.1"; echo $?)
