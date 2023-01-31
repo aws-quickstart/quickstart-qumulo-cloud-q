@@ -341,6 +341,7 @@ Resources:
         QInstanceType: !Ref QInstanceType
         QNodeCount: !If [CustomNC, !Ref QNodeCount, !FindInMap [ConfigMap, !Ref QMarketPlaceType, NodeCount]]
         QSgCidr1: !Ref QSgCidr1
+        RequireIMDSv2: !Ref RequireIMDSv2        
         VPCId: !Ref VPCId
         VolumesEncryptionKey: !Ref VolumesEncryptionKey
       TemplateURL: 
@@ -409,7 +410,6 @@ Resources:
         QStackName: !GetAtt QSTACK.Outputs.AWSStackName
         Region: !Ref AWS::Region
         RequireIMDSv2: !Ref RequireIMDSv2        
-        SecretsManagedPolicy: !Sub "arn:${AWS::Partition}:iam::aws:policy/SecretsManagerReadWrite"
         SideCarProv: !Ref SideCarProv
         SideCarSecretsArn: !GetAtt SECRETSSTACK.Outputs.SideCarSecretsArn
         SoftwareSecretsArn: !GetAtt SECRETSSTACK.Outputs.SoftwareSecretsArn
