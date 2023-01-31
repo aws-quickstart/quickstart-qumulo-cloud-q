@@ -305,6 +305,11 @@ Resources:
         FromPort: 2049
         IpProtocol: udp
         ToPort: 2049
+      - CidrIp: !Ref QSgCidr1
+        Description: TCP port for S3
+        FromPort: 9000
+        IpProtocol: TCP
+        ToPort: 9000
 
   QumuloSecurityGroupNodeRule:
     Type: AWS::EC2::SecurityGroupIngress

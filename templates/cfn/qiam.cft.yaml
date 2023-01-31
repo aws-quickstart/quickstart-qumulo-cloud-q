@@ -70,6 +70,8 @@ Resources:
               - "sts:AssumeRole"
       Path: /
       PermissionsBoundary: !If [ProvBoundary, !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:policy/${QPermissionsBoundary}", !Ref "AWS::NoValue"]
+      ManagedPolicyArns:
+        - !Ref AmazonSSMManagedInstanceCore      
       Policies:
         - PolicyName: QumuloAccess-EC2-CW-Logs
           PolicyDocument:

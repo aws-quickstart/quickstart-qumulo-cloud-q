@@ -173,6 +173,7 @@ Resources:
       PermissionsBoundary: !If [ProvBoundary, !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:policy/${QPermissionsBoundary}", !Ref "AWS::NoValue"]      
       ManagedPolicyArns:
         - !Ref SecretsManagedPolicy
+        - !Ref AmazonSSMManagedInstanceCore
       Policies:
         - PolicyName: S3AccessPolicy
           PolicyDocument:
