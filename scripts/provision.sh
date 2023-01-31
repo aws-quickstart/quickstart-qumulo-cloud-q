@@ -111,7 +111,6 @@ if [ "$term_state" != "$protection" ]; then
     ec2protect "$protection" "$region" "${newIDs[m]}"
   done
 
-  ec2protect "$protection" "$region" "$this_ec2"
   ssmput "termination-protection" "$region" "$stkname" "$protection"
 fi
 

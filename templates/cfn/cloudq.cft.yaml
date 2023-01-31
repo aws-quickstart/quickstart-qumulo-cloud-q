@@ -410,7 +410,6 @@ Resources:
         QStackName: !GetAtt QSTACK.Outputs.AWSStackName
         Region: !Ref AWS::Region
         RequireIMDSv2: !Ref RequireIMDSv2        
-        SecretsManagedPolicy: !Sub "arn:${AWS::Partition}:iam::aws:policy/SecretsManagerReadWrite"
         SideCarProv: !Ref SideCarProv
         SideCarSecretsArn: !GetAtt SECRETSSTACK.Outputs.SideCarSecretsArn
         SoftwareSecretsArn: !GetAtt SECRETSSTACK.Outputs.SoftwareSecretsArn

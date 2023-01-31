@@ -1333,6 +1333,143 @@ Resources:
             Port: 8000
           - !Ref AWS::NoValue
 
+  NLBTargetGroup9000:
+    Type: "AWS::ElasticLoadBalancingV2::TargetGroup"
+    Properties:
+      Name: !Join
+        - ""
+        - - "qint-9000-"
+          - !Select [1, !Split ["-QNLBSTACK-", !Ref "AWS::StackName"]]
+      TargetType: ip
+      Protocol: TCP
+      Port: 9000
+      VpcId: !Ref VPCID      
+      TargetGroupAttributes:
+        - Key: stickiness.enabled
+          Value: !Ref Stickiness
+        - Key: stickiness.type
+          Value: source_ip
+        - Key: deregistration_delay.timeout_seconds
+          Value: !Ref DeregDelay
+        - Key: deregistration_delay.connection_termination.enabled 
+          Value: !Ref DeregTerm
+        - Key: preserve_client_ip.enabled
+          Value: !Ref PreserveIP             
+        - Key: proxy_protocol_v2.enabled 
+          Value: !Ref ProxyProtoV2    
+      Targets:
+        - Id: !Select [0, !Ref NodeIPs]
+          Port: 9000
+        - Id: !Select [1, !Ref NodeIPs]
+          Port: 9000
+        - Id: !Select [2, !Ref NodeIPs]
+          Port: 9000
+        - !If
+          - Provision4
+          - Id: !Select [3, !Ref NodeIPs]
+            Port: 9000
+          - !Ref AWS::NoValue
+        - !If
+          - Provision5
+          - Id: !Select [4, !Ref NodeIPs]
+            Port: 9000
+          - !Ref AWS::NoValue
+        - !If
+          - Provision6
+          - Id: !Select [5, !Ref NodeIPs]
+            Port: 9000
+          - !Ref AWS::NoValue
+        - !If
+          - Provision7
+          - Id: !Select [6, !Ref NodeIPs]
+            Port: 9000
+          - !Ref AWS::NoValue
+        - !If
+          - Provision8
+          - Id: !Select [7, !Ref NodeIPs]
+            Port: 9000
+          - !Ref AWS::NoValue
+        - !If
+          - Provision9
+          - Id: !Select [8, !Ref NodeIPs]
+            Port: 9000
+          - !Ref AWS::NoValue
+        - !If
+          - Provision10
+          - Id: !Select [9, !Ref NodeIPs]
+            Port: 9000
+          - !Ref AWS::NoValue
+        - !If
+          - Provision11
+          - Id: !Select [10, !Ref NodeIPs]
+            Port: 9000
+          - !Ref AWS::NoValue
+        - !If
+          - Provision12
+          - Id: !Select [11, !Ref NodeIPs]
+            Port: 9000
+          - !Ref AWS::NoValue
+        - !If
+          - Provision13
+          - Id: !Select [12, !Ref NodeIPs]
+            Port: 9000
+          - !Ref AWS::NoValue
+        - !If
+          - Provision14
+          - Id: !Select [13, !Ref NodeIPs]
+            Port: 9000
+          - !Ref AWS::NoValue
+        - !If
+          - Provision15
+          - Id: !Select [14, !Ref NodeIPs]
+            Port: 9000
+          - !Ref AWS::NoValue
+        - !If
+          - Provision16
+          - Id: !Select [15, !Ref NodeIPs]
+            Port: 9000
+          - !Ref AWS::NoValue
+        - !If
+          - Provision17
+          - Id: !Select [16, !Ref NodeIPs]
+            Port: 9000
+          - !Ref AWS::NoValue
+        - !If
+          - Provision18
+          - Id: !Select [17, !Ref NodeIPs]
+            Port: 9000
+          - !Ref AWS::NoValue
+        - !If
+          - Provision19
+          - Id: !Select [18, !Ref NodeIPs]
+            Port: 9000
+          - !Ref AWS::NoValue
+        - !If
+          - Provision20
+          - Id: !Select [19, !Ref NodeIPs]
+            Port: 9000
+          - !Ref AWS::NoValue
+        - !If
+          - Provision21
+          - Id: !Select [20, !Ref NodeIPs]
+            Port: 9000
+          - !Ref AWS::NoValue
+        - !If
+          - Provision22
+          - Id: !Select [21, !Ref NodeIPs]
+            Port: 9000
+          - !Ref AWS::NoValue
+        - !If
+          - Provision23
+          - Id: !Select [22, !Ref NodeIPs]
+            Port: 9000
+          - !Ref AWS::NoValue
+        - !If
+          - Provision24
+          - Id: !Select [23, !Ref NodeIPs]
+            Port: 9000
+          - !Ref AWS::NoValue
+
   NLBListener21:
     Type: "AWS::ElasticLoadBalancingV2::Listener"
     Properties:
@@ -1421,6 +1558,16 @@ Resources:
         TargetGroupArn: !Ref NLBTargetGroup8000
       LoadBalancerArn: !Ref NLB
       Port: 8000
+      Protocol: TCP
+
+  NLBListener9000:
+    Type: "AWS::ElasticLoadBalancingV2::Listener"
+    Properties:
+      DefaultActions:
+      - Type: forward
+        TargetGroupArn: !Ref NLBTargetGroup9000
+      LoadBalancerArn: !Ref NLB
+      Port: 9000
       Protocol: TCP
 
 Outputs:
