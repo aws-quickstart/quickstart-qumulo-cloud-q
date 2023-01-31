@@ -41,8 +41,6 @@ Parameters:
     Default: "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
   SideCarProv:
     Type: String
-  SecretsManagedPolicy:
-    Type: String
   KeyName:
     Type: String
   Region:
@@ -102,7 +100,7 @@ Parameters:
   FlashTput:
     Type: String
   FlashIops:
-    Type: String     
+    Type: String        
 
 Conditions:
   ProvBoundary: !Not
@@ -172,8 +170,8 @@ Resources:
       Path: /
       PermissionsBoundary: !If [ProvBoundary, !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:policy/${QPermissionsBoundary}", !Ref "AWS::NoValue"]      
       ManagedPolicyArns:
-        - !Ref SecretsManagedPolicy
-        - !Ref AmazonSSMManagedInstanceCore
+        - !Sub "arn:${AWS::Partition}:iam::aws:policy/SecretsManagerReadWrite"
+        - !Sub "arn:${AWS::Partition}:iam::aws:policy/AmazonSSMManagedInstanceCore"
       Policies:
         - PolicyName: S3AccessPolicy
           PolicyDocument:
