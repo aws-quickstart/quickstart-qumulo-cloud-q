@@ -484,7 +484,7 @@ Parameters:
     MaxLength: 11
     MinLength: 5
     Type: String
-    Default: "5.2.4"
+    Default: "6.0.1"
 
   QClusterAdminPwd:
     AllowedPattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&\\-_])[A-Za-z\\d@$!%*?&\\-_]{8,}$"
@@ -573,7 +573,7 @@ Parameters:
     MaxLength: 11
     MinLength: 5
     Type: String
-    Default: "5.2.4"
+    Default: "6.0.1"
 
   SideCarSNSTopic:
     Description: (Optional) Enter an SNS topic ARN to publish Sidecar (Lambda) errors and successful EBS disk replacements to.
@@ -721,7 +721,7 @@ Resources:
         PrivateSubnetIDs: !GetAtt AWSVPCSTACK.Outputs.PrivateSubnetId
         PublicSubnetIDs: !GetAtt AWSVPCSTACK.Outputs.PublicSubnetId
         QAmiID: !Ref QAmiID
-        QAmiVer: "5.1.0.1"        
+        QAmiVer: "5.3.0"        
         QAuditLog: !Ref QAuditLog
         QClusterAdminPwd: !Ref QClusterAdminPwd
         QClusterLocalZone: !Ref QClusterLocalZone
