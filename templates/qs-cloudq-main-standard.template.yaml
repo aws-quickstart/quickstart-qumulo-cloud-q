@@ -225,7 +225,7 @@ Parameters:
     MaxLength: 11
     MinLength: 5
     Type: String
-    Default: "5.1.0.1"
+    Default: "5.3.0"
 
 Rules:
   CustomRule:
@@ -249,12 +249,12 @@ Resources:
         PrivateSubnetIDs: !Ref PrivateSubnetID
         PublicSubnetIDs: ""
         QAmiID: "Only for Specified AMI-ID Offering"
-        QAmiVer: "5.1.0.1"
+        QAmiVer: "5.3.0"
         QAuditLog: "NO"
         QClusterAdminPwd: !Ref QClusterAdminPwd
         QClusterLocalZone: "NO"
         QClusterName: "Cloud-Q"
-        QClusterVersion: "5.1.0.1"
+        QClusterVersion: "5.3.0"
         QDiskConfig: !Ref QDiskConfig
         QDr: "NO"
         QFlashIops: "Use Qumulo Default"
