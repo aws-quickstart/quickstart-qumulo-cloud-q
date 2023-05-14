@@ -438,7 +438,7 @@ Parameters:
     MaxLength: 11
     MinLength: 5
     Type: String
-    Default: "6.0.1"
+    Default: "6.1.0"
 
   QClusterAdminPwd:
     AllowedPattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&\\-_])[A-Za-z\\d@$!%*?&\\-_]{8,}$"
@@ -555,7 +555,7 @@ Parameters:
     MaxLength: 11
     MinLength: 5
     Type: String
-    Default: "6.0.1"
+    Default: "6.1.0"
 
   SideCarSNSTopic:
     Description: (Optional) Enter an SNS topic ARN to publish Sidecar (Lambda) errors and successful EBS disk replacements to.
