@@ -1,3 +1,0 @@
-The Qumulo https://qumulo.com/products/cloud-q/[Cloud Q^] Quick Start provisions a 1-TB to 6-PB cluster of Qumulo file-storage nodes in the AWS Cloud. The Qumulo multiprotocol file data platform delivers enterprise scale and performance for compute-intensive workloads, accelerating the monetization of your unstructured data.
-
-For more information, see the https://care.qumulo.com/hc/en-us/categories/115000637447-KNOWLEDGE-BASE[Qumulo knowledge base^].
