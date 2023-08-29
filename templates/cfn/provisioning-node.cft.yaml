@@ -350,7 +350,7 @@ Resources:
             - !Ref ProvisionerSG
           SubnetId: !Ref PrivateSubnetId
       BlockDeviceMappings:
-        - DeviceName: /dev/sda1
+        - DeviceName: /dev/xvda
           Ebs:
             VolumeType: !Ref FlashType
             VolumeSize: 40
